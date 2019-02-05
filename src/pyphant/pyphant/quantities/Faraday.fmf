@@ -1,0 +1,48 @@
+; -*- fmf-version: 1.0 -*-
+[*reference]
+creator: Andreas W. Liehr and Andreas J. Holtmann
+created: 1995-01-10
+title: Measurement of Faraday's constant - An example of documenting experimental data and their analysis with the Full-Metadata Format
+place: Physikalisches Institut, Universität Münster
+lab excercise manual: Physikalisches Institut (Hrsg.): Anleitung zu den Experimentellen Übungen I für Physiker (Mechanik, Elektrizitätslehre). Münster: Universität Münster 1993, chapter E7-Elektrolyse
+[measurement]
+room temperature: T = (292 \pm 1) K
+barometric pressure: p = 1.0144 bar \pm 10 mbar
+current: I = (171 \pm 1) mA
+solution: sodium hydroxide	
+[analysis]
+estimation method: line of best fit
+[*table definitions]
+analysis: A
+primary: P
+[*data definitions: A]
+gas: G
+number of electrons: N_e
+volume per time interval: V' \pm \Delta_{V'} [cm^3/min]
+uncertainty of ratio: \Delta_{V'} [cm^3/min]
+Faraday constant: Fa \pm \Delta_{Fa} [C/mol]
+error of Faraday constant: \Delta_{Fa} [C/mol]
+[*data: A]
+;G	N_e	V'	\Delta_{V'} Fa		\Delta_{Fa}
+H_2	2	1.256	0.065	    91400	5500
+O_2	4	0.562	0.04	    102200	7800
+[*data definitions: P]
+time: t [min] \pm 5 [s]
+hydrogen volume: V_{H_2}(t) \pm 0.2 [cm^3]
+oxygen volume: V_{O_2}(t) \pm 0.2 [cm^3]
+[*data: P]
+2.5	2.0	2.1
+4	4.0	2.4
+6	6.6	3.7
+9	9.8	4.2
+11	13.8	6.0
+13	15.0	6.8
+15	18.2	8.4
+17	20.0	9.4
+19	23.4	11.0
+21	26.0	12.2
+23	28.8	13.8
+25	31.6	14.6
+27	33.6	15.8
+29	36.6	17.2
+31	39.0	18.4
