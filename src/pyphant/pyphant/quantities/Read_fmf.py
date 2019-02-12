@@ -1,77 +1,117 @@
 import pandas as pd
 import os
 import re
+import numpy as np
 
-### Paths to files and folders
-path_module = os.path.dirname(os.path.abspath(__file__))
-path_project = os.path.normpath(os.path.join(path_module, '..'))
+file_name = 'Solar.fmf'
+# file_name = 'Faraday.fmf'
+file_name = 'Dynamik-Numerik-Drift.fmf'
 
-name_file = 'Solar.fmf'
-# name_file = 'Faraday.fmf'
+def readFMF(file_name, returnMeta = False):
+    '''
+    Function reads in a fmf file and returns pandas.dataframe
 
-path_folder = os.path.join(path_project, ('quantities/'))
-path_file = path_folder + name_file
-print(path_file)
+    Note: only works if files in in same folder,
 
-### Open, read in save, and close
-# the code could be changed to read as is to save memory - probably not an issue nowdays.
-with open(path_file, "r") as file_handle:
-    file_contents = file_handle.readlines()
-file_handle.close()
-# print(len(file_contents))
+    Author:Michael Zhang - UoA
+    Date: 10-02-2019
+    :param file_name: String, filename of the file to be read, - including the .fmf extention.
+    :param returnMeta: Boolean, to return dictionary of the metadata or not.
+    :return: dataframe of the data located inside the fmffiles.
+    '''
 
-### Patterns for regular expressions
-pat_general_header = '\[(.*)\]'
-pat_data_header = '\[\*data(.*?)\]'
-pat_data_def_header = '\[\*data definition(.*?)\]'
-pat_dictionary = "(.*?)\: (.*)"
-pat_comment = "\A(;)"
+    # Patterns for regular expressions
+    pat_general_header = '\[(.*)\]'
+    pat_data_header = '\[\*data(.*?)\]'
+    pat_dictionary = "(.*?)\: (.*)"
+    pat_table_def = '\[\*table definitions\]'
+    pat_comment = "\A(;)"
 
-# lnum_data_headers = []
-dict_headers = {}
+    # Paths to files and folders
+    path_module = os.path.dirname(os.path.abspath(file_name))
+    path_file = path_module + '/' + file_name
+    path_temp_file = path_module +  '/' + 'temp' + file_name
 
-for lnum, line in enumerate(file_contents):
-    # print(line)
-    if re.match(pat_comment, str.lower(line)):
-        # Ignores comments
-        # print("Comment")
-        continue
-    if re.match(pat_dictionary, str.lower(line)):
-        # Finds the dicitonary key value pairs
-        mm = re.match(pat_dictionary, str.lower(line))
-        # print(mm[0])
-        # print(mm[1])
-        # print(mm[2])
-        # print('dict')
-        # Adds them to the dictionary
-        dict_headers[current_header][mm[1]] = mm[2]
-    if re.match(pat_general_header, str.lower(line)):
-        # Finds headers
-        # print('header')
-        mm = re.match(pat_general_header, str.lower(line))
-        # print(mm[0])
-        # print(mm[1])
-        dict_headers[mm[1]] = {'line_number': lnum}
-        current_header = mm[1]
-    if re.match(pat_data_header, str.lower(line)):
-        # Finds the data header
-        mm = re.match(pat_data_header, str.lower(line))
-        # print(mm[1])
-        # lnum_data_headers.append(lnum)
-        if(mm[1] == ''):
-            # if not the data definintions one
-            # print('data')
-            column_names = list(dict_headers['*data definitions'].keys())
-            # print(column_names[1:])
-            # Save to df
-            df_data = pd.read_csv(path_file, names = column_names[1:], skiprows=lnum + 1, delimiter='\t')
-        # print(mm[2])
-    # if (line_number == 7):
-    #     print('hi')
-    #     break
+    # Open file
+    # the code could be changed to read as is to save memory
+    with open(path_file, "r") as file_handle_read:
+        file_contents = file_handle_read.readlines()
+    file_handle_read.close()
 
-    # data.append(numbers_float[col])
+    # Remove comments
+    file_contents_filtered = []
+    file_handle_write = open(path_temp_file, "w+")
 
-print(lnum)
-print(lnum_data_headers)
-print(dict_headers)
+    for lnum, line in enumerate(file_contents):
+        if re.match(pat_comment, str.lower(line)):
+            continue
+        else:
+            file_handle_write.write(line)
+            file_contents_filtered.append(line)
+    file_handle_write.close()
+
+    isMultiple = False  # does the file contains multiple tables?
+    lnum_data_headers = []
+    dict_headers = {}
+
+    for lnum, line in enumerate(file_contents_filtered):
+        if re.match(pat_general_header, str.lower(line)):
+            # Finds headers
+            mm = re.match(pat_general_header, str.lower(line))
+            # Assigns some intermediate data
+            lnum_data_headers.append(lnum)
+            dict_headers[mm[1]] = {'line_number': lnum}
+            dict_headers[mm[1]].update({'header_number': len(lnum_data_headers)})
+            current_header = mm[1]
+            if re.match(pat_table_def, str.lower(line)):
+                isMultiple = True
+            continue
+
+        if re.match(pat_dictionary, str.lower(line)):
+            # Finds the dicitonary key value pairs
+            mm = re.match(pat_dictionary, str.lower(line))
+            # Adds them to the dictionary
+            dict_headers[current_header][mm[1]] = mm[2]
+
+    lnum_data_headers.append(lnum + 1)
+    len_sections = np.diff(lnum_data_headers)  # length of each section
+
+    list_data = []
+
+    if isMultiple:
+        num_tables = dict_headers['*table definitions'].__len__() - 2
+        table_keys = list(dict_headers['*table definitions'].keys())
+
+        for table in range(num_tables):
+            table_symbol = dict_headers['*table definitions'][table_keys[table + 2]]
+            pat_data_header_symbol = '\[\*data\: ' + table_symbol + '\]'
+            for lnum, line in enumerate(file_contents_filtered):
+                if re.match(pat_data_header_symbol, str.lower(line)):
+                    column_names = list(dict_headers['*data definitions: ' + table_symbol].keys())
+                    startline = dict_headers['*data: ' + table_symbol]['line_number'] + 1
+                    nrows = len_sections[dict_headers['*data: ' + table_symbol]['header_number'] - 1] - 1
+                    list_data.append(pd.read_csv(path_temp_file, names=column_names[2:], skiprows=startline, nrows = nrows, delimiter='\t'))
+    else: #if single table
+        for lnum, line in enumerate(file_contents_filtered):
+            if re.match(pat_data_header, str.lower(line)):
+                # Finds the data header
+                mm = re.match(pat_data_header, str.lower(line))
+                if(mm[1] == ''):
+                    # if not the data definintions one
+                    column_names = list(dict_headers['*data definitions'].keys())
+                    startline = dict_headers['*data']['line_number'] + 1
+                    nrows = len_sections[dict_headers['*data']['header_number'] - 1] - 1
+                    # Save to df
+                    list_data = pd.read_csv(path_temp_file, names =column_names[2:], skiprows=startline, nrows = nrows, delimiter='\t')
+
+    os.remove(path_temp_file)
+
+    if returnMeta:
+        return list_data, dict_headers
+    else:
+        return list_data
+
+
+print(readFMF(file_name, 1))
+# print(lnum_data_headers)
+# print(dict_headers)
