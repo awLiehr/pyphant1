@@ -608,8 +608,8 @@ def data2table(longname, shortname, preParsedData, config, FMFversion='1.1'):
 def preParseData(b):
     localVar = {'fmf-version': '1.1', 'coding': 'utf-8', 'delimiter': '\t'}
     commentChar = ';'
-    if b.startswith(codecs.BOM_UTF8):
-        b = b.lstrip(codecs.BOM_UTF8)
+    if b.startswith(str(codecs.BOM_UTF8)):
+        b = b.lstrip(str(codecs.BOM_UTF8))
     if b[0] == ';' or b[0] == '#':
         commentChar = b[0]
         items = [var.strip().split(':') for var
