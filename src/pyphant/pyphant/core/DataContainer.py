@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 =============================================================================
 **DataContainer** -- A Pyphant module for *self-explanatory scientific data*
 =============================================================================
@@ -63,33 +63,33 @@ different observations on the same subject per row whereby each column
 comprises a quantity of the same kind. Each row can be regarded as the
 realization of a random variable.
 """
-from __future__ import with_statement
+
 import copy
 import hashlib
 import threading
 import numpy
-import StringIO
-import urlparse
-from pyphant.core.AstTransformers import (
+import io
+import urllib.parse
+from src.pyphant.pyphant.core.AstTransformers import (
     ReplaceName, ReplaceCompare, ReplaceOperator, UnitCalculator,
     checkDimensions)
-import Helpers
+from . import Helpers
 import logging
 _logger = logging.getLogger("pyphant")
 
 
 #Default string encoding
-enc = lambda s: unicode(s, "utf-8")
+enc = lambda s: str(s, "utf-8")
 
 
 def parseId(id):
-    u"""Returns tuple (HASH, TYPESTRING) from given .id attribute."""
-    resUri = urlparse.urlsplit(id)
+    """Returns tuple (HASH, TYPESTRING) from given .id attribute."""
+    resUri = urllib.parse.urlsplit(id)
     return resUri[2].split('/')[-1].split('.')  # (hash, uriType)
 
 
 class DataContainer(object):
-    u"""DataContainer \t- Base class for self-explanatory scientific data
+    """DataContainer \t- Base class for self-explanatory scientific data
 \nDataContainer presents the following attributes:
 \t  .longname \t- Notation of the data, e.g. 'electric field',
 \t\t\t  which is used for the automatic annotation of charts.
@@ -132,7 +132,7 @@ class DataContainer(object):
     def _getLock(self):
         try:
             return self._lock
-        except AttributeError, e:
+        except AttributeError as e:
             self.masterLock.acquire()
             if not hasattr(self, "_lock"):
                 super(DataContainer, self).__setattr__("_lock",
@@ -178,7 +178,7 @@ class DataContainer(object):
             else:
                 self.hash = self.generateHash()
                 self.timestamp = Helpers.getModuleUniqueTimestamp()
-                self.id = u"emd5://%s/%s/%s/%s.%s" % (
+                self.id = "emd5://%s/%s/%s/%s.%s" % (
                     self.machine,
                     self.creator,
                     enc(self.timestamp.isoformat('_')),
@@ -187,11 +187,11 @@ class DataContainer(object):
                     )
 
 
-from FieldContainer import *
+from .FieldContainer import *
 
 
 class SampleContainer(DataContainer):
-    u"""SampleContainer(columns, longname='Realizations of random variable',
+    """SampleContainer(columns, longname='Realizations of random variable',
 \t\t\t  shortname='X')
 \t  Class of tables storing realizations of random variables as recarray
 \t  colums\t: List of FieldContainer instances, each one holding a vector of all
@@ -213,7 +213,7 @@ class SampleContainer(DataContainer):
 \t  .label\t- Typical axis description composed from the meta information
 \t\t\t  of the DataContainer.
 """
-    typeString = u"sample"
+    typeString = "sample"
 
     def __init__(self, columns, longname='Realizations of random variable',
                  shortname='X', attributes=None):
@@ -225,13 +225,13 @@ class SampleContainer(DataContainer):
         self._columns = columns
         self.longnames = {}
         self.shortnames = {}
-        for i in xrange(len(self.columns)):
+        for i in range(len(self.columns)):
             self.longnames[self.columns[i].longname] = columns[i]
             self.shortnames[self.columns[i].shortname] = columns[i]
     columns = property(lambda self: self._columns, _setColumns)
 
     def _getLabel(self):
-        return u"%s %s" % (self.longname, self.shortname)
+        return "%s %s" % (self.longname, self.shortname)
     label = property(_getLabel)
 
     def _getRawDataBytes(self):
@@ -242,7 +242,7 @@ class SampleContainer(DataContainer):
         if m == None:
             m = hashlib.md5()
         super(SampleContainer, self).generateHash(m)
-        m.update(u''.join([c.hash for c in self.columns]))
+        m.update(''.join([c.hash for c in self.columns]))
         return enc(m.hexdigest())
 
     def __deepcopy__(self, memo):
@@ -274,7 +274,7 @@ class SampleContainer(DataContainer):
             return self.shortnames[key]
         except KeyError:
             pass
-        raise KeyError(u'No column named "%s" could be found.' % (key, ))
+        raise KeyError('No column named "%s" could be found.' % (key, ))
 
     def __eq__(self, other):
         try:
@@ -380,7 +380,7 @@ class SampleContainer(DataContainer):
         rpo = ReplaceOperator(rpn.localDict)
         factorExpr = rpo.visit(factorExpr)
         localDict = dict([(key, value.data) \
-                          for key, value in rpn.localDict.iteritems()])
+                          for key, value in rpn.localDict.items()])
         numpyDict = {'logical_and': numpy.logical_and,
                      'logical_or': numpy.logical_or,
                      'logical_not': numpy.logical_not}
@@ -467,7 +467,7 @@ class SampleContainer(DataContainer):
 
 
 def assertEqual(con1, con2, rtol=1e-5, atol=1e-8):
-    diagnosis = StringIO.StringIO()
+    diagnosis = io.StringIO()
     testReport = logging.StreamHandler(diagnosis)
     logger = logging.getLogger("pyphant")
     logger.addHandler(testReport)

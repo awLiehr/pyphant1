@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The Worker module provides the Worker base class and some support.
 """
 
@@ -68,19 +68,17 @@ class WorkerFactory(type):
 
     def __init__(cls, name, bases, cdict):
         cls._plugs = []
-        for f in filter(lambda key: identifyPlugs(key, cdict), cdict):
+        for f in [key for key in cdict if identifyPlugs(key, cdict)]:
             cls._plugs.append((f, cdict[f]))
         super(WorkerFactory, cls).__init__(name, bases, cdict)
         if cls.__name__ != 'Worker':
             WorkerFactory.workerRegistry.registerWorker(WorkerInfo(cls))
 
 
-class Worker(object):
+class Worker(object, metaclass=WorkerFactory):
     API = 2
     VERSION = 1
     REVISION = pkg_resources.get_distribution("pyphant").version
-
-    __metaclass__ = WorkerFactory
     _sockets = []
     _plugs = []
     _params = []
@@ -90,9 +88,9 @@ class Worker(object):
         if annotations is None:
             annotations = {}
         self._annotations = annotations
-        map(lambda k: self._annotations.setdefault(
+        list(map(lambda k: self._annotations.setdefault(
             k, Worker.DEFAULT_ANNOTATIONS[k]),
-            Worker.DEFAULT_ANNOTATIONS.keys())
+            list(Worker.DEFAULT_ANNOTATIONS.keys())))
         self.parent = parent
         self.initSockets(self._sockets)
         self.initPlugs(self._plugs)
@@ -100,7 +98,7 @@ class Worker(object):
         self.inithook()
         if parent:
             basename = self.getParam('name').value
-            for i in xrange(10000):
+            for i in range(10000):
                 try:
                     parent.addWorker(self)
                     break
@@ -127,7 +125,7 @@ class Worker(object):
     def initPlugs(self, plugs):
         self._plugs = {}
         for (name, func) in plugs:
-            p = Connectors.CalculatingPlug(getattr(self, func.func_name),
+            p = Connectors.CalculatingPlug(getattr(self, func.__name__),
                                            name, func.returnType)
             setattr(self, 'plug' + self.upperFirstLetter(name), p)
             self._plugs[name] = p
@@ -193,19 +191,19 @@ class Worker(object):
         self.getParam(param).unregisterListener(listener, eventType)
 
     def invalidate(self, event=None):
-        map(lambda p: p.invalidate(), self._plugs.values())
+        list(map(lambda p: p.invalidate(), list(self._plugs.values())))
 
     def getSocket(self, name):
         return self._sockets[name]
 
     def getSockets(self):
-        return self._sockets.values()
+        return list(self._sockets.values())
 
     def getPlug(self, name):
         return self._plugs[name]
 
     def getPlugs(self):
-        return self._plugs.values()
+        return list(self._plugs.values())
 
     def findConnectorForId(self, id):
         splittedId = id.split('.', 1)

@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides unittest classes TestApplyMask and TestApplyMask3D.
+"""Provides unittest classes TestApplyMask and TestApplyMask3D.
 """
 
 
@@ -38,7 +38,7 @@ import sys
 import unittest
 import ImageProcessing as I
 import ImageProcessing.ApplyMask as IM
-import TestDistanceMapper as TDM
+from . import TestDistanceMapper as TDM
 import numpy
 import pyphant.quantities as pq
 from pyphant.core import DataContainer
@@ -68,7 +68,7 @@ class TestApplyMask(unittest.TestCase):
         result = self.worker.createMaskedImage(self.inputField,self.mask)
         afoot = numpy.zeros((self.dim,self.dim)).astype('d')
         afoot[self.dim-1,self.dim-1] = 100+self.dim-1
-        for i in xrange(1,self.dim-1):
+        for i in range(1,self.dim-1):
             afoot[i,self.dim/2] = 100+i
         numpy.testing.assert_array_equal(afoot, result.data)
         assert(result.unit == self.inputField.unit)
@@ -81,18 +81,18 @@ class TestApplyMask(unittest.TestCase):
     def testReturnedTable(self):
         """Checking the extracted samples by applying a string-like mask to the input field."""
         result = self.worker.findMaskPoints(self.inputField,self.mask)
-        xPos = range(1,self.dim)
-        yPos = [self.dim/2 for i in xrange(1,self.dim-1)]
+        xPos = list(range(1,self.dim))
+        yPos = [self.dim/2 for i in range(1,self.dim-1)]
         yPos.append(self.dim-1)
-        zVal = range(101,101+self.dim)
-        afoot = zip(xPos,yPos,zVal)
-        table = zip(result[0].data.tolist(),
+        zVal = list(range(101,101+self.dim))
+        afoot = list(zip(xPos,yPos,zVal))
+        table = list(zip(result[0].data.tolist(),
                     result[1].data.tolist(),
-                    result[2].data.tolist())
+                    result[2].data.tolist()))
         for row in table:
             try:
                 afoot.remove(row)
-            except ValueError,e:
+            except ValueError as e:
                 self.fail('Row %s not found.' % row)
 
     def testReturnedTableUnits(self):
@@ -171,15 +171,15 @@ class TestApplyMask3D(unittest.TestCase):
         yPos = (0,0,self.dim/2)
         zPos = yPos
         zVal = numpy.sin(numpy.array((0,1,3.0*round(self.dim/2))))
-        afoot = zip(xPos,yPos,zPos,zVal)
-        table = zip(result[0].data.tolist(),
+        afoot = list(zip(xPos,yPos,zPos,zVal))
+        table = list(zip(result[0].data.tolist(),
                     result[1].data.tolist(),
                     result[2].data.tolist(),
-                    result[3].data.tolist())
+                    result[3].data.tolist()))
         for row in table:
             try:
                 afoot.remove(row)
-            except ValueError,e:
+            except ValueError as e:
                 self.fail('Row %s not found.' % str(row))
 
 

@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The Ultimate Points Calculator Worker is a class of Pyphant's Image
 Processing Toolbox. It is used to calculate peaks in an image.
 """
@@ -65,31 +65,30 @@ class UltimatePointsCalculator(Worker.Worker):
             ):
             ultimatePoints.append((nx - 1, ny - 1, img[nx - 1, ny - 1]))
         #upper edge:
-        for x in xrange(1, nx - 1):
+        for x in range(1, nx - 1):
             if img[x, 0] == scipy.amax(scipy.amax(img[x - 1: x + 2, :2])):
                 ultimatePoints.append((x, 0, img[x, 0]))
         #lower edge:
-        for x in xrange(1, nx - 1):
+        for x in range(1, nx - 1):
             if img[x, ny - 1] == scipy.amax(scipy.amax(img[x - 1: x + 2,
                                                            ny - 2:])):
                 ultimatePoints.append((x, ny - 1, img[x, ny - 1]))
         #left edge:
-        for y in xrange(1, ny - 1):
+        for y in range(1, ny - 1):
             if img[0, y] == scipy.amax(scipy.amax(img[:2, y - 1: y + 2])):
                 ultimatePoints.append((0, y, img[0, y]))
         #right edge:
-        for y in xrange(1, ny - 1):
+        for y in range(1, ny - 1):
             if img[nx - 1, y] == scipy.amax(scipy.amax(img[nx - 2:,
                                                            y - 1: y + 2])):
                 ultimatePoints.append((nx - 1, y, img[nx - 1, y]))
         #inner image:
-        for y in xrange(1, ny - 1):
-            for x in xrange(1, nx - 1):
+        for y in range(1, ny - 1):
+            for x in range(1, nx - 1):
                 if img[x, y] == scipy.amax(scipy.amax(img[x - 1: x + 2,
                                                           y - 1: y + 2])):
                     ultimatePoints.append((x, y, img[x, y]))
-        ultimatePoints = scipy.array(filter(lambda (x, y, v):
-                                            v > 0, ultimatePoints))
+        ultimatePoints = scipy.array([x_y_v for x_y_v in ultimatePoints if x_y_v[2] > 0])
         x = DataContainer.FieldContainer(ultimatePoints[:, 0],
                                        image.dimensions[0].unit,
                                        longname=image.dimensions[0].longname,
@@ -104,13 +103,13 @@ class UltimatePointsCalculator(Worker.Worker):
 ##                                  longname=u"Distance to background",
 ##                                  shortname=u"d")
         z = DataContainer.FieldContainer(ultimatePoints[:, 2], image.unit,
-                                       longname=u"Distance to background",
-                                       shortname=u"d")
+                                       longname="Distance to background",
+                                       shortname="d")
         x.seal()
         y.seal()
         z.seal()
         return DataContainer.SampleContainer(
             [x, y, z],
-            u"Ultimate points from %s" % (image.longname, ),
-            u"D"
+            "Ultimate points from %s" % (image.longname, ),
+            "D"
             )

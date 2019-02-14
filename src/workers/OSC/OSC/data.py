@@ -2056,7 +2056,7 @@ def discreteLocalNoise(A):
     sq = numpy.square(numpy.diff(A))
     xs = []
     sums = []
-    for i in xrange(1, nA):
+    for i in range(1, nA):
         l = i * dA / 2
         xs.append(l)
         sums.append(numpy.sum(sq[l - dA / 2: l + dA / 2]))

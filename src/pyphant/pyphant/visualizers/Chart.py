@@ -119,7 +119,7 @@ class Chart(object):
 
 
 class BarChart(Chart):
-    name = u"Bar chart"
+    name = "Bar chart"
 
     def draw(self, abscissa, data, maskedData, error, **kwargs):
         width = numpy.min(numpy.diff(abscissa))
@@ -131,7 +131,7 @@ class BarChart(Chart):
                 pylab.bar(abscissa, ordinate, capsize=0,
                           width=width)
         else:
-            for i in xrange(data.shape[0]):
+            for i in range(data.shape[0]):
                 pylab.bar(abscissa, maskedData[i],
                           yerr=error[i],
                           width=width)
@@ -145,7 +145,7 @@ class BarChart(Chart):
 
 
 class LineChart(Chart):
-    name = u"Line chart"
+    name = "Line chart"
     linestyle = '-'
 
     def draw(self, abscissa, data, maskedData, error, **kwargs):
@@ -153,19 +153,19 @@ class LineChart(Chart):
             for ordinate in maskedData:
                 pylab.plot(abscissa, ordinate, self.linestyle)
         else:
-            for i in xrange(data.shape[0]):
+            for i in range(data.shape[0]):
                 line = pylab.plot(abscissa, maskedData[i], self.linestyle)
                 color = [l._color for l in line]
                 for direction in [-1., 1.]:
                     ordinate = maskedData[i] + direction * error[i]
                     line = pylab.plot(abscissa, ordinate, linestyle=':')
-                    for j in xrange(len(color)):
+                    for j in range(len(color)):
                         line[j]._color = color[j]
         pylab.axis([self.xmin, self.xmax, self.ymin, self.ymax])
 
 
 class ScatterPlot(LineChart):
-    name = u"Scatter Plot"
+    name = "Scatter Plot"
     linestyle = 'o'
 
 

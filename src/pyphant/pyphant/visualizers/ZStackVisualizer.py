@@ -215,7 +215,7 @@ class ZStackConfigPanel(wx.PyPanel):
         retval = dial.ShowModal()
         user_text = dial.GetValue()
         dial.Destroy()
-        pixel_resolution = map(int, user_text.split('x'))
+        pixel_resolution = list(map(int, user_text.split('x')))
         longname = self.parent.dataContainer.longname
         if retval == wx.ID_OK:
             for count, img_fc in enumerate(self.parent.dataContainer):

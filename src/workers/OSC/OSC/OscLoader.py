@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 import zipfile
@@ -40,6 +40,7 @@ import collections
 from pyphant.core import (Worker, Connectors, DataContainer)
 from pyphant.quantities import Quantity, isQuantity
 import pkg_resources
+from functools import reduce
 
 
 def makeRoot(pixelName, ll):
@@ -47,9 +48,9 @@ def makeRoot(pixelName, ll):
 
 
 def startSection(root, dataSections, l):
-    if l == u'MESSDATEN':
+    if l == 'MESSDATEN':
         root[l] = []
-    elif l == u'SPALTENBESCHRIFTUNG':
+    elif l == 'SPALTENBESCHRIFTUNG':
         root[l] = []
     else:
         root[l] = {}
@@ -73,9 +74,9 @@ def addTableLine(section, l):
 
 
 LINE_HANDLER = collections.defaultdict(lambda: addAttributeLine)
-LINE_HANDLER[u'Section'] = startSection
-LINE_HANDLER[u'SPALTENBESCHRIFTUNG'] = addDataColumn
-LINE_HANDLER[u'MESSDATEN'] = addTableLine
+LINE_HANDLER['Section'] = startSection
+LINE_HANDLER['SPALTENBESCHRIFTUNG'] = addDataColumn
+LINE_HANDLER['MESSDATEN'] = addTableLine
 
 
 def readZipFile(filename, data=None, subscriber=0):
@@ -147,13 +148,13 @@ def loadOscFromFile(filename, subscriber=0):
     container = constructTemplate(data, dataSections)
     for d in data:
         for dicname in dataSections:
-            for k in d[dicname].keys():
+            for k in list(d[dicname].keys()):
                 container[k].append(d[dicname][k])
-        for i, col in enumerate(d[u'SPALTENBESCHRIFTUNG']):
-            container[col].append(d[u'MESSDATEN'][:, i])
-    cols = [createFieldContainer(k, v) for k, v in container.iteritems()]
-    if container.has_key('KOMMENTAR'):
-        title = container[u'KOMMENTAR'][0]
+        for i, col in enumerate(d['SPALTENBESCHRIFTUNG']):
+            container[col].append(d['MESSDATEN'][:, i])
+    cols = [createFieldContainer(k, v) for k, v in container.items()]
+    if 'KOMMENTAR' in container:
+        title = container['KOMMENTAR'][0]
     else:
         title = ''
     return DataContainer.SampleContainer(cols, longname=title)
@@ -164,8 +165,8 @@ def constructTemplate(data, dataSections):
     container = {}
     for k in reduce(
         lambda x, y: x + y,
-        [template[secName].keys() for secName in dataSections] + \
-            [template[u'SPALTENBESCHRIFTUNG']],
+        [list(template[secName].keys()) for secName in dataSections] + \
+            [template['SPALTENBESCHRIFTUNG']],
         []
         ):
         container[k] = []
@@ -173,7 +174,7 @@ def constructTemplate(data, dataSections):
 
 
 def readSingleFile(b, pixelName):
-    d = unicode(b, 'cp1252')
+    d = str(b, 'cp1252')
     ll = d.splitlines()
     root = makeRoot(pixelName, ll)
     dataSections = []
@@ -181,12 +182,12 @@ def readSingleFile(b, pixelName):
     secId = 'root'
     for l in ll:
         if l.startswith('[') and l.endswith(']'):
-            section, secId = LINE_HANDLER[u'Section'](
+            section, secId = LINE_HANDLER['Section'](
                 root, dataSections, l[1:-1]
                 )
         else:
             LINE_HANDLER[secId](section, l)
-    root[u'MESSDATEN'] = numpy.array(root[u'MESSDATEN'])
+    root['MESSDATEN'] = numpy.array(root['MESSDATEN'])
     return (root, dataSections)
 
 
@@ -195,7 +196,7 @@ class OscLoader(Worker.Worker):
     VERSION = 1
     REVISION = pkg_resources.get_distribution("pyphant.osc").version
     name = "Data Loader"
-    _params = [("filename", u"Filename", "", Connectors.SUBTYPE_FILE)]
+    _params = [("filename", "Filename", "", Connectors.SUBTYPE_FILE)]
 
     @Worker.plug(Connectors.TYPE_ARRAY)
     def loadOsc(self, subscriber=0):

@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 Provides unittest class TestDistanceMapper and helper function stringFeature.
 """
 
@@ -57,8 +57,8 @@ def stringFeature(Nx,width=1,directions=1,distanceToBorder=1):
     featureField = numpy.zeros((Nx,Nx))
     featureField[:,:] = I.BACKGROUND_COLOR
     for d in range(directions):
-        for i in xrange(distanceToBorder,Nx-distanceToBorder):
-            for j in xrange((Nx-width)/2,(Nx+width)/2):
+        for i in range(distanceToBorder,Nx-distanceToBorder):
+            for j in range((Nx-width)/2,(Nx+width)/2):
                 if d==0:
                     featureField[i,j]=I.FEATURE_COLOR
                 else:
@@ -114,7 +114,7 @@ class TestBroadFeaturesTouchingTheBoundary(unittest.TestCase):
         #Compute result afoot
         afoot = numpy.zeros(referenceField.data.shape,'f')
         dx = numpy.diff(referenceField.dimensions[0].data)[0]
-        for i in xrange(referenceField.data.shape[1]):
+        for i in range(referenceField.data.shape[1]):
             afoot[:,i]= dx * abs(5-i)
         numpy.testing.assert_array_equal(afoot,result.data)
 
@@ -138,7 +138,7 @@ class TestBroadFeaturesTouchingTheBoundary(unittest.TestCase):
         #Compute result afoot
         afoot = numpy.zeros(referenceField.data.shape,'f')
         dy = numpy.diff(referenceField.dimensions[1].data)[0]
-        for i in xrange(referenceField.data.shape[0]):
+        for i in range(referenceField.data.shape[0]):
             afoot[i,:]= dy * abs(pos-i)
         numpy.testing.assert_array_equal(afoot,result.data)
 
@@ -168,10 +168,10 @@ class TestBroadFeaturesTouchingTheBoundary(unittest.TestCase):
         #Compute result afoot
         afoot = numpy.zeros(referenceField.data.shape,'f')
         dy = numpy.diff(referenceField.dimensions[1].data)[0]
-        for i in xrange(referenceField.data.shape[0]):
+        for i in range(referenceField.data.shape[0]):
             afoot[i,:]= dy * abs(pos-i)
         afoot=DataContainer.FieldContainer(afoot, unit=self.xDim.unit,
-                                           dimensions = map(copy.deepcopy,referenceField.dimensions))
+                                           dimensions = list(map(copy.deepcopy,referenceField.dimensions)))
         self.assertEqual(afoot, result)
 
     def testDistanceMappingInvertedStringDxDy(self):
@@ -191,10 +191,10 @@ class TestBroadFeaturesTouchingTheBoundary(unittest.TestCase):
         #Compute result afoot
         afoot = numpy.zeros(referenceField.data.shape,'f')
         dx = numpy.diff(referenceField.dimensions[0].data)[0]
-        for i in xrange(referenceField.data.shape[1]):
+        for i in range(referenceField.data.shape[1]):
             afoot[:,i]= dx * abs(5-i)
         afoot=DataContainer.FieldContainer(afoot, unit=self.xDim.unit,
-                                           dimensions = map(copy.deepcopy,referenceField.dimensions))
+                                           dimensions = list(map(copy.deepcopy,referenceField.dimensions)))
         self.assertEqual(afoot, result)
 
     def testDistanceMappingInvertedStringDyDx(self):
@@ -220,10 +220,10 @@ class TestBroadFeaturesTouchingTheBoundary(unittest.TestCase):
         #Compute result afoot
         afoot = numpy.zeros(referenceField.data.shape,'f')
         dx = numpy.diff(referenceField.dimensions[0].data)[0]
-        for i in xrange(referenceField.data.shape[1]):
+        for i in range(referenceField.data.shape[1]):
             afoot[:,i]= dx * abs(5-i)
         afootC=DataContainer.FieldContainer(afoot, unit=self.xDim.unit,
-                                           dimensions = map(copy.deepcopy,referenceField.dimensions))
+                                           dimensions = list(map(copy.deepcopy,referenceField.dimensions)))
         DataContainer.assertEqual(afootC, result)
 
     def testDistanceMappingInvertedHorizontalString(self):
@@ -242,7 +242,7 @@ class TestBroadFeaturesTouchingTheBoundary(unittest.TestCase):
         #Compute result afoot
         afoot = numpy.zeros(referenceField.data.shape,'f')
         dx = numpy.diff(referenceField.dimensions[0].data)[0]
-        for i in xrange(referenceField.data.shape[1]):
+        for i in range(referenceField.data.shape[1]):
             afoot[:,i]= dx * abs(5-i)
         afoot=numpy.rot90(afoot)
         numpy.testing.assert_array_equal(afoot,result.data)
@@ -306,7 +306,7 @@ class TestBroadFeaturesTouchingTheBoundary(unittest.TestCase):
              [rt+dx,   rt, dy, dy],
              [ 3*dx, 2*dx, dx,  0]])
         afoot=DataContainer.FieldContainer(afoot,
-                                           dimensions = map(copy.deepcopy,referenceField.dimensions),
+                                           dimensions = list(map(copy.deepcopy,referenceField.dimensions)),
                                            unit=self.xDim.unit,rescale=True)
         self.assertEqual(afoot, result)
 
@@ -476,9 +476,9 @@ class TestDistanceMapper(TestDistanceMapperBoundary):
         result = self.worker.calculateDistanceMap(referenceField)
         for dim in [0,1]:
             axisUnit   = result.dimensions[dim].unit
-            self.failUnless(result.unit.unit.isCompatible(axisUnit.unit),
+            self.assertTrue(result.unit.unit.isCompatible(axisUnit.unit),
                             'Unit of distance map has to be compatible with unit of axis.')
-        self.failUnless(result.unit.unit.name() == 'nm',
+        self.assertTrue(result.unit.unit.name() == 'nm',
                         'Unit of distance map has to be choosen appropriately.')
 
     def testDistanceMappRescale(self):
@@ -500,7 +500,7 @@ class TestDistanceMapper(TestDistanceMapperBoundary):
             axisUnit   = result.dimensions[dim].unit
             self.assertEqual(axisUnit.unit.name(),'mum',
                              'Unit of distance should me mum but is %s.' % axisUnit.unit.name())
-        self.failUnless(result.unit.unit.name() == 'nm',
+        self.assertTrue(result.unit.unit.name() == 'nm',
                         'Unit of distance map has to be choosen appropriately.')
 
 
@@ -591,8 +591,8 @@ class TestDistanceMapperDimensions(unittest.TestCase):
         referenceField.seal()
         try:
             result = self.worker.calculateDistanceMap(referenceField)
-        except ValueError,e:
-            self.failIf(True,
+        except ValueError as e:
+            self.assertFalse(True,
                         "No ValueError should be raised, if the discretisation"
                         +" of two dimension vectors is correct, but the lenght"
                         +" of the vectors differ.")
@@ -636,7 +636,7 @@ class TestDifferentDiscretisation(unittest.TestCase):
         #Compute result afoot
         afoot = DataContainer.FieldContainer(
             numpy.where(referenceField.data == I.FEATURE_COLOR,self.dx,0),
-            dimensions=map(copy.deepcopy,[self.xDim,self.yDim]),
+            dimensions=list(map(copy.deepcopy,[self.xDim,self.yDim])),
             unit = self.xDim.unit,
             rescale=True)
         self.assertEqual(afoot,result)
@@ -658,7 +658,7 @@ class TestDifferentDiscretisation(unittest.TestCase):
         #Compute result afoot
         afoot = DataContainer.FieldContainer(
             numpy.where(referenceField.data == I.FEATURE_COLOR,self.dy,0),
-            dimensions=map(copy.deepcopy,[self.xDim,self.yDim]),
+            dimensions=list(map(copy.deepcopy,[self.xDim,self.yDim])),
             unit = self.xDim.unit,
             rescale=True)
         self.assertEqual(afoot,result)
@@ -682,7 +682,7 @@ class TestDifferentDiscretisation(unittest.TestCase):
         afoot[5,1]=self.dx
         afoot[5,9]=self.dx
         afoot = DataContainer.FieldContainer(afoot,
-                                             dimensions=map(copy.deepcopy,[self.xDim,self.yDim]),
+                                             dimensions=list(map(copy.deepcopy,[self.xDim,self.yDim])),
                                              unit = self.xDim.unit,
                                              rescale=True)
         self.assertEqual(afoot,result)
@@ -710,7 +710,7 @@ class TestDifferentDiscretisation(unittest.TestCase):
             result = self.worker.calculateDistanceMap(referenceField)
             #Compute result afoot
             afoot = numpy.where(referenceField.data == I.FEATURE_COLOR,1.0,0).astype('d')
-            dx,dy = map(lambda dim: dim.data[1]-dim.data[0],[self.xDim,yDim])
+            dx,dy = [dim.data[1]-dim.data[0] for dim in [self.xDim,yDim]]
             afoot[5,:] = dy/dx
             if  dy <= dx*7.0**0.5:
                 centerDist = numpy.sqrt(1.0+(dy/dx)**2)

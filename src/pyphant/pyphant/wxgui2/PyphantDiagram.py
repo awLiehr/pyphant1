@@ -33,7 +33,7 @@
 
 import threading
 import math
-import Queue
+import queue
 import wx
 import sogl
 import pyphant.core.CompositeWorker
@@ -42,7 +42,7 @@ import pyphant.core.WorkerRegistry
 import pyphant.wxgui2.wxPyphantApplication
 import pyphant.wxgui2.DataVisReg
 from pyphant.core import Param
-import cPickle as pickle
+import pickle as pickle
 
 
 class PyphantDiagram(sogl.Diagram):
@@ -216,8 +216,8 @@ class ParamShape(ConnectorShape, sogl.PolygonShape, AcceptPlugs):
 
 class ProgressMeter(wx.ProgressDialog):
     def __init__(self, plugName):
-        title = u"Calculating %s" % plugName
-        message = u"Calculating the result of %s" % plugName
+        title = "Calculating %s" % plugName
+        message = "Calculating the result of %s" % plugName
         wx.ProgressDialog.__init__(
             self, title, message, parent=wx.GetApp().getMainFrame()
             )
@@ -241,7 +241,7 @@ class ProgressMeter(wx.ProgressDialog):
     def updatePercentage(self):
         self.cv.acquire()
         self.percentage = int(
-            sum([x * self.share for x in self.processes.values()])
+            sum([x * self.share for x in list(self.processes.values())])
             )
         self.count += 1
         self.cv.notify()
@@ -284,7 +284,7 @@ class PlugShape(ConnectorShape, sogl.CircleShape):
     def visualize(self, event):
         if not self._plug.resultIsAvailable():
             progress = ProgressMeter(self._plug.name)
-            exception_queue = Queue.Queue()
+            exception_queue = queue.Queue()
             computer = Connectors.Computer(
                 self._plug.getResult, exception_queue, subscriber=progress
                 )
@@ -301,8 +301,8 @@ class PlugShape(ConnectorShape, sogl.CircleShape):
         if not result == None:
             self._ids[event.GetId()](result)
         else:
-            wx.MessageBox(u"No result is available.\nPlease check the logs.",
-                          u"No Result", wx.ICON_ERROR)
+            wx.MessageBox("No result is available.\nPlease check the logs.",
+                          "No Result", wx.ICON_ERROR)
 
     def OnRightClick(self, x, y, keys, attachments):
         if not hasattr(self, '_menu'):
@@ -366,7 +366,7 @@ class ConnectorBox(sogl.CompositeShape):
         if len(self.conShapes) > 0:
             self.AddConstraint(sogl.Constraint(sogl.CONSTRAINT_ALIGNED_LEFT,
                                                self, [self.conShapes[0]]))
-        for i in xrange(1, len(self.conShapes)):
+        for i in range(1, len(self.conShapes)):
             self.AddConstraint(sogl.Constraint(sogl.CONSTRAINT_RIGHT_OF,
                                                self.conShapes[i - 1],
                                                [self.conShapes[i]]))
@@ -417,7 +417,7 @@ class WorkerShape(sogl.CompositeShape):
                     [self.socketShapes[0]]
                     )
                 )
-            for i in xrange(1, len(self.socketShapes)):
+            for i in range(1, len(self.socketShapes)):
                 self.AddConstraint(
                     sogl.Constraint(
                         sogl.CONSTRAINT_RIGHT_OF, self.socketShapes[i - 1],
@@ -438,7 +438,7 @@ class WorkerShape(sogl.CompositeShape):
                     [self.plugShapes[0]]
                     )
                 )
-            for i in xrange(1, len(self.plugShapes)):
+            for i in range(1, len(self.plugShapes)):
                 self.AddConstraint(
                     sogl.Constraint(
                         sogl.CONSTRAINT_LEFT_OF, self.plugShapes[i - 1],
@@ -459,7 +459,7 @@ class WorkerShape(sogl.CompositeShape):
                     [self.paramShapes[0]]
                     )
                 )
-            for i in xrange(1, len(self.paramShapes)):
+            for i in range(1, len(self.paramShapes)):
                 self.AddConstraint(
                     sogl.Constraint(
                         sogl.CONSTRAINT_LEFT_OF, self.paramShapes[i - 1],
@@ -481,13 +481,10 @@ class WorkerShape(sogl.CompositeShape):
             )
         self.Show(True)
 
-        map(
+        list(map(
             lambda con: self.diag.connectors[con].Show(False),
-            filter(
-                lambda connector: not connector.isExternal,
-                self.diag.connectors
-                )
-            )
+            [connector for connector in self.diag.connectors if not connector.isExternal]
+            ))
 
     def hideConnector(self, connector):
         try:

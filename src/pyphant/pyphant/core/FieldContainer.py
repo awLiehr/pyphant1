@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 =================================================================
 The **FieldContainer** -- A module storing sampled scalar fields
 =================================================================
@@ -53,28 +53,28 @@ The *FieldContainer* stores a sampled scalar Filed.
         its *unit* and coordinates of the idependent variable (*dimensions*).
 """
 
-from __future__ import with_statement
+
 import scipy
 import copy
 import hashlib
 import numpy
-from pyphant.quantities import (isQuantity, Quantity, _prefixes)
-from pyphant.core.DataContainer import DataContainer, enc, _logger
-from types import NoneType
+from src.pyphant.pyphant.quantities import (isQuantity, Quantity, _prefixes)
+from src.pyphant.pyphant.core.DataContainer import DataContainer, enc, _logger
+# from types import NoneType
 
 #Default variables of indices
-INDEX_NAMES = [u'i', u'j', u'k', u'l', u'm', u'n']
+INDEX_NAMES = ['i', 'j', 'k', 'l', 'm', 'n']
 PREFIXES_METER = copy.deepcopy(_prefixes)
-map(lambda r: PREFIXES_METER.remove(r), [('h', 1.e2), ('da', 1.e1)])
+list(map(lambda r: PREFIXES_METER.remove(r), [('h', 1.e2), ('da', 1.e1)]))
 PREFIXES_METER.append(('', 1.0))
 PREFIXES = copy.deepcopy(PREFIXES_METER)
-map(lambda r: PREFIXES.remove(r), [('d', 1.e-1), ('c', 1.e-2)])
+list(map(lambda r: PREFIXES.remove(r), [('d', 1.e-1), ('c', 1.e-2)]))
 
 
 class IndexMarker(object):
     hash = hashlib.md5().hexdigest()
-    shortname = u"i"
-    longname = u"index"
+    shortname = "i"
+    longname = "index"
     rawDataBytes = 0
 
     def seal(self, id=None):
@@ -107,17 +107,17 @@ INDEX = [IndexMarker()]
 
 
 def generateIndex(i, n, indexNames=INDEX_NAMES):
-    u"""Returns a FieldContainer for index variables.
+    """Returns a FieldContainer for index variables.
     It stores an index vector (0,...,n-1)^T, whose short name
     will be given by the i. element of list indexNames, if i<=n,
     and 'i_\%i' %i otherwise.
     """
     if i < len(indexNames):
-        name = u"%s" % (indexNames[i], )
+        name = "%s" % (indexNames[i], )
     else:
-        name = u"i_%i" % (i, )
+        name = "i_%i" % (i, )
     return FieldContainer(scipy.arange(0, n), dimensions=INDEX,
-                          longname=u"Index", shortname=name)
+                          longname="Index", shortname=name)
 
 
 class DimensionList(list):
@@ -194,7 +194,7 @@ def slice2ind(arg, dim):
 
 
 class FieldContainer(DataContainer):
-    u"""FieldContainer(data, unit=1, error=None,dimensions=None, longname=u"Sampled Field",
+    """FieldContainer(data, unit=1, error=None,dimensions=None, longname=u"Sampled Field",
 \t\t\t  shortname=u"\\Psi",rescale=False)
 \t  Class describing sampled fields:
 \t  .data\t\t- Numpy.array representing the sampled field.
@@ -214,18 +214,18 @@ class FieldContainer(DataContainer):
 \t  .label\t- Typical axis description composed from the meta information of the DataContainer.
 Concerning the ordering of data matrices and the dimension list consult http://wiki.pyphant.org/xwiki/bin/view/Main/Dimension+Handling+in+Pyphant.
 """
-    typeString = u"field"
+    typeString = "field"
 
     def __init__(self, data, unit=1, error=None, mask=None,
-                 dimensions=None, longname=u"Sampled Field",
-                 shortname=u"\\Psi", attributes=None, rescale=False):
+                 dimensions=None, longname="Sampled Field",
+                 shortname="\\Psi", attributes=None, rescale=False):
         DataContainer.__init__(self, longname, shortname, attributes)
         self.data = data
         self.mask = mask
         try:
-            if isinstance(unit, (str, unicode)):
+            if isinstance(unit, str):
                 unit = unit.replace('^', '**')
-            if isinstance(unit, unicode):
+            if isinstance(unit, str):
                 unit = unit.encode('utf-8')
             self.unit = Quantity(unit)
         except:
@@ -261,7 +261,7 @@ Concerning the ordering of data matrices and the dimension list consult http://w
             dependency = '(%s)' % ','.join(shortnames)
         else:
             dependency = ''
-        return u"%s $%s%s$ / %s" % (
+        return "%s $%s%s$ / %s" % (
             self.longname.title(), self.shortname,
             dependency, self._formatUnit()
             )
@@ -269,26 +269,26 @@ Concerning the ordering of data matrices and the dimension list consult http://w
 
     def _getShortLabel(self):
         unit = self._formatUnit()
-        if unit == u'a.u.' and self.longname.lower() == 'index':
-            return u"%s $%s$" % (self.longname.title(), self.shortname)
+        if unit == 'a.u.' and self.longname.lower() == 'index':
+            return "%s $%s$" % (self.longname.title(), self.shortname)
         else:
-            return u"%s $%s$ / %s" % (
+            return "%s $%s$ / %s" % (
                 self.longname.title(), self.shortname, unit
                 )
     shortlabel = property(_getShortLabel)
 
     def _formatUnit(self):
-        unit = unicode(self.unit)
+        unit = str(self.unit)
         try:
             if not isQuantity(self.unit) and self.unit == 1:
-                return u'a.u.'
+                return 'a.u.'
         except:
             # is this bug still present?
             # why catch everything?
             pass  # just a ScientificPython bug
-        unit = unit.replace(u'1.0 ', u'')#.replace(u'mu',u'\\textmu{}')
-        if u' ' in unit or u'/' in unit or u'*' in unit:
-            unit = u'(%s)' % (unit, )
+        unit = unit.replace('1.0 ', '')#.replace(u'mu',u'\\textmu{}')
+        if ' ' in unit or '/' in unit or '*' in unit:
+            unit = '(%s)' % (unit, )
         return unit
 
     def _getRawDataBytes(self):
@@ -395,13 +395,9 @@ Concerning the ordering of data matrices and the dimension list consult http://w
             prefixes = PREFIXES_METER
         else:
             prefixes = PREFIXES
-        prefixCandidates = map(
-            lambda i: (i[0], abs(i[1] - newDecade)), prefixes
-            )
+        prefixCandidates = [(i[0], abs(i[1] - newDecade)) for i in prefixes]
         optPrefix = min([prefix[1] for prefix in prefixCandidates])
-        newPrefix = filter(
-            lambda prefix: prefix[1] == optPrefix, prefixCandidates
-            )[0][0]
+        newPrefix = [prefix for prefix in prefixCandidates if prefix[1] == optPrefix][0][0]
         newUnitName = newPrefix + baseUnit
         #Convert to new unit
         newUnit = oldUnit.inUnitsOf(newUnitName)
@@ -414,7 +410,8 @@ Concerning the ordering of data matrices and the dimension list consult http://w
 
     def __eq__(self, other, rtol=1e-5, atol=1e-8):
         if type(self) != type(other):
-            if type(other) != IndexMarker and type(other) != NoneType:
+            # if type(other) != IndexMarker and type(other) != NoneType:
+            if type(other) != IndexMarker and not(isInstance(type(other), type(None))):
                 _logger.debug(
                     'Cannot compare objects '
                     'with different type (%s and %s).' % (
@@ -596,7 +593,7 @@ Concerning the ordering of data matrices and the dimension list consult http://w
                 error = None
             if len(self._dimensions) != len(other.dimensions):
                 return NotImplemented
-            for i in xrange(len(self._dimensions)):
+            for i in range(len(self._dimensions)):
                 if not self._dimensions[i] == other.dimensions[i]:
                     return NotImplemented
             if isQuantity(self.unit):
@@ -627,8 +624,8 @@ Concerning the ordering of data matrices and the dimension list consult http://w
                 mask = self.mask
             else:
                 mask = self.mask + other.mask
-            longname = u"Sum of %s and %s." % (self.longname, other.longname)
-            shortname = u"%s + %s" % (self.shortname, other.shortname)
+            longname = "Sum of %s and %s." % (self.longname, other.longname)
+            shortname = "%s + %s" % (self.shortname, other.shortname)
             return FieldContainer(data, unit, error, mask,
                                   copy.deepcopy(self._dimensions),
                                   longname, shortname)
@@ -642,7 +639,7 @@ Concerning the ordering of data matrices and the dimension list consult http://w
                 error = None
             if len(self._dimensions) != len(other.dimensions):
                 return NotImplemented
-            for i in xrange(len(self._dimensions)):
+            for i in range(len(self._dimensions)):
                 if not self._dimensions[i] == other.dimensions[i]:
                     return NotImplemented
             if isQuantity(self.unit):
@@ -676,10 +673,10 @@ Concerning the ordering of data matrices and the dimension list consult http://w
                 mask = self.mask
             else:
                 mask = self.mask + other.mask
-            longname = u"Difference of %s and %s." % (
+            longname = "Difference of %s and %s." % (
                 self.longname, other.longname
                 )
-            shortname = u"%s - %s" % (self.shortname, other.shortname)
+            shortname = "%s - %s" % (self.shortname, other.shortname)
             return FieldContainer(data, unit, error, mask,
                                   copy.deepcopy(self._dimensions),
                                   longname, shortname)
@@ -736,7 +733,7 @@ Concerning the ordering of data matrices and the dimension list consult http://w
                     dimensions.append(dim)
                 else:
                     dimensions.append(dim[args[i], ])
-        for i in xrange(len(args), len(data.shape)):
+        for i in range(len(args), len(data.shape)):
             dimensions.append(copy.deepcopy(self._dimensions[i]))
         if data.shape != (1,):
             data = data.squeeze()

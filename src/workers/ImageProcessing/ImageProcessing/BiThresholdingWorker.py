@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 from pyphant.core import (Worker, Connectors, DataContainer)
@@ -64,8 +64,8 @@ class BiThresholdingWorker(Worker.Worker):
     def computeCovering(self, data):
         nx, ny = data.shape
         count = 0
-        for x in xrange(0, nx):
-            for y in xrange(0, ny):
+        for x in range(0, nx):
+            for y in range(0, ny):
                 if data[x, y] == 0:
                     count += 1
         covering = float(count) / (nx * ny)
@@ -100,7 +100,7 @@ class BiThresholdingWorker(Worker.Worker):
         data = self.getIntermediate(image)
         result = DataContainer.FieldContainer(data,
                                 dimensions=copy.deepcopy(image.dimensions),
-                                longname=u"Binary Image", shortname=u"B")
+                                longname="Binary Image", shortname="B")
         result.seal()
         return result
 
@@ -118,8 +118,8 @@ class BiThresholdingWorker(Worker.Worker):
         lowerCover, intermediateCover, upperCover = self.getCovering(image)
         data = image.data.copy()
         nx, ny = data.shape
-        for x in xrange(0, nx):
-            for y in xrange(0, ny):
+        for x in range(0, nx):
+            for y in range(0, ny):
                 if data[x, y] < upperThreshold:
                     if data[x, y] < lowerThreshold:
                         data[x, y] = lowerCover
@@ -128,11 +128,11 @@ class BiThresholdingWorker(Worker.Worker):
                 else:
                     data[x, y] = upperCover
         covering = self.getCovering(image)
-        print covering
+        print(covering)
         result = DataContainer.FieldContainer(data,
                                     dimensions=copy.deepcopy(image.dimensions),
-                                    longname=u"Covering Image %s" % covering,
-                                    shortname=u"C")
+                                    longname="Covering Image %s" % covering,
+                                    shortname="C")
         result.seal()
         return result
 
@@ -147,9 +147,9 @@ class BiThresholdingWorker(Worker.Worker):
                                         shortname='\theta')
         A = DataContainer.FieldContainer(coveringVec, '1',
                                          longname='Covering', shortname='A')
-        print theta.data, thresholds
-        print A.data, coveringVec
+        print(theta.data, thresholds)
+        print(A.data, coveringVec)
         res = DataContainer.SampleContainer([theta, A],
-                                            u"Covering of image parts", u"X_A")
+                                            "Covering of image parts", "X_A")
         res.seal()
         return res

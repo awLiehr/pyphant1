@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The Coverage Worker is a class of Pyphant's Image Processing
 toolbox. It compares every pixel with a calculated
 threshold. Therefore required percentages of black and white material
@@ -85,6 +85,6 @@ class CoverageWorker(Worker.Worker):
                                   BACKGROUND_COLOR)
         result = FieldContainer(resultArray,
                                 dimensions=copy.deepcopy(image.dimensions),
-                                longname=u"Binary Image", shortname=u"B")
+                                longname="Binary Image", shortname="B")
         result.seal()
         return result

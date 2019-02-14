@@ -68,7 +68,7 @@ class PasteServerThread(Thread):
         self.paste_server = PasteServer(host=self.host, port=self.port)
         try:
             pyphant.core.bottle.run(app=self.app, server=self.paste_server)
-        except Exception, exep:
+        except Exception as exep:
             self.error = exep
 
 
@@ -81,7 +81,7 @@ class RoutingHTTPServer(object):
       server.url : URL server is listening at
     """
 
-    def __init__(self, host=u'127.0.0.1', port=8080, start=False):
+    def __init__(self, host='127.0.0.1', port=8080, start=False):
         """
         Sets up the server and (optionally) starts it.
         Arguments:
@@ -102,7 +102,7 @@ class RoutingHTTPServer(object):
             self.start()
 
     def _get_url(self):
-        return u'http://%s:%d/' % (self.host, self.port)
+        return 'http://%s:%d/' % (self.host, self.port)
     url = property(_get_url)
 
     def start(self):

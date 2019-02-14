@@ -35,7 +35,7 @@ The purpose of this module is the storage and management of DataContainers
 This module provides the KnowledgeManager class as well as some helper classes.
 """
 
-from __future__ import with_statement
+
 from pyphant.core.singletonmixin import Singleton
 import os
 import logging
@@ -45,8 +45,8 @@ from pyphant.core import LoadFMF
 from pyphant.core.SQLiteWrapper import (SQLiteWrapper, AnyValue)
 from pyphant.core.Helpers import getPyphantPath
 from uuid import uuid1
-from urlparse import urlparse
-import urllib
+from urllib.parse import urlparse
+import urllib.request, urllib.parse, urllib.error
 
 # Limit for sum(DC.rawDataBytes) for DC in cache:
 CACHE_MAX_SIZE = 256 * 1024 * 1024
@@ -105,7 +105,7 @@ class TestCachedDC(object):
         return self.id == other.id
 
 
-KM_DBASE = u'default'  # modify for debug purposes
+KM_DBASE = 'default'  # modify for debug purposes
 
 
 class KnowledgeManager(Singleton):
@@ -153,7 +153,7 @@ class KnowledgeManager(Singleton):
         self.logger = logging.getLogger("pyphant")
         self._cache = []
         self._cache_size = 0
-        if KM_DBASE == u'default':
+        if KM_DBASE == 'default':
             self.dbase = os.path.join(getPyphantPath('sqlite3'),
                                       "km_meta.sqlite3")
         else:
@@ -267,7 +267,7 @@ class KnowledgeManager(Singleton):
         with h5fh:
             summaryDict = h5fh.loadSummary()
         with SQLiteWrapper(self.dbase) as wrapper:
-            for dcId, summary in summaryDict.items():
+            for dcId, summary in list(summaryDict.items()):
                 if dcId == im_id:
                     wrapper.set_entry(summary, None, temporary)
                 else:
@@ -305,7 +305,7 @@ class KnowledgeManager(Singleton):
             fnwoext = ''
             for part in split:
                 fnwoext += (part + '.')
-            from sys import maxint
+            from sys import maxsize
             while i < maxint:
                 fill = str(i).zfill(10)
                 tryfn = os.path.join(directory,
@@ -317,7 +317,7 @@ class KnowledgeManager(Singleton):
                     break
         self.logger.info("Retrieving url '%s'..." % url)
         self.logger.info("Using local file '%s'." % filename)
-        savedto, headers = urllib.urlretrieve(url, filename)
+        savedto, headers = urllib.request.urlretrieve(url, filename)
         if REFMF.match(filename.lower()) != None:
             self.registerFMF(filename, temporary)
         elif REHDF5.match(filename.lower()) != None:

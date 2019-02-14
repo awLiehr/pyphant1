@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 
@@ -106,7 +106,7 @@ def str2unit(unitStr, FMFversion='1.1'):
 
 def parseQuantity(value, FMFversion='1.1'):
     import re
-    pm = re.compile(ur"(?:\\pm|\+-|\+/-)")
+    pm = re.compile(r"(?:\\pm|\+-|\+/-)")
     try:
         value, error = [s.strip() for s in pm.split(value)]
     except:

@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides unittest classes for KnowledgeNode.
+"""Provides unittest classes for KnowledgeNode.
 """
 
 
@@ -46,7 +46,7 @@ class KnowledgeNodeTestCase(unittest.TestCase):
         osid, filename = tempfile.mkstemp(suffix='.sqlite3', prefix='test-')
         os.close(osid)
         self.filename = filename
-        ports = [8080] + range(48621, 48771)
+        ports = [8080] + list(range(48621, 48771))
         self.kn = get_kn_autoport(ports, start=True, web_interface=True,
                                   dbase=filename)
 
@@ -55,7 +55,7 @@ class KnowledgeNodeTestCase(unittest.TestCase):
         os.remove(self.filename)
 
     def testUUID(self):
-        from urllib2 import urlopen
+        from urllib.request import urlopen
         stream = urlopen(self.kn.url + 'uuid/')
         uuid = stream.readline()
         stream.close()

@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The Load ZStack worker is a class of Pyphant's Image Processing
 Toolbox. It simply loads a set of images from the location given in the
 worker's configuration as a 3d image.
@@ -49,21 +49,21 @@ class LoadZStack(Worker.Worker):
         ).version
     name = "Load ZStack"
     _params = [
-        ("path", u"Path (select any file)", "", SUBTYPE_FILE),
-        ("regex", u"File Filter Regex", r'(?i)^.+\.tif$', None),
-        ("fieldUnit", u"Unit of the field", "1", None),
-        ("dz", u"z increment", '1 mum', None),
-        ("dy", u"y increment", '1 mum', None),
-        ("dx", u"x increment", '1 mum', None),
-        ("startz", u"z start", '0 mum', None),
-        ("starty", u"y start", '0 mum', None),
-        ("startx", u"x start", '0 mum', None),
-        ("zClip", u"Clipping of z-axis (pixels)", ':', None),
-        ("yClip", u"Clipping of y-axis (pixels)", ':', None),
-        ("xClip", u"Clipping of x-axis (pixels)", ':', None),
-        ("dtype", u"data type", 'uint8', None),
-        ("longname", u"Longname", 'ZStack', None),
-        ("shortname", u"Shortname", 'I', None)
+        ("path", "Path (select any file)", "", SUBTYPE_FILE),
+        ("regex", "File Filter Regex", r'(?i)^.+\.tif$', None),
+        ("fieldUnit", "Unit of the field", "1", None),
+        ("dz", "z increment", '1 mum', None),
+        ("dy", "y increment", '1 mum', None),
+        ("dx", "x increment", '1 mum', None),
+        ("startz", "z start", '0 mum', None),
+        ("starty", "y start", '0 mum', None),
+        ("startx", "x start", '0 mum', None),
+        ("zClip", "Clipping of z-axis (pixels)", ':', None),
+        ("yClip", "Clipping of y-axis (pixels)", ':', None),
+        ("xClip", "Clipping of x-axis (pixels)", ':', None),
+        ("dtype", "data type", 'uint8', None),
+        ("longname", "Longname", 'ZStack', None),
+        ("shortname", "Shortname", 'I', None)
         ]
 
     @Worker.plug(TYPE_IMAGE)
@@ -77,12 +77,10 @@ class LoadZStack(Worker.Worker):
         if os.path.isfile(path):
             path = os.path.dirname(path)
         pattern = re.compile(self.paramRegex.value)
-        filenames = filter(
-            lambda x: pattern.match(x) is not None, os.listdir(path)
-            )
+        filenames = [x for x in os.listdir(path) if pattern.match(x) is not None]
         filenames.sort()
         filenames = [os.path.join(path, fname) for fname in filenames]
-        print path
+        print(path)
         zClip = self.getClip(self.paramZClip.value)
         filenames = filenames[zClip[0]:zClip[1]]
         assert len(filenames) >= 1

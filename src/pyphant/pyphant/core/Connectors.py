@@ -39,7 +39,7 @@ import inspect
 import logging
 
 # used in exec statement; shouldn't this be passed as a name to exec?
-import Queue
+import queue
 
 
 class FullSocketError(ValueError):
@@ -88,9 +88,9 @@ class Computer(threading.Thread):
         if self.method:
             try:
                 self.result = self.method(subscriber=self.kwargs["subscriber"])
-            except Exception, e:
+            except Exception as e:
                 logging.getLogger('pyphant').error(
-                    u"An unhandled exception occured in the calculation.",
+                    "An unhandled exception occured in the calculation.",
                     exc_info=True)
                 self.exception_queue.put(e)
                 raise
@@ -148,14 +148,14 @@ class Updater(object):
 
 class CalculatingPlug(Plug):
     def __init__(self, method, name, type=DEFAULT_DATA_TYPE):
-        Plug.__init__(self, method.im_self, name, type)
-        self._methodName = method.func_name
+        Plug.__init__(self, method.__self__, name, type)
+        self._methodName = method.__name__
         self._func = self.createWrapper(method)
 
     def createWrapper(self, method):
         args, varargs, varkw, defaults = inspect.getargspec(method)
         sockets = args[1:-1]
-        name = method.func_name + 'PyphantWrapper'
+        name = method.__name__ + 'PyphantWrapper'
         l = 'def ' + name + '(subscriber, method=method, process=self):\n'
         l += '\texception_queue=Queue.Queue()\n'
         for s in sockets:
@@ -177,7 +177,7 @@ class CalculatingPlug(Plug):
         for s in sockets:
             l += s + '=' + s + '.result,'
         l = l[:-1] + ')\n'
-        exec l
+        exec(l)
         return eval(name)
 
     def __getstate__(self):  # this could be done with marshalling

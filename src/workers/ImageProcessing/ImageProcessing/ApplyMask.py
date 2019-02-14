@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The ApplyMask Worker is a class of Pyphant's Image Processing
 Toolbox. By using this worker one gray-scale image can be applied as a
 mask on another image.
@@ -106,8 +106,8 @@ class ApplyMask(Worker.Worker):
                       )
         res = SampleContainer(
             fields,
-            u"Points from %s at %s" % (image.longname, mask.longname),
-            u"X1"
+            "Points from %s at %s" % (image.longname, mask.longname),
+            "X1"
             )
         res.seal()
         subscriber %= 100.0

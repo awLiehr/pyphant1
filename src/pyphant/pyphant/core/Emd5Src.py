@@ -46,7 +46,7 @@ class Emd5Src(Worker.Worker):
     VERSION = 1
     REVISION = pkg_resources.get_distribution("pyphant").version
     name = "Emd5Src"
-    _params = [("emd5", u"id (emd5)", "", None)]
+    _params = [("emd5", "id (emd5)", "", None)]
 
     @Worker.plug(Connectors.TYPE_IMAGE)
     def getDataContainer(self, subscriber=0):

@@ -46,13 +46,13 @@ for root, dirs, files in os.walk("."):
         if ignore in dirs:
             dirs.remove(ignore)
 
-    files = filter(lambda f: f.startswith('Test') and f.endswith('.py'), files)
+    files = [f for f in files if f.startswith('Test') and f.endswith('.py')]
 
     if len(files) > 0:
         sys.path.append(root)
         for f in files:
             mod = f[:-3]
-            exec 'import ' + mod
+            exec('import ' + mod)
             mod = sys.modules[mod]
             suites.append(unittest.TestLoader().loadTestsFromModule(mod))
 

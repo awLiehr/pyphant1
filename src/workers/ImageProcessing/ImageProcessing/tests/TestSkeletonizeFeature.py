@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides unittest classes TestSkeletonizeFeature, TestSkeletonizeCross, and TestCheckNeighbours.
+"""Provides unittest classes TestSkeletonizeFeature, TestSkeletonizeCross, and TestCheckNeighbours.
 """
 
 
@@ -38,7 +38,7 @@ import sys
 import unittest
 import ImageProcessing as I
 import ImageProcessing.SkeletonizeFeature as IM
-import TestDistanceMapper as TDM
+from . import TestDistanceMapper as TDM
 import numpy
 import pyphant.quantities as pq
 from pyphant.core import DataContainer
@@ -169,7 +169,7 @@ class TestCheckNeighbours(unittest.TestCase):
         self.binIm[1,1] = self.F
 
     def assertEqualRot(self,image,proof,cases=1):
-        for n in xrange(cases):
+        for n in range(cases):
             rotIm = numpy.rot90(image,n)
             result = list(IM.checkNeighbours(rotIm)) + [IM.checkTransitions(rotIm)]
             self.assertEqual(result,proof,"The neighbourhood fingerprint should be %s, but is %s for \n%s!"%(proof,result,image))
@@ -254,7 +254,7 @@ class TestCheckNeighbours(unittest.TestCase):
         """If three pixels are directly connected at an corner to the central pixel, the latter has 3 neighboured feature pixels, 2 closely neighboured background pixels, and 1 transition from feature to background, while the corner position depends on the orientation of the corner."""
         self.binIm[2,:2] = self.F
         self.binIm[1,0]  = self.F
-        for n in xrange(4):
+        for n in range(4):
             proof = [3,2,n+1,1]
             rotIm = numpy.rot90(self.binIm,n)
             result = list(IM.checkNeighbours(rotIm))+[IM.checkTransitions(rotIm)]

@@ -70,7 +70,7 @@ def str2number(str):
         value = int(str)
     except ValueError:
         try:
-            value = long(str)
+            value = int(str)
         except ValueError:
             value = float(str)
     return value
@@ -144,7 +144,7 @@ def get_wildcards(length, char, braces=False, commas=True):
         wc = '('
     else:
         wc = ''
-    for index in xrange(length):
+    for index in range(length):
         wc += char
         if commas:
             wc += ','
@@ -232,7 +232,7 @@ class SQLiteWrapper(object):
             try:
                 self.connection.commit()
             except:
-                print "Could not commit changes to database."
+                print("Could not commit changes to database.")
         if hasattr(self.cursor, 'close'):
             self.cursor.close()
         if hasattr(self.connection, 'close'):
@@ -368,7 +368,7 @@ class SQLiteWrapper(object):
         insert_dict['bu_id'] = l_row_id
         dimension_query = "INSERT INTO km_fc_dimensions VALUES (?, ?, ?)"
         for dim_id, dim_index in zip(summary['dimensions'],
-                                     range(len(summary['dimensions']))):
+                                     list(range(len(summary['dimensions'])))):
             exe(dimension_query, (summary['id'], dim_id, dim_index))
 
     def set_entry(self, summary, storage, temporary=False):
@@ -389,13 +389,13 @@ class SQLiteWrapper(object):
             exe("INSERT INTO km_temporary VALUES (?)",
                 (summary['id'],))
         insert_dict = dict([(key, value) for key, value in \
-                                summary.iteritems() if key in \
+                                summary.items() if key in \
                                 SQLiteWrapper.common_keys])
         insert_dict['storage'] = storage
         insert_dict['date'] = date2dbase(insert_dict['date'])
         type = emd52type(summary['id'])
         attr_query = "INSERT INTO km_attributes VALUES (?, ?, ?)"
-        for key, value in summary['attributes'].iteritems():
+        for key, value in summary['attributes'].items():
             assert isinstance(key, StringTypes)
             if isinstance(value, StringTypes):
                 value = utf82uc(value)
@@ -406,13 +406,13 @@ class SQLiteWrapper(object):
             insert_dict['sc_id'] = summary['id']
             column_query = "INSERT INTO km_sc_columns VALUES (?, ?, ?)"
             for fc_id, fc_index in zip(summary['columns'],
-                                       range(len(summary['columns']))):
+                                       list(range(len(summary['columns'])))):
                 exe(column_query, (summary['id'], fc_id, fc_index))
         insert_query = "INSERT INTO km_%s %s VALUES %s"
         value_list = []
         key_query = "("
         value_query = "("
-        for key, value in insert_dict.iteritems():
+        for key, value in insert_dict.items():
             value_query += "?, "
             key_query += key + ", "
             value_list.append(value)
@@ -482,7 +482,7 @@ class SQLiteWrapper(object):
             return ('1', [], True)
         expr = '('
         new_value = []
-        for attr_key, attr_value in value.iteritems():
+        for attr_key, attr_value in value.items():
             if isinstance(attr_value, AnyValue):
                 value_expr = ''
                 new_value.append(attr_key)
@@ -512,7 +512,7 @@ class SQLiteWrapper(object):
             % (id_str, id_str, table, index_str, lid_str, '%s')
         new_value = []
         expr = '('
-        for fc_search_dict, fc_index in zip(value, range(len(value))):
+        for fc_search_dict, fc_index in zip(value, list(range(len(value)))):
             fc_query, fc_values = self.get_andsearch_query(
                 'field', ['id'], fc_search_dict, False)
             expr += qry % (fc_query, )
@@ -524,7 +524,7 @@ class SQLiteWrapper(object):
 
     def translate_parent_search(self, key, dc_search_dict, type):
         id_str = replace_type('%s_id', type)
-        if dc_search_dict.has_key('type'):
+        if 'type' in dc_search_dict:
             check = dc_search_dict.pop('type')
         else:
             check = None
@@ -548,7 +548,7 @@ class SQLiteWrapper(object):
 
     def translate_child_search(self, key, child_search_dict):
         if key == 'has_col':
-            if child_search_dict.has_key('type'):
+            if 'type' in child_search_dict:
                 child_type = child_search_dict.pop('type')
                 child_qry, child_values = self.get_andsearch_query(
                     child_type, ['id'], child_search_dict, False)
@@ -564,7 +564,7 @@ class SQLiteWrapper(object):
             child_id_str = 'fc_id'
             table = 'km_sc_columns'
         elif key == 'has_dim':
-            if child_search_dict.has_key('type'):
+            if 'type' in child_search_dict:
                 assert child_search_dict.pop('type') == 'field'
             child_qry, child_values = self.get_andsearch_query(
                 'field', ['id'], child_search_dict, False)
@@ -578,7 +578,7 @@ class SQLiteWrapper(object):
     def translate_search_dict(self, type, search_dict):
         where = ''
         values = []
-        for key, value in search_dict.iteritems():
+        for key, value in search_dict.items():
             extend = False
             if key in self.one_to_one_search_keys:
                 expr = '%s=?' % key
@@ -700,9 +700,9 @@ class SQLiteWrapper(object):
                     % (order_by, {True: 'ASC', False: 'DESC'}[order_asc])
         assert isinstance(limit, int)
         assert isinstance(offset, int)
-        if not search_dict.has_key('type'):
+        if 'type' not in search_dict:
             self.verify_keys(result_keys, self.common_result_keys)
-            self.verify_keys(search_dict.keys(), self.common_search_keys)
+            self.verify_keys(list(search_dict.keys()), self.common_search_keys)
             fc_query, fc_values \
                 = self.get_andsearch_query('field', result_keys,
                                            search_dict, distinct)
@@ -732,7 +732,7 @@ class SQLiteWrapper(object):
                 allowed_result_keys = self.common_result_keys
             mod_search_dict = search_dict.copy()
             mod_search_dict.pop('type')
-            self.verify_keys(mod_search_dict.keys(), allowed_search_keys)
+            self.verify_keys(list(mod_search_dict.keys()), allowed_search_keys)
             self.verify_keys(result_keys, allowed_result_keys)
             query, values = self.get_andsearch_query(
                 search_dict['type'], result_keys, mod_search_dict, distinct)
@@ -790,7 +790,7 @@ class FCRowWrapper(RowWrapper):
             self.cursor.execute(self.dimension_query, (self.emd5, ))
             dimensions = [row[0] for row in self.cursor]
             if dimensions == []:
-                dimensions = [u'IndexMarker']
+                dimensions = ['IndexMarker']
             return dimensions
         elif key == 'unit':
             self.cursor.execute(self.unit_query % 'QUANTITY', (self.emd5, ))

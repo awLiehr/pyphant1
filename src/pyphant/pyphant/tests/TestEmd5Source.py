@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides unittest classes TestMRA and TestMRADiscontinuousDiscretisation.
+"""Provides unittest classes TestMRA and TestMRADiscontinuousDiscretisation.
 """
 
 

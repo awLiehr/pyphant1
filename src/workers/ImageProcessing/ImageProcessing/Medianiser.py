@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The Medianiser Worker is a class of Pyphant's Image Processing
 Toolbox. It is used to remove noise from an image, by implementing a
 standard median filter. In its configurations the size of the applied
@@ -58,7 +58,7 @@ class Medianiser(Worker.Worker):
         im = copy.deepcopy(field)
         size = self.paramSize.value
         ru = self.paramRuns.value
-        for _ in xrange(ru):
+        for _ in range(ru):
             im.data = scipy.ndimage.filters.median_filter(im.data, size=size)
         im.seal()
         return im

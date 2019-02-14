@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The Diff Worker belongs to Pyphant's Image Processing Toolbox. It
 computes the difference between two images, eg. the skeletonised image
 and the origial image.
@@ -46,17 +46,17 @@ class DiffWorker(Worker.Worker):
         "pyphant.imageprocessing"
         ).version
     name = "Difference"
-    _params = [("absolute", u"Return absolute of difference: ",
-                [u"Yes", u"No"], None),
-               ("longname", u"Name of result", 'default', None),
-               ("symbol", u"Symbol of result", 'default', None)]
+    _params = [("absolute", "Return absolute of difference: ",
+                ["Yes", "No"], None),
+               ("longname", "Name of result", 'default', None),
+               ("symbol", "Symbol of result", 'default', None)]
     _sockets = [("image1", Connectors.TYPE_IMAGE),
                 ("image2", Connectors.TYPE_IMAGE)]
 
     @Worker.plug(Connectors.TYPE_IMAGE)
     def diffImages(self, image1, image2, subscriber=0):
         result = image1 - image2
-        if self.paramAbsolute.value == u"Yes":
+        if self.paramAbsolute.value == "Yes":
             import numpy
             result.data = numpy.abs(result.data)
         if self.paramLongname.value != 'default':

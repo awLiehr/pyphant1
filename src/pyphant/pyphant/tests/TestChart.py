@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides unittests for ImageVisualizers. Because it is difficult to check the correct visualization of a image, it is just checked, wether the visualizers run without assertions."""
+"""Provides unittests for ImageVisualizers. Because it is difficult to check the correct visualization of a image, it is just checked, wether the visualizers run without assertions."""
 
 from pyphant.mplbackend import ensure_mpl_backend
 ensure_mpl_backend('agg')
@@ -105,7 +105,7 @@ class TestLinePlot(unittest.TestCase):
                                    shortname = 'x')
         #Prepare potential
         V = []
-        for i in xrange(len(lambField.data)):
+        for i in range(len(lambField.data)):
             u = X[i]
             V.append(-lambField.data[i]/2* u**2 + u**4/4-u*self.kappa1)
         self.V = DC.FieldContainer(numpy.array(V),unit='1 V',dimensions=[lambField,xField],
@@ -133,7 +133,7 @@ class TestLinePlot(unittest.TestCase):
                                    shortname = 'x')
         #Prepare potential
         V = []
-        for i in xrange(len(lambField.data)):
+        for i in range(len(lambField.data)):
             u = X[i]
             V.append(-lambField.data[i]/2* u**2 + u**4/4-u*self.kappa1)
         self.V = DC.FieldContainer(numpy.array(V),unit='1 V',dimensions=[lambField, xField],

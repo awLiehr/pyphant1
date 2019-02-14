@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The Composite worker acts as a container for graphs of workers.
 At the moment these can only be entire recipes, but it is planned
 that they can be subgraphs, too.
@@ -107,12 +107,12 @@ class CompositeWorker(Worker.Worker):
         self._sources = []
         self._sinks = []
         self._eventDispatcher = EventDispatcher.EventDispatcher()
-        for i in xrange(self.paramNoSockets.value):
+        for i in range(self.paramNoSockets.value):
             name = "socket%i" % i
             socketProxy = Connectors.ConnectorProxy(self, True, name)
             setattr(self, 'socket' + self.upperFirstLetter(name), socketProxy)
             self._sockets[name] = socketProxy
-        for i in xrange(self.paramNoPlugs.value):
+        for i in range(self.paramNoPlugs.value):
             name = "plug%i" % i
             plugProxy = Connectors.ConnectorProxy(self, False, name)
             setattr(self, 'plug' + self.upperFirstLetter(name), plugProxy)
@@ -120,7 +120,7 @@ class CompositeWorker(Worker.Worker):
 
     def addWorker(self, worker, data=None):
         if not self.checkWorkerName(worker, worker.getParam('name').value):
-            raise ValueError(u'Duplicate worker name')
+            raise ValueError('Duplicate worker name')
         worker.registerParamListener(self.vetoWorkerName,
                                      'name', Param.ParamChangeRequested)
         self._workers.append(worker)
@@ -194,19 +194,19 @@ class CompositeWorker(Worker.Worker):
         return pdict
 
     def generateEvents(self, listenerDict):
-        map(lambda worker: listenerDict[WorkerAddedEvent](
+        list(map(lambda worker: listenerDict[WorkerAddedEvent](
                 WorkerAddedEvent(worker)
-                ), self._workers)
+                ), self._workers))
 
         def connectionInformer(worker):
             for socket in worker.getSockets():
                 if socket.isFull():
                     [(issubclass(ConnectionCreatedEvent, x)
                        and l(ConnectionCreatedEvent(socket.getPlug(), socket)))
-                      for (x, l) in listenerDict.items()]
+                      for (x, l) in list(listenerDict.items())]
 
         connectionInformer(self)
-        map(connectionInformer, self._workers)
+        list(map(connectionInformer, self._workers))
 
     def createCompositeWorkerWalker(self):
         return CompositeWorkerWalker(self)

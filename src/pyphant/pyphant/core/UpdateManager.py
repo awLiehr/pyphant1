@@ -38,7 +38,7 @@ TODO: Is this still working?
 
 import pkg_resources
 pkg_resources.require('setuptools')
-import StringIO
+import io
 import sys
 import logging
 
@@ -48,7 +48,7 @@ ei = pkg_resources.load_entry_point('setuptools',
 
 
 def updatePackage(package):
-    stdout, stderr = StringIO.StringIO(), StringIO.StringIO()
+    stdout, stderr = io.StringIO(), io.StringIO()
     old = sys.stdout, sys.stderr
     sys.stdout, sys.stderr = stdout, stderr
     ei(['-U', '-f http://pyphant.sourceforge.net/nightly-builds', package])

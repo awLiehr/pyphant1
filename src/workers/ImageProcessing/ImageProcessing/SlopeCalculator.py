@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 from pyphant.core import (Worker, Connectors, DataContainer)
@@ -74,7 +74,7 @@ class SlopeCalculator(Worker.Worker):
         dx     = numpy.diff(image.dimensions[0].data)
         dy     = numpy.diff(image.dimensions[1].data)
         if dx.min() == dx.max() and dy.min() == dy.max():
-            print "Calculating gradients with O(2)."
+            print("Calculating gradients with O(2).")
             NablaX = 0.5 * (paddedField[:, :-2] - paddedField[:, 2:]) / \
                 dx.min()
             NablaY = 0.5 * (paddedField[:-2, :] - paddedField[2:, :]) / \
@@ -82,7 +82,7 @@ class SlopeCalculator(Worker.Worker):
             xAbs = NablaX[1:-1, :] ** 2
             yAbs = NablaY[:, 1:-1] ** 2
         else:
-            print "Calculating (right-side) gradient with O(1)."
+            print("Calculating (right-side) gradient with O(1).")
             NablaX = numpy.diff(paddedField, axis=0)
             NablaY = numpy.diff(paddedField, axis=1)
             xAbs   = (NablaX[:, :-1] / dx[:, numpy.newaxis]) ** 2
@@ -99,8 +99,8 @@ class SlopeCalculator(Worker.Worker):
             gradient,
             unit=newUnit,
             dimensions=copy.deepcopy(image.dimensions),
-            longname=u"Slope of %s" % image.longname,
-            shortname=u"|\nabla %s|" % image.shortname,
+            longname="Slope of %s" % image.longname,
+            shortname="|\nabla %s|" % image.shortname,
             rescale=True
             )
         result.seal()

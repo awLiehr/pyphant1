@@ -31,7 +31,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 Pyphant module computing the local extrema of one-dimensional
 sampled fields. If a two-dimensional field is provided as input, the
 algorithm loops over the 0th dimension denoting the y-axis, which
@@ -50,7 +50,7 @@ class ExtremumFinder(Worker.Worker):
     name = "Find Extremum"
     _sockets = [("field", Connectors.TYPE_IMAGE)]
     _params = [
-        ("extremum", u"extremum", [u"minima", u"maxima", u"both"], None)
+        ("extremum", "extremum", ["minima", "maxima", "both"], None)
         ]
 
     @Worker.plug(Connectors.TYPE_IMAGE)
@@ -70,31 +70,31 @@ class ExtremumFinder(Worker.Worker):
             XCurv = numpy.array(extremaCurv[0])
             XError = numpy.array(extremaError[0])
         else:
-            maxLen = max(map(len, extremaPos))
+            maxLen = max(list(map(len, extremaPos)))
             X0 = numpy.zeros((Nrows, maxLen), 'f')
             X0[:] = numpy.NaN
             XCurv = X0.copy()
             XError = X0.copy()
-            for i in xrange(Nrows):
+            for i in range(Nrows):
                 numExt = len(extremaPos[i])
                 if numExt == 1:
                     X0[i, 0] = extremaPos[i][0]
                     XCurv[i, 0] = extremaCurv[i]
                     XError[i, 0] = extremaError[i]
                 else:
-                    for j in xrange(numExt):
+                    for j in range(numExt):
                         X0[i, j] = extremaPos[i][j]
                         XCurv[i, j] = extremaCurv[i][j]
                         XError[i, j] = extremaError[i][j]
         extremaType = self.paramExtremum.value
-        if extremaType == u'minima':
+        if extremaType == 'minima':
             X0 = numpy.where(XCurv > 0, X0, numpy.nan)
             error = numpy.where(XCurv > 0, XError, numpy.nan)
-        elif extremaType == u'maxima':
+        elif extremaType == 'maxima':
             X0 = numpy.where(XCurv < 0, X0, numpy.nan)
             error = numpy.where(XCurv < 0, XError, numpy.nan)
         else:
-            extremaType = u'extrema'
+            extremaType = 'extrema'
             error = XError
         xName = field.dimensions[-1].longname
         xSym = field.dimensions[-1].shortname
@@ -155,7 +155,7 @@ def findLocalExtrema(field, Nrows):
     #fields the last dimension is the sampled abscissa $\vec{x}$.
     x = field.dimensions[-1].data
     #Loop over all rows $N_{rows}$.
-    for i in xrange(Nrows):
+    for i in range(Nrows):
         #If a $1\times N_{rows}$ matrix is supplied,
         #save this row to vector $\vec{y}$.
         #Otherwise set vector $\vec{y}$ to the i$^\text{th}$ row

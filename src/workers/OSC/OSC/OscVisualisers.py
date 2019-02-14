@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 
@@ -55,32 +55,32 @@ class AbsorptionVisualizer(LineChart):
 
         data = self.dataContainer
         if self.dataContainer.numberOfColumns() > 2:
-            if u'Smoothed Absorption' in data.longnames.keys():
-                setField(u'Smoothed Absorption')
-            elif u'Absorption' in data.longnames.keys():
-                setField(u'Absorption')
+            if 'Smoothed Absorption' in list(data.longnames.keys()):
+                setField('Smoothed Absorption')
+            elif 'Absorption' in list(data.longnames.keys()):
+                setField('Absorption')
             else:
-                self.xData = data[u'Wellenlänge[nm]']
-                self.yData = data[u'ScopRaw[counts]']
+                self.xData = data['Wellenlänge[nm]']
+                self.yData = data['ScopRaw[counts]']
                 pylab.ylabel('Scop Raw / a.u.')
         else:
             self.xData = self.dataContainer[0]
             self.yData = self.dataContainer[1]
-        for i in xrange(len(self.xData.data)):
+        for i in range(len(self.xData.data)):
             self.ordinates.append(self.yData.data[i])
             self.abscissae.append(self.xData.data[i])
-        if u'Minima' in data.longnames.keys():
-            mins = data[u'Minima']
-            for i in xrange(len(mins.data)):
+        if 'Minima' in list(data.longnames.keys()):
+            mins = data['Minima']
+            for i in range(len(mins.data)):
                 self.mins.append(mins.data[i])
 
         pylab.xlabel('Wavelength $\lambda$ / nm')
         pylab.title(self.dataContainer.longname)
 
     def draw(self):
-        for i in xrange(len(self.ordinates)):
+        for i in range(len(self.ordinates)):
             pylab.plot(self.abscissae[i], self.ordinates[i])
-        for i in xrange(len(self.mins)):
+        for i in range(len(self.mins)):
             pylab.axvline(self.mins[i])
 
 DataVisReg.getInstance().registerVisualizer(

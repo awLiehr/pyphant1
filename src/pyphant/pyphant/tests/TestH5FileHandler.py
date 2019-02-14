@@ -30,9 +30,9 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from __future__ import with_statement
 
-u"""Provides unittest classes for H5FileHandler.
+
+"""Provides unittest classes for H5FileHandler.
 """
 
 
@@ -59,9 +59,9 @@ class FieldContainerTestCase(unittest.TestCase):
         data = NPArray([10.0, -103.5, 1000.43, 0.0, 10.0])
         unit = PQ('3s')
         error = NPArray([0.1, 0.2, 4.5, 0.1, 0.2])
-        longname = u'Test: FieldContainer H5FileHandler'
-        shortname = u'TestH5FC'
-        attributes = {'custom1':u'testing1...', 'custom2':u'testing2...'}
+        longname = 'Test: FieldContainer H5FileHandler'
+        shortname = 'TestH5FC'
+        attributes = {'custom1':'testing1...', 'custom2':'testing2...'}
         self.fc = FieldContainer(data, unit, error, None, None, longname,
                                  shortname, attributes)
         self.fc.seal()
@@ -110,9 +110,9 @@ class SampleContainerTestCase(unittest.TestCase):
         data = NPArray([10.0, -103.5, 1000.43, 0.0, 10.0])
         unit = PQ('3s')
         error = NPArray([0.1, 0.2, 4.5, 0.1, 0.2])
-        longname = u'Test: FieldContainer H5FileHandler'
-        shortname = u'TestH5FC'
-        attributes = {'custom1':u'testing1...', 'custom2':u'testing2...'}
+        longname = 'Test: FieldContainer H5FileHandler'
+        shortname = 'TestH5FC'
+        attributes = {'custom1':'testing1...', 'custom2':'testing2...'}
         self.fc = FieldContainer(data, unit, error, None, None, longname,
                                  shortname, attributes)
         self.fc.seal()
@@ -120,8 +120,8 @@ class SampleContainerTestCase(unittest.TestCase):
                              None, None, 'FieldContainer 2', 'FC2')
         fc2.seal()
         columns = [self.fc, fc2]
-        longname = u'Test: SampleContainer H5FileHandler'
-        shortname = u'TestH5SC'
+        longname = 'Test: SampleContainer H5FileHandler'
+        shortname = 'TestH5SC'
         self.sc = SampleContainer(columns, longname, shortname, attributes)
         self.sc.seal()
 
@@ -237,7 +237,7 @@ class RecipeTestCase(unittest.TestCase):
         from pyphant.core.CompositeWorker import CompositeWorker
         from pyphant.core.WorkerRegistry import WorkerRegistry
         from itertools import chain
-        recipe = CompositeWorker(annotations={'foo':42.0, 'bar':u'Hääh?'})
+        recipe = CompositeWorker(annotations={'foo':42.0, 'bar':'Hääh?'})
         wreg = WorkerRegistry.getInstance()
         workerInfos = [t.workerInfos for t in wreg.getToolBoxInfoList()]
         for wInfo in chain(*workerInfos):

@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 TODO
 """
 
@@ -67,11 +67,11 @@ class FindLocalExtrema(Worker.Worker):
             viewextr = data[sl].max()
         else:
             viewextr = data[sl].min()
-        for y in xrange(sl[0].start, sl[0].stop):
+        for y in range(sl[0].start, sl[0].stop):
             ydiff = 1
             if y == 0:
                 ydiff = 0
-            for x in xrange(sl[1].start, sl[1].stop):
+            for x in range(sl[1].start, sl[1].stop):
                 xdiff = 1
                 if x == 0:
                     xdiff = 0

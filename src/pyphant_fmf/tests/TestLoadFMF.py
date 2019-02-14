@@ -218,56 +218,56 @@ N_2	1	2
             'Mathematical and Physical Constants'
             ]
         self.assertEqual(
-            consts[u'Speed of light'][1], str2unit("1 c", FMFversion="1.0")
+            consts['Speed of light'][1], str2unit("1 c", FMFversion="1.0")
             )
-        self.assertEqual(consts[u'Speed of light'][1], str2unit("1 c"))
+        self.assertEqual(consts['Speed of light'][1], str2unit("1 c"))
         self.assertEqual(
-            consts[u'Permeability of vacuum'][1],
+            consts['Permeability of vacuum'][1],
             str2unit("1 mu0", FMFversion="1.0")
             )
         self.assertEqual(
-            consts[u'Permittivity of vacuum'][1],
+            consts['Permittivity of vacuum'][1],
             str2unit("1 eps0", FMFversion="1.0")
             )
         self.assertEqual(
-            consts[u'Gravitational constant'][1],
+            consts['Gravitational constant'][1],
             str2unit("1 Grav", FMFversion="1.0")
             )
         self.assertTrue(
-            consts[u'Planck constant'][1],
+            consts['Planck constant'][1],
             str2unit("1 hplanck", FMFversion="1.0")
             )
         self.almostEqual(
-            consts[u'Planck constant / 2pi'][1],
+            consts['Planck constant / 2pi'][1],
             str2unit("1 hbar", FMFversion="1.0")
             )
         self.almostEqual(
-            consts[u'Elementary charge'][1],
+            consts['Elementary charge'][1],
             str2unit("1 e", FMFversion="1.0")
             )
         self.assertNotEqual(
-            consts[u'Elementary charge'][1], str2unit("1 e"),
+            consts['Elementary charge'][1], str2unit("1 e"),
             "Elementary charge has been adapted to new CODATA recommendations."
             )
         self.assertEqual(
-            consts[u'Electron mass'][1], str2unit("1 me", FMFversion="1.0")
+            consts['Electron mass'][1], str2unit("1 me", FMFversion="1.0")
             )
         self.assertNotEqual(
-            consts[u'Electron mass'][1], str2unit("1 me"),
+            consts['Electron mass'][1], str2unit("1 me"),
             "Electron mass has been adapted to new CODATA recommendations."
             )
         self.assertEqual(
-            consts[u'Proton mass'][1], str2unit("1 mp", FMFversion="1.0")
+            consts['Proton mass'][1], str2unit("1 mp", FMFversion="1.0")
             )
         self.assertNotEqual(
-            consts[u'Proton mass'][1], str2unit("1 mp"),
+            consts['Proton mass'][1], str2unit("1 mp"),
             "Proton mass has been adapted to new CODATA recommendations."
             )
         self.assertEqual(
-            consts[u'Avogadro number'][1], str2unit("1 Nav", FMFversion="1.0")
+            consts['Avogadro number'][1], str2unit("1 Nav", FMFversion="1.0")
             )
         self.assertEqual(
-            consts[u'Boltzmann constant'][1], str2unit("1 k", FMFversion="1.0")
+            consts['Boltzmann constant'][1], str2unit("1 k", FMFversion="1.0")
             )
         consts = LoadFMF.readSingleFile(
             self.FMFinput,
@@ -275,13 +275,13 @@ N_2	1	2
             'Additional constants changed from FMF version 1.0 to 1.1'
             ]
         self.almostEqual(
-            consts[u'Parsec'][1], str2unit("1 pc", FMFversion="1.0")
+            consts['Parsec'][1], str2unit("1 pc", FMFversion="1.0")
             )
         self.almostEqual(
-            consts[u'US gallon'][1], str2unit("1 galUS", FMFversion="1.0")
+            consts['US gallon'][1], str2unit("1 galUS", FMFversion="1.0")
             )
         self.assertEqual(
-            consts[u'Atomic mass units'][1],
+            consts['Atomic mass units'][1],
             str2unit("1 amu", FMFversion="1.0")
             )
 
@@ -347,66 +347,66 @@ N_2	1	2
             'Mathematical and Physical Constants'
             ]
         self.assertEqual(
-            consts[u'Speed of light'][1], str2unit("1 c", FMFversion="1.1")
+            consts['Speed of light'][1], str2unit("1 c", FMFversion="1.1")
             )
         self.assertEqual(
-            consts[u'Permeability of vacuum'][1],
+            consts['Permeability of vacuum'][1],
             str2unit("1 mu0", FMFversion="1.1"),
             'The values differ by %s.' % (
-                consts[u'Permeability of vacuum'][1] -\
+                consts['Permeability of vacuum'][1] -\
                 str2unit("1 mu0", FMFversion="1.1"),
                 )
             )
         self.assertEqual(
-            consts[u'Permittivity of vacuum'][1],
+            consts['Permittivity of vacuum'][1],
             str2unit("1 eps0", FMFversion="1.1")
             )
         self.assertEqual(
-            consts[u'Gravitational constant'][1],
+            consts['Gravitational constant'][1],
             str2unit("1 G", FMFversion="1.1")
             )
         self.assertEqual(
-            consts[u'Planck constant'][1],
+            consts['Planck constant'][1],
             str2unit("1 h", FMFversion="1.1")
             )
         self.assertEqual(
-            consts[u'Planck constant / 2pi'][1],
+            consts['Planck constant / 2pi'][1],
             str2unit("1 hbar", FMFversion="1.1")
             )
         self.assertEqual(
-            consts[u'Elementary charge'][1], str2unit("1 e",FMFversion="1.1"),
+            consts['Elementary charge'][1], str2unit("1 e",FMFversion="1.1"),
             'The elements %s and %s do not match.' % (
-                consts[u'Elementary charge'][1],
+                consts['Elementary charge'][1],
                 str2unit("1 e", FMFversion="1.1")
                 )
             )
         self.assertEqual(
-            consts[u'Electron mass'][1], str2unit("1 me", FMFversion="1.1")
+            consts['Electron mass'][1], str2unit("1 me", FMFversion="1.1")
             )
         self.assertEqual(
-            consts[u'Proton mass'][1], str2unit("1 mp", FMFversion="1.1")
+            consts['Proton mass'][1], str2unit("1 mp", FMFversion="1.1")
             )
         self.assertEqual(
-            consts[u'Avogadro number'][1], str2unit("1 NA", FMFversion="1.1")
+            consts['Avogadro number'][1], str2unit("1 NA", FMFversion="1.1")
             )
         self.assertEqual(
-            consts[u'Boltzmann constant'][1], str2unit("1 k",FMFversion="1.1")
+            consts['Boltzmann constant'][1], str2unit("1 k",FMFversion="1.1")
             )
         self.assertEqual(
-            consts[u'Rydberg constant'][1], str2unit("1 Ryd", FMFversion="1.1")
+            consts['Rydberg constant'][1], str2unit("1 Ryd", FMFversion="1.1")
             )
         consts = LoadFMF.readSingleFile(
             self.FMFinput, "testReadSingleFile")[0].attributes[
             'Additional constants changed from FMF version 1.0 to 1.1'
             ]
         self.assertEqual(
-            consts[u'Parsec'][1], str2unit("1 pc", FMFversion="1.1")
+            consts['Parsec'][1], str2unit("1 pc", FMFversion="1.1")
             )
         self.assertEqual(
-            consts[u'US gallon'][1], str2unit("1 galUS", FMFversion="1.1")
+            consts['US gallon'][1], str2unit("1 galUS", FMFversion="1.1")
             )
         self.assertEqual(
-            consts[u'Atomic mass units'][1], str2unit("1 u", FMFversion="1.1")
+            consts['Atomic mass units'][1], str2unit("1 u", FMFversion="1.1")
             )
 
 
@@ -419,7 +419,7 @@ class Emd5ConsistencyTestCase(unittest.TestCase):
     def testImportFMF(self):
         from pyphant.core.LoadFMF import loadFMFFromFile
         table = loadFMFFromFile(self.filename)
-        print "Testing imported SampleContainer for consistency..."
+        print("Testing imported SampleContainer for consistency...")
         for column in ['y0', 'y1', 'y2', 'y3', 'y4', 'y5', 'y6', 'y7', 'y8']:
             self.assertEqual(table[column].dimensions[0].id,
                              table['x'].id)
@@ -429,7 +429,7 @@ class Emd5ConsistencyTestCase(unittest.TestCase):
         kmanager = KnowledgeManager.getInstance()
         table_id = kmanager.registerFMF(self.filename, temporary=True)
         table = kmanager.getDataContainer(table_id)
-        print "Testing registered SampleContainer for consistency..."
+        print("Testing registered SampleContainer for consistency...")
         for column in ['y0', 'y1', 'y2', 'y3', 'y4', 'y5', 'y6', 'y7', 'y8']:
             self.assertEqual(table[column].dimensions[0].id,
                              table['x'].id)
@@ -439,7 +439,7 @@ class Emd5ConsistencyTestCase(unittest.TestCase):
         kmanager = KnowledgeManager.getInstance()
         table_id = kmanager.registerFMF(self.filename, temporary=True)
         table = kmanager.getDataContainer(table_id)
-        print "Testing registered SampleContainer summary for consistency..."
+        print("Testing registered SampleContainer summary for consistency...")
         for column in ['y0', 'y1', 'y2', 'y3', 'y4', 'y5', 'y6', 'y7', 'y8']:
             summary = kmanager.getSummary(table[column].id)
             emd5 = summary['dimensions'][0]

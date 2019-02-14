@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 TODO
 """
 
@@ -85,8 +85,8 @@ class Watershed(Worker.Worker):
                     d[ny, nx] = 0
                     if p[0] != 0 and not p in q:
                         heapq.heappush(q, p)
-                except IndexError, e:
-                    print e
+                except IndexError as e:
+                    print(e)
         return w
 
     @Worker.plug(Connectors.TYPE_IMAGE)

@@ -31,7 +31,7 @@
 
 """This module provides a GUI element for configuring worker parameters"""
 
-import Queue
+import queue
 import wx
 from pyphant.core.Connectors import Computer
 
@@ -45,7 +45,7 @@ class ConfigureFrame(wx.Dialog):
             )
         self._paramDict = {}
         progress = ProgressMeter("Acquiring Param data")
-        exception_queue = Queue.Queue()
+        exception_queue = queue.Queue()
         computer = Computer(
             worker.refreshParams, exception_queue, subscriber=progress
             )
@@ -77,9 +77,10 @@ class ConfigureFrame(wx.Dialog):
             sizer.Fit(self)
 
     def applyAll(self, event=None):
-        for (vis, (param, checkBox)) in self._paramDict.items():
+        for (vis, (param, checkBox)) in list(self._paramDict.items()):
             try:
                 param.value = vis.getValue()
                 param.isExternal = checkBox.GetValue()
-            except ValueError, (e):
-                print "Caught a ValueError in ", vis, ":", e
+            except ValueError as xxx_todo_changeme:
+                (e) = xxx_todo_changeme
+                print("Caught a ValueError in ", vis, ":", e)

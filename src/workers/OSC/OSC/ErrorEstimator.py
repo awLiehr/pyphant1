@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The Estimate Error worker is a class of Pyphant's OSC-Toolbox. It
 evaluates the error caused by noise for every pixel in a field.
 """
@@ -59,7 +59,7 @@ def localNoise(y, samples=50):
     #Inititalize error vector
     error = numpy.zeros(y.shape, 'float')
     #Compute experimental standard deviation
-    for i in xrange(samples2, length + samples2):
+    for i in range(samples2, length + samples2):
         sample = yExtended[i - samples2:i + samples2 + sampleMod]
         yMean = numpy.mean(sample)
         error[i - samples2] = numpy.sqrt(numpy.sum((yMean - sample) ** 2) /
@@ -74,7 +74,7 @@ class ErrorEstimator(Worker.Worker):
     name = "Estimate Error"
     _sockets = [("osc", Connectors.TYPE_IMAGE)]
     _params = [
-        ("dA", u"Window Size in number of data points", 10, None)
+        ("dA", "Window Size in number of data points", 10, None)
         ]
 
     @Worker.plug(Connectors.TYPE_IMAGE)
@@ -84,7 +84,7 @@ class ErrorEstimator(Worker.Worker):
         intervallLength = self.paramDA.value
         count = xCon.shape[0]
         #Loop over all rows
-        for i in xrange(count):
+        for i in range(count):
             x = xCon[i]
             noise[i] = localNoise(x, self.paramDA.value)
             subscriber %= float(i + 1) / count * 100.0

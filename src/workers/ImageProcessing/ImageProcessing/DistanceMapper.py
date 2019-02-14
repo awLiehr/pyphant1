@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The Map Distance worker is a class of Pyphant's Image Processing
 Toolbox. It is used to determine the size of respective features in
 binary images through calculating the distance of every pixel to the
@@ -72,7 +72,7 @@ class Metrics:
                 UnEqualUnits()
         except TypeError:
             UnEqualUnits()
-        delta = map(lambda d: scipy.diff(d.data), self.dimensions)
+        delta = [scipy.diff(d.data) for d in self.dimensions]
         for dim in delta:
             if abs(dim.min() - dim.max()) > 1E-4:
                 raise ValueError("Each dimension has to be equally spaced.")
@@ -111,9 +111,9 @@ class DistanceMapper(Worker.Worker):
         a = scipy.where(im == FEATURE_COLOR, g, 0).astype('d')
         rowPercentage = 50.0 / ny
         featurePixels = []
-        for y in xrange(1, ny - 1):
+        for y in range(1, ny - 1):
             subscriber %= y * rowPercentage
-            for x in xrange(1, nx - 1):
+            for x in range(1, nx - 1):
                 if a[x, y] > 0:
                     a[x, y] = metric.distance(a[x - 1:x + 2, y - 1:y + 2])
                     featurePixels.append((x, y))
@@ -131,8 +131,8 @@ class DistanceMapper(Worker.Worker):
             image.dimensions[0].unit,
             rescale=True,
             dimensions=copy.deepcopy(image.dimensions),
-            longname=u'Distance to background',
-            shortname=u'D'
+            longname='Distance to background',
+            shortname='D'
             )
         result.seal()
         return result

@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The Load Image worker is a class of Pyphant's Image Processing
 Toolbox. It simply loads an image from the location given in the
 worker's configuration.
@@ -51,10 +51,10 @@ class ImageLoaderWorker(Worker.Worker):
         "pyphant.imageprocessing"
         ).version
     name = "Load Image"
-    _params = [("filename", u"Filename", "", Connectors.SUBTYPE_FILE),
-               ("fieldUnit", u"Unit of the field", "1", None),
-               ("xScale", u"Scale of the x-axis (eg. 100nm)", '1mum', None),
-               ("yScale", u"Scale of the y-axis (eg. 100nm)", 'link2X', None)]
+    _params = [("filename", "Filename", "", Connectors.SUBTYPE_FILE),
+               ("fieldUnit", "Unit of the field", "1", None),
+               ("xScale", "Scale of the x-axis (eg. 100nm)", '1mum', None),
+               ("yScale", "Scale of the y-axis (eg. 100nm)", 'link2X', None)]
 
 ## Result is colour image
 ##     @Worker.plug(Connectors.TYPE_IMAGE)

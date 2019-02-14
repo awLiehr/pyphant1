@@ -87,34 +87,35 @@ class NumberDict(dict):
 
     def __add__(self, other):
         sum_dict = NumberDict()
-        for key in self.keys():
+        for key in list(self.keys()):
             sum_dict[key] = self[key]
-        for key in other.keys():
+        for key in list(other.keys()):
             sum_dict[key] = sum_dict[key] + other[key]
         return sum_dict
 
     def __sub__(self, other):
         sum_dict = NumberDict()
-        for key in self.keys():
+        for key in list(self.keys()):
             sum_dict[key] = self[key]
-        for key in other.keys():
+        for key in list(other.keys()):
             sum_dict[key] = sum_dict[key] - other[key]
         return sum_dict
 
     def __mul__(self, other):
         new = NumberDict()
-        for key in self.keys():
+        for key in list(self.keys()):
             new[key] = other*self[key]
         return new
     __rmul__ = __mul__
 
     def __div__(self, other):
         new = NumberDict()
-        for key in self.keys():
+        for key in list(self.keys()):
             new[key] = self[key]/other
         return new
 
 import numpy as np
+from functools import reduce
 def int_sum(a, axis=0):
     return np.add.reduce(a, axis)
 def zeros_st(shape, other):
@@ -219,8 +220,8 @@ class PhysicalQuantity:
         return str(self.value) + ' ' + self.unit.name()
 
     def __repr__(self):
-        return (self.__class__.__name__ + '(' + `self.value` + ',' +
-                `self.unit.name()` + ')')
+        return (self.__class__.__name__ + '(' + repr(self.value) + ',' +
+                repr(self.unit.name()) + ')')
 
     def _sum(self, other, sign1, sign2):
         if not isPhysicalQuantity(other):
@@ -292,7 +293,7 @@ class PhysicalQuantity:
     def __neg__(self):
         return self.__class__(-self.value, self.unit)
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self.value != 0
 
     def convertToUnit(self, unit):
@@ -329,7 +330,7 @@ class PhysicalQuantity:
         @raises TypeError: if any of the specified units are not compatible
         with the original unit
         """
-        units = map(_findUnit, units)
+        units = list(map(_findUnit, units))
         if len(units) == 1:
             unit = units[0]
             value = _convertValue (self.value, self.unit, unit)
@@ -360,7 +361,7 @@ class PhysicalQuantity:
         new_value = self.value * self.unit.factor + self.unit.offset
         num = ''
         denom = ''
-        for i in xrange(9):
+        for i in range(9):
             unit = _base_names[i]
             power = self.unit.powers[i]
             if power < 0:
@@ -471,8 +472,8 @@ class PhysicalUnit:
         if isPhysicalUnit(other):
             return PhysicalUnit(self.names+other.names,
                                 self.factor*other.factor,
-                                map(lambda a,b: a+b,
-                                    self.powers, other.powers))
+                                list(map(lambda a,b: a+b,
+                                    self.powers, other.powers)))
         else:
             return PhysicalUnit(self.names+{str(other): 1},
                                 self.factor*other,
@@ -487,8 +488,8 @@ class PhysicalUnit:
         if isPhysicalUnit(other):
             return PhysicalUnit(self.names-other.names,
                                 self.factor/other.factor,
-                                map(lambda a,b: a-b,
-                                    self.powers, other.powers))
+                                list(map(lambda a,b: a-b,
+                                    self.powers, other.powers)))
         else:
             return PhysicalUnit(self.names+{str(other): -1},
                                 self.factor/other, self.powers)
@@ -499,30 +500,30 @@ class PhysicalUnit:
         if isPhysicalUnit(other):
             return PhysicalUnit(other.names-self.names,
                                 other.factor/self.factor,
-                                map(lambda a,b: a-b,
-                                    other.powers, self.powers))
+                                list(map(lambda a,b: a-b,
+                                    other.powers, self.powers)))
         else:
             return PhysicalUnit({str(other): 1}-self.names,
                                 other/self.factor,
-                                map(lambda x: -x, self.powers))
+                                [-x for x in self.powers])
 
     def __pow__(self, other):
         if self.offset != 0:
             raise TypeError("cannot exponentiate units with non-zero offset")
         if isinstance(other, int):
             return PhysicalUnit(other*self.names, pow(self.factor, other),
-                                map(lambda x,p=other: x*p, self.powers))
+                                list(map(lambda x,p=other: x*p, self.powers)))
         if (isinstance(other, float)) and (other != 0.):
             inv_exp = 1./other
             rounded = round(inv_exp)
             if abs(inv_exp-rounded) < 1.e-10:
                 if reduce(lambda a, b: a and b,
-                          map(lambda x, e=rounded: x%e == 0, self.powers)):
+                          list(map(lambda x, e=rounded: x%e == 0, self.powers))):
                     f = pow(self.factor, other)
-                    p = map(lambda x,p=rounded: x/p, self.powers)
+                    p = list(map(lambda x,p=rounded: x/p, self.powers))
                     if reduce(lambda a, b: a and b,
-                              map(lambda x, e=rounded: x%e == 0,
-                                  self.names.values())):
+                              list(map(lambda x, e=rounded: x%e == 0,
+                                  list(self.names.values())))):
                         names = self.names/rounded
                     else:
                         names = NumberDict()
@@ -606,7 +607,7 @@ class PhysicalUnit:
     def name(self):
         num = ''
         denom = ''
-        for unit in self.names.keys():
+        for unit in list(self.names.keys()):
             power = self.names[unit]
             if power < 0:
                 denom = denom + '/' + unit
@@ -716,8 +717,8 @@ for unit in _base_units:
 _help = []
 
 def _addUnit(name, unit, comment=''):
-    if _unit_table.has_key(name):
-	raise KeyError, 'Unit ' + name + ' already defined'
+    if name in _unit_table:
+	raise KeyError('Unit ' + name + ' already defined')
     if comment:
         _help.append((name, comment, unit))
     if type(unit) == type(''):
@@ -732,7 +733,7 @@ def _addPrefixed(unit):
     _help.append('Prefixed units for %s:' % unit)
     _prefixed_names = []
     if unit in ['EUR']:
-        validPrefixes = filter(lambda prefix: prefix[1]>=1000,_prefixes) 
+        validPrefixes = [prefix for prefix in _prefixes if prefix[1]>=1000] 
     else:
         validPrefixes = _prefixes
     for prefix in validPrefixes:
@@ -770,7 +771,7 @@ _addUnit('Sv', 'J/kg', 'Sievert')
 
 del _unit_table['kg']
 
-for unit in _unit_table.keys():
+for unit in list(_unit_table.keys()):
     _addPrefixed(unit)
 
 # Fundamental constants
@@ -921,7 +922,7 @@ _addUnit('VAL', 'EUR/1936.27' ,'Vatican City, Lira')
 
 #Get daily updated exchange rates
 if rc['fetchCurrencyRates']:
-    import urllib
+    import urllib.request, urllib.parse, urllib.error
     from xml.dom import minidom
     url = "http://www.ecb.europa.eu/stats/eurofxref/eurofxref-daily.xml"
     currencyNames={'USD':'US dollar'  ,     'JPY':'Japanese yen',
@@ -942,24 +943,24 @@ if rc['fetchCurrencyRates']:
                    'PHP':'Philippine peso', 'SGD':'Singapore dollar',
                    'THB':'Thai baht',       'ZAR':'South African rand'}
     try:
-        doc = minidom.parseString(urllib.urlopen(url).read())
+        doc = minidom.parseString(urllib.request.urlopen(url).read())
         elements = doc.documentElement.getElementsByTagName('Cube')
         for element in elements[2:]:
             currency = element.getAttribute('currency').encode('utf8')
             _addUnit(currency,
                      'EUR/%s' % element.getAttribute('rate').encode('utf8'),
                      currencyNames[currency])
-        print "Added exchange rate of %s for %s." % (elements[1].getAttribute('time'),
+        print("Added exchange rate of %s for %s." % (elements[1].getAttribute('time'),
                                                      [ i.getAttribute('currency').encode('utf8')
-                                                       for i in elements[2:] ])
+                                                       for i in elements[2:] ]))
     except:
-        print "WARNING: No daily exchange rates available."
+        print("WARNING: No daily exchange rates available.")
 
 def description():
     """Return a string describing all available units."""
     s = ''  # collector for description text
     for entry in _help:
-        if isinstance(entry, basestring):
+        if isinstance(entry, str):
             # headline for new section
             s += '\n' + entry + '\n'
         elif isinstance(entry, tuple):
@@ -967,7 +968,7 @@ def description():
             s += '%-8s  %-26s %s\n' % (name, comment, unit)
         else:
             # impossible
-            raise TypeError, 'wrong construction of _help list'
+            raise TypeError('wrong construction of _help list')
     return s
 
 # add the description of the units to the module's doc string:
@@ -981,23 +982,23 @@ if __name__ == '__main__':
 #    from Scientific.N import *
     l = PhysicalQuantity(10., 'm')
     big_l = PhysicalQuantity(10., 'km')
-    print big_l + l
+    print(big_l + l)
     t = PhysicalQuantity(314159., 's')
-    print t.inUnitsOf('d','h','min','s')
+    print(t.inUnitsOf('d','h','min','s'))
 
     p = PhysicalQuantity # just a shorthand...
 
     e = p('2.7 Hartree*Nav')
     e.convertToUnit('kcal/mol')
-    print e
-    print e.inBaseUnits()
+    print(e)
+    print(e.inBaseUnits())
 
     freeze = p('0 degC')
-    print freeze.inUnitsOf ('degF')
+    print(freeze.inUnitsOf ('degF'))
 
     euro = PhysicalQuantity('1 EUR')
-    print euro.inUnitsOf('DEM')
-    print euro.inUnitsOf('USD')
+    print(euro.inUnitsOf('DEM'))
+    print(euro.inUnitsOf('USD'))
 
     euroSQM = PhysicalQuantity('19.99 EUR/m**2')
-    print "%s=%s" % (euroSQM,euroSQM.inUnitsOf('EUR/cm**2'))
+    print("%s=%s" % (euroSQM,euroSQM.inUnitsOf('EUR/cm**2')))

@@ -5,4 +5,4 @@ try:
 except:
     __version__ = 'unknown'
 
-import quantities
+from . import quantities

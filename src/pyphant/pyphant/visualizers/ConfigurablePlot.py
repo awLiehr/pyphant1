@@ -59,9 +59,9 @@ class PlotPanel (wx.PyPanel):
         from matplotlib.figure import Figure
 
         # initialize Panel
-        if 'id' not in kwargs.keys():
+        if 'id' not in list(kwargs.keys()):
             kwargs['id'] = wx.ID_ANY
-        if 'style' not in kwargs.keys():
+        if 'style' not in list(kwargs.keys()):
             kwargs['style'] = wx.NO_FULL_REPAINT_ON_RESIZE
         # why not wx.PyPanel.__init__ ?
         wx.Panel.__init__(self, parent, **kwargs)
@@ -142,8 +142,8 @@ class OscPlotPanel(PlotPanel):
             self.colorbar = self.figure.colorbar(self.scat, format=F(self.c),
                                                  ax=self.ax)
             self.rescale(self.ax)
-        except Exception, e:
-            print e
+        except Exception as e:
+            print(e)
         self.ax.set_xlabel(self.x.label)
         self.ax.set_ylabel(self.y.label)
         try:
@@ -167,7 +167,7 @@ class ConfigurationPanel(wx.PyPanel):
         wx.Panel.__init__(self, parent)
         self.dataContainer = dataContainer
         self.plot_panel = plot_panel
-        self.columns = [name for name in self.dataContainer.longnames.keys()
+        self.columns = [name for name in list(self.dataContainer.longnames.keys())
                         if isinstance(self.dataContainer[name],
                                       DataContainer.FieldContainer)]
         sizer = wx.FlexGridSizer(2, 6)
@@ -233,9 +233,9 @@ class ConfigurationPanel(wx.PyPanel):
         independentVariable = self.independentCombo.GetValue()
         dependentVariable = self.dependentCombo.GetValue()
         colorVariable = self.colorCombo.GetValue()
-        if (u'' == independentVariable
-            or u'' == dependentVariable
-            or u'' == colorVariable):
+        if ('' == independentVariable
+            or '' == dependentVariable
+            or '' == colorVariable):
             return
         self.plot_panel.x_key = independentVariable
         self.plot_panel.y_key = dependentVariable

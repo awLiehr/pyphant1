@@ -134,7 +134,7 @@ DEFAULT_COL_DELIM = '\t'
 
 
 def is_unicode(s):
-    return type(s) == unicode
+    return type(s) == str
 
 
 def assure_unicode(obj, coding):
@@ -150,7 +150,7 @@ def assure_unicode(obj, coding):
     if is_unicode(obj):
         return obj
     else:
-        return unicode(obj, coding)
+        return str(obj, coding)
 
 
 class _xproperty(property):
@@ -239,7 +239,7 @@ class _FMFElement(object):
         self._factory = kwds['factory']
 
     def __str__(self):
-        return self.unicode().encode(self._out_coding)
+        return self.str().encode(self._out_coding)
 
 
 class _Item(_FMFElement):
@@ -261,8 +261,8 @@ class _Item(_FMFElement):
         self._metatag = metatag
         self._value = value
 
-    def unicode(self):
-        return u"%s: %s%s" % (self._metatag, self._value, self._eol)
+    def str(self):
+        return "%s: %s%s" % (self._metatag, self._value, self._eol)
 
     metatag = _AutoProperty('_metatag')
     value = _AutoProperty('_value')
@@ -294,12 +294,12 @@ class _ColumnDef(_Item):
         if len(deps) > 0:
             value += LPAREN_DEPEND
             for d in deps[:-1]:
-                value += u"%s," % (d,)
+                value += "%s," % (d,)
             value += deps[-1] + RPAREN_DEPEND
         if unit is not None:
-            value += u" [%s]" % (unit,)
+            value += " [%s]" % (unit,)
         if error is not None:
-            value += u" +- %s" % (error,)
+            value += " +- %s" % (error,)
         super(_ColumnDef, self).__init__(longname, value, *args, **kwds)
 
         self._shortname = shortname
@@ -343,11 +343,11 @@ class _Section(_FMFElement):
             c = RESERVED_MARK
         else:
             c = ''
-        return u"[%s%s]%s" % (c, self._tag, self._eol)
+        return "[%s%s]%s" % (c, self._tag, self._eol)
 
-    def unicode(self):
+    def str(self):
         s = self._header()
-        s += u''.join([it.unicode() for it in self._items])
+        s += ''.join([it.str() for it in self._items])
         return s
 
     def add_item(self, metatag, value, arg_coding=None):
@@ -525,7 +525,7 @@ class _Table(_FMFElement):
     #    """
     #    pass
 
-    def unicode(self):
+    def str(self):
         #
         # check for number of data definitions
         #
@@ -550,9 +550,9 @@ class _Table(_FMFElement):
         #
         # prepare data definition section
         #
-        datadef_section_name = u'*data definitions'
+        datadef_section_name = '*data definitions'
         if not self._suppress_section_shortnames:
-            datadef_section_name += u": %s" % (self._shortname,)
+            datadef_section_name += ": %s" % (self._shortname,)
         datadef_section = self._factory.gen_section(datadef_section_name)
         for cd in self._coldefs:
             datadef_section.add_item(cd.metatag, cd.value)
@@ -560,21 +560,21 @@ class _Table(_FMFElement):
         #
         # prepare data section
         #
-        data_section_name = u'*data'
+        data_section_name = '*data'
         if not self._suppress_section_shortnames:
-            data_section_name += u": %s" % (self._shortname,)
+            data_section_name += ": %s" % (self._shortname,)
         data_section = self._factory.gen_section(data_section_name)
         data_lines = []
         col_formats = [cd.format for cd in self._coldefs]
         for i, row in enumerate(self._seq2D):
-            line = u""
+            line = ""
             for j, value in enumerate(row):
                 if isinstance(value, complex):
                     value = str(value)[1:-1]  # leave out parantheses
                 elif isinstance(value, datetime.datetime):
                     value = value.isoformat()
                 if isinstance(value, str):
-                    value = unicode(value, self._in_coding)
+                    value = str(value, self._in_coding)
 
                 try:
                     line += col_formats[j] % (value,)
@@ -593,8 +593,8 @@ class _Table(_FMFElement):
         #
         # construct text representation of this table
         #
-        s = datadef_section.unicode()
-        s += data_section.unicode()
+        s = datadef_section.str()
+        s += data_section.str()
         for dl in data_lines:
             s += dl
         return s
@@ -661,7 +661,7 @@ class _FMFContainer(_FMFElement):
                 "as reserved (section: %s)." % (section.tag, )
                 )
 
-        if section.tag in self._user_sections.keys():
+        if section.tag in list(self._user_sections.keys()):
             raise FMFBuildException(
                 "Section '%s' is already included. "
                 "Each section can only be added once."
@@ -686,7 +686,7 @@ class _FMFContainer(_FMFElement):
         if self._tables_section is not None:
             self._tables_section.add_item(table.longname, table.shortname)
 
-    def unicode(self):
+    def str(self):
 
         if len(self._tables) == 0:
             raise FMFBuildException(
@@ -699,15 +699,15 @@ class _FMFContainer(_FMFElement):
         # *data definitions
         # *data
 
-        s = u"; -*- coding: %s -*-%s" % (self._out_coding, self._eol)
-        s += self._reference_section.unicode()
+        s = "; -*- coding: %s -*-%s" % (self._out_coding, self._eol)
+        s += self._reference_section.str()
         for tag in self._user_sections_tags:
-            s += self._user_sections[tag].unicode()
+            s += self._user_sections[tag].str()
         if not self._tables_section is None:
-            s += self._tables_section.unicode()
+            s += self._tables_section.str()
         for tab in self._tables:
             tab.suppress_section_shortnames = (self._tables_section is None)
-            s += tab.unicode()
+            s += tab.str()
         # s += self._eol
         return s
 

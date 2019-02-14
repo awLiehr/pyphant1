@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides unittest class TestSlopeCalculator."""
+"""Provides unittest class TestSlopeCalculator."""
 
 
 import sys
@@ -39,7 +39,7 @@ import numpy
 import ImageProcessing as I
 import ImageProcessing.SlopeCalculator as IM
 import pyphant.quantities as pq
-from TestDistanceMapper import stringFeature
+from .TestDistanceMapper import stringFeature
 from pyphant.core import DataContainer
 
 class TestSlopeCalculator(unittest.TestCase):

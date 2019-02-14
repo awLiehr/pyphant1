@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 from pyphant.core import (Worker, Connectors, DataContainer)
@@ -44,13 +44,13 @@ class ColumnExtractor(Worker.Worker):
     REVISION = pkg_resources.get_distribution("pyphant.tools").version
     name = "Extract Column"
     _sockets = [("osc", Connectors.TYPE_ARRAY)]
-    _params = [("column", u"Column", [u"Absorption"], None),
-               ("index", u"Row", 'All', None)]
+    _params = [("column", "Column", ["Absorption"], None),
+               ("index", "Row", 'All', None)]
 
     def refreshParams(self, subscriber=None):
         if self.socketOsc.isFull():
             templ = self.socketOsc.getResult(subscriber)
-            self.paramColumn.possibleValues = templ.longnames.keys()
+            self.paramColumn.possibleValues = list(templ.longnames.keys())
 
     @Worker.plug(Connectors.TYPE_IMAGE)
     def extract(self, osc, subscriber=0):

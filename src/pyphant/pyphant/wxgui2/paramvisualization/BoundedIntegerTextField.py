@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 
@@ -50,7 +50,7 @@ class BoundedIntegerTextField(wx.lib.masked.NumCtrl):
         if self.IsValid():
             return self.GetValue()
         else:
-            raise ValueError, "Invalid value"
+            raise ValueError("Invalid value")
 
     def SetValue(self, value):
         return super(BoundedIntegerTextField, self).SetValue(int(value))

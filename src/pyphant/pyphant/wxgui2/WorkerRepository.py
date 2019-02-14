@@ -32,7 +32,7 @@
 """This module provides a GUI element for displaying the available workers"""
 
 import wx
-import cPickle
+import pickle
 from pyphant.core.WorkerRegistry import WorkerRegistry
 
 
@@ -53,7 +53,7 @@ class WorkerRepository(wx.TreeCtrl):
         workerInfo = self.GetItemData(event.Item).Data
         if workerInfo is not None:
             dropSource = wx.DropSource(self)
-            dump = cPickle.dumps(workerInfo)
+            dump = pickle.dumps(workerInfo)
             data = wx.CustomDataObject('PYPHANT_WORKER')
             data.SetData(dump)
             dropSource.SetData(data)

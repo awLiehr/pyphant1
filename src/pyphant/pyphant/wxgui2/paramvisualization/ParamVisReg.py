@@ -29,15 +29,15 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 
-import OneLineStringField
-import BoundedIntegerTextField
-import CheckBox
-import ListSelect
-import FileButton
+from . import OneLineStringField
+from . import BoundedIntegerTextField
+from . import CheckBox
+from . import ListSelect
+from . import FileButton
 from pyphant.core import Connectors, Param
 import wx
 
@@ -63,7 +63,7 @@ class ParamValidator(wx.PyValidator):
         newValue = ctrl.getValue()
         try:
             self.param.value = newValue
-        except Param.VetoParamChange, e:
+        except Param.VetoParamChange as e:
             wx.MessageBox("%s" % str(e),
                           "Invalid Parameter %s" % self.param.name)
             ctrl.SetFocus()

@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 Deprecated
 """
 
@@ -67,8 +67,8 @@ class FitBackground(Worker.Worker):
         xList = []
         yList = []
         zList = []
-        for y in xrange(0, dims[0] - 1, sheight):
-            for x in xrange(0, dims[1] - 1, swidth):
+        for y in range(0, dims[0] - 1, sheight):
+            for x in range(0, dims[1] - 1, swidth):
                 view = data[y:y + sheight, x:x + swidth]
                 flatIndex = numpy.argmax(view)
                 yIdx, xIdx = numpy.unravel_index(flatIndex, view.shape)
@@ -84,7 +84,7 @@ class FitBackground(Worker.Worker):
                                    xb=0, yb=0,
                                    xe=int(dims[0]), ye=int(dims[1]))
         clipmin, clipmax = data.min(), threshold
-        return interpolate.bisplev(range(dims[0]), range(dims[1]),
+        return interpolate.bisplev(list(range(dims[0])), list(range(dims[1])),
                                    tck).clip(clipmin, clipmax)
 
     @Worker.plug(Connectors.TYPE_IMAGE)
@@ -102,13 +102,13 @@ class FitBackground(Worker.Worker):
         dopreview = self.paramDopreview.value
         data = image.data
         #Median:
-        for run in xrange(medianruns):
+        for run in range(medianruns):
             data = ndimage.median_filter(data, size=mediansize)
         #Suspend dark spots:
-        for run in xrange(darkruns):
+        for run in range(darkruns):
             data = 255 - ndimage.grey_erosion(255 - data, size=darksize)
         #Suspend features:
-        for run in xrange(brightruns):
+        for run in range(brightruns):
             data = ndimage.grey_erosion(data, size=brightsize)
         #Fit background:
         if not dopreview:

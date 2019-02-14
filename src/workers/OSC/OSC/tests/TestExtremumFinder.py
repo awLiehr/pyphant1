@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides unittest classes TestExtremumFinder and TestExtremumFinderDiscontinuousDiscretisation.
+"""Provides unittest classes TestExtremumFinder and TestExtremumFinderDiscontinuousDiscretisation.
 """
 
 
@@ -72,7 +72,7 @@ class TestExtremumFinder(unittest.TestCase):
                                            shortname = 'x_0')
         #Retrieve result from worker
         w = EF.ExtremumFinder(None)
-        w.paramExtremum.value=u'both'
+        w.paramExtremum.value='both'
         result = w.locate(self.V)
         #Testing
         DC.assertEqual(result,expectedResult)
@@ -87,7 +87,7 @@ class TestExtremumFinder(unittest.TestCase):
                                            shortname = 'x_0')
         #Retrieve result from worker
         w = EF.ExtremumFinder(None)
-        w.paramExtremum.value=u'minima'
+        w.paramExtremum.value='minima'
         result = w.locate(self.V)
         #Testing
         DC.assertEqual(result,expectedResult)
@@ -103,7 +103,7 @@ class TestExtremumFinder(unittest.TestCase):
                                            shortname = 'x_0')
         #Retrieve result from worker
         w = EF.ExtremumFinder(None)
-        w.paramExtremum.value=u'maxima'
+        w.paramExtremum.value='maxima'
         result = w.locate(self.V)
         #Testing
         DC.assertEqual(result,expectedResult)
@@ -138,7 +138,7 @@ class TestExtremumFinderTable(unittest.TestCase):
                                    shortname = 'x')
         #Prepare potential
         V = []
-        for i in xrange(len(lambField.data)):
+        for i in range(len(lambField.data)):
             u = xField.data
             V.append(-lambField.data[i]/2* u**2 + u**4/4-u*self.kappa1)
         self.V = DC.FieldContainer(numpy.array(V),unit='1 V',dimensions=[lambField,xField],
@@ -157,7 +157,7 @@ class TestExtremumFinderTable(unittest.TestCase):
                                            shortname = 'x_0')
         #Configure worker
         w = EF.ExtremumFinder(None)
-        w.paramExtremum.value=u'both'
+        w.paramExtremum.value='both'
         #Retrieve result from worker
         result = w.locate(self.V)
         self.test(result,expectedResult)
@@ -192,7 +192,7 @@ class TestError(unittest.TestCase):
                                            error = numpy.array([0.05])
                                            )
         w = EF.ExtremumFinder(None)
-        w.paramExtremum.value=u'minima'
+        w.paramExtremum.value='minima'
         #Retrieve result from worker
         result = w.locate(inputField)
         DC.assertEqual(result,expectedResult)
@@ -212,7 +212,7 @@ class TestError(unittest.TestCase):
                                            error = numpy.array([0.1])
                                            )
         w = EF.ExtremumFinder(None)
-        w.paramExtremum.value=u'minima'
+        w.paramExtremum.value='minima'
         #Retrieve result from worker
         result = w.locate(inputField)
         DC.assertEqual(result,expectedResult)
@@ -232,7 +232,7 @@ class TestError(unittest.TestCase):
                                            shortname = 'x_0',
                                            error = error)
         w = EF.ExtremumFinder(None)
-        w.paramExtremum.value=u'minima'
+        w.paramExtremum.value='minima'
         #Retrieve result from worker
         result = w.locate(inputField)
         DC.assertEqual(result,expectedResult)
@@ -259,7 +259,7 @@ class TestError(unittest.TestCase):
                                                           longname='type',
                                                           shortname=r'\theta')
         w = EF.ExtremumFinder(None)
-        w.paramExtremum.value=u'minima'
+        w.paramExtremum.value='minima'
         #Retrieve result from worker
         result = w.locate(inputField)
         DC.assertEqual(result,expectedResult)

@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides test for unique timestamps
+"""Provides test for unique timestamps
 """
 
 
@@ -39,7 +39,7 @@ import unittest
 class TestModuleUniqueTimestamp(unittest.TestCase):
     def testUnique(self):
         from pyphant.core.Helpers import getModuleUniqueTimestamp
-        for x in xrange(100):
+        for x in range(100):
             self.assertNotEqual(
                 getModuleUniqueTimestamp(),
                 getModuleUniqueTimestamp())

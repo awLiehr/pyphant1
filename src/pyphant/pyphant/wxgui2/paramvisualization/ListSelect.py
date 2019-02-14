@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 
@@ -39,7 +39,7 @@ class ListSelect(wx.Choice):
     def __init__(self, parent, param, validator):
         self.data = dict([(str(v), v) for v in param.possibleValues])
         wx.Choice.__init__(self, parent,
-                           choices=map(str, param.possibleValues),
+                           choices=list(map(str, param.possibleValues)),
                            validator=validator)
         self.SetValue(param.value)
 

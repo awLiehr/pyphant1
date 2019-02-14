@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 import numpy
@@ -78,9 +78,9 @@ class OscThicknessCorrector(Worker.Worker):
 
     @Worker.plug(Connectors.TYPE_IMAGE)
     def correct(self, osc, subscriber=0):
-        x = osc[u'x-position']
-        y = osc[u'y-position']
-        t = osc[u'thickness']
+        x = osc['x-position']
+        y = osc['y-position']
+        t = osc['thickness']
         method = self.paramMethod.value
         if  method == "Spin Coating":
             corrected_t = self.perform_spincoat_correction(x, y, t)

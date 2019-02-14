@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 import numpy
@@ -48,36 +48,36 @@ class EstimateParameter(Worker.Worker):
         ("experimental", Connectors.TYPE_ARRAY)
         ]
     _params = [
-        ("minima_model", u"Minima in the model", [u"Minima"], None),
-        ("maxima_model", u"Maxima in the model", [u"Maxima"], None),
+        ("minima_model", "Minima in the model", ["Minima"], None),
+        ("maxima_model", "Maxima in the model", ["Maxima"], None),
         (
             "minima_experimental",
-            u"Minima in the experiment",
-            [u"Minima"],
+            "Minima in the experiment",
+            ["Minima"],
             None
             ),
         (
             "maxima_experimental",
-            u"Maxima in the experiment",
-            [u"Maxima"],
+            "Maxima in the experiment",
+            ["Maxima"],
             None
             ),
-        ("extentX", u"Extension of x-axis [%%]", 10, None),
-        ("extentY", u"Extension of y-axis [%%]", 10, None)
+        ("extentX", "Extension of x-axis [%%]", 10, None),
+        ("extentY", "Extension of y-axis [%%]", 10, None)
         ]
 
     def refreshParams(self, subscriber=None):
         if self.socketModel.isFull():
             templ = self.socketModel.getResult(subscriber)
-            self.paramMinima_model.possibleValues = templ.longnames.keys()
-            self.paramMaxima_model.possibleValues = templ.longnames.keys()
+            self.paramMinima_model.possibleValues = list(templ.longnames.keys())
+            self.paramMaxima_model.possibleValues = list(templ.longnames.keys())
         if self.socketExperimental.isFull():
             templ = self.socketExperimental.getResult(subscriber)
             self.paramMinima_experimental.possibleValues = (
-                templ.longnames.keys()
+                list(templ.longnames.keys())
                 )
             self.paramMaxima_experimental.possibleValues = (
-                templ.longnames.keys()
+                list(templ.longnames.keys())
                 )
 
     def calculateThickness(
@@ -161,18 +161,16 @@ class EstimateParameter(Worker.Worker):
         subscriber %= acc
         for row_minima, row_maxima in zip(minima, maxima):
             if minima_error:
-                filtered_minima_error = filter(
-                    lambda c: not numpy.isnan(c), minima_error.next())
+                filtered_minima_error = [c for c in next(minima_error) if not numpy.isnan(c)]
             else:
                 filtered_minima_error = None
             if maxima_error:
-                filtered_maxima_error = filter(
-                    lambda c: not numpy.isnan(c), maxima_error.next())
+                filtered_maxima_error = [c for c in next(maxima_error) if not numpy.isnan(c)]
             else:
                 filtered_maxima_error = None
             parameter.append(self.calculateThickness(
-                    filter(lambda c: not numpy.isnan(c), row_minima),
-                    filter(lambda c: not numpy.isnan(c), row_maxima),
+                    [c for c in row_minima if not numpy.isnan(c)],
+                    [c for c in row_maxima if not numpy.isnan(c)],
                     minima_model,
                     maxima_model,
                     filtered_minima_error,

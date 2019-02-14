@@ -61,7 +61,7 @@ class TestQuantity(unittest.TestCase):
                          )
 
     def testUnicodeQuantitySpecification(self):
-        self.assertEqual(Quantity(u'1V'),
+        self.assertEqual(Quantity('1V'),
                          Quantity(1.0,'V')
                          )
         self.assertEqual(Quantity('1V'.encode('utf-8')),
@@ -82,8 +82,8 @@ class TestQuantity(unittest.TestCase):
         elif cop == '>':
             expression = quant0 > quant1
         if expression != result:
-            print "%s %s %s = %s, should be %s" % (quant0, cop, quant1,
-                                                   expression, result)
+            print("%s %s %s = %s, should be %s" % (quant0, cop, quant1,
+                                                   expression, result))
         self.assertEqual(expression, result)
 
     def matrixTest(self, matrix, cop):

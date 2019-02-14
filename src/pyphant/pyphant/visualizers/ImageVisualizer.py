@@ -80,7 +80,7 @@ class ImageVisualizer(object):
 
             def format(val):
                 if not isQuantity(val):
-                    if type(val) in (type(' '), type(u' ')):
+                    if type(val) in (type(' '), type(' ')):
                         valstr = val
                     else:
                         valstr = "%.4g" % val
@@ -88,7 +88,7 @@ class ImageVisualizer(object):
                     valstr = "%.3f %s" % (val.value, val.unit.name())
                 return valstr
 
-            labels = map(format, [xval, yval, val])
+            labels = list(map(format, [xval, yval, val]))
             labels.insert(0, zLabel)
             self.figure.canvas.toolbar.set_message("%s(%s,%s) = %s"
                                                    % tuple(labels))

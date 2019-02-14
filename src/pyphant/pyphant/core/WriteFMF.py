@@ -32,7 +32,7 @@
 """This module is used for writing fieldContainers to FMF"""
 
 
-enc = lambda s: unicode(s, "utf-8")
+enc = lambda s: str(s, "utf-8")
 
 import socket
 import datetime
@@ -47,7 +47,7 @@ def dtype2colFormat(dtype):
     elif dtype.name.startswith('int'):
         return "%i"
     else:
-        print dtype
+        print(dtype)
         return "%s"
 
 
@@ -59,7 +59,7 @@ def field2fmf(fieldContainer):
     fc.add_reference_item('place', socket.getfqdn())
     fc.add_reference_item('created', datetime.datetime.utcnow().isoformat())
     sec = factory.gen_section("parameters")
-    for key, value in fieldContainer.attributes.iteritems():
+    for key, value in fieldContainer.attributes.items():
         if type(value) == type([]):
             output = ' '.join(value)
         else:
@@ -79,14 +79,14 @@ def field2fmf(fieldContainer):
         if fieldContainer.error == None:
             errorSymbol = None
         else:
-            errorSymbol = u"\\Delta_{%s}" % fieldContainer.shortname
+            errorSymbol = "\\Delta_{%s}" % fieldContainer.shortname
         tab.add_column_def(fieldContainer.longname,
                            fieldContainer.shortname,
                            str(fieldContainer.unit),
                            dependencies=[dim.shortname],
                            error=errorSymbol)
         if fieldContainer.error != None:
-            tab.add_column_def(u"uncertainty of %s" % fieldContainer.longname,
+            tab.add_column_def("uncertainty of %s" % fieldContainer.longname,
                                errorSymbol,
                                str(fieldContainer.unit))
     elif fieldContainer.dimensions[0].isIndex():
@@ -94,14 +94,14 @@ def field2fmf(fieldContainer):
         try:
             data = numpy.vstack([dim.data, fieldContainer.data])
         except:
-            print dim.data, fieldContainer
+            print(dim.data, fieldContainer)
         tab = factory.gen_table(data.transpose())
         tab.add_column_def(
             dim.longname, dim.shortname,
             str(dim.unit), format=dtype2colFormat(dim.data.dtype)
             )
         superscript = ('st', 'nd', 'rd')
-        for i in xrange(len(fieldContainer.dimensions[0].data)):
+        for i in range(len(fieldContainer.dimensions[0].data)):
             if i < 3:
                 sup = superscript[i]
             else:

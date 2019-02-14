@@ -30,9 +30,9 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from __future__ import with_statement
 
-u"""Provides unittest classes for SQLiteWrapper.
+
+"""Provides unittest classes for SQLiteWrapper.
 """
 
 
@@ -86,8 +86,8 @@ class SQLiteWrapperTestCase(unittest.TestCase):
         self.sc_summary.pop('dimensions')
         self.sc_summary['columns'] = [self.summary['id'], self.summary['id']]
         self.sc_summary['type'] = 'sample'
-        self.sc_summary['longname'] = u'name2'
-        self.sc_summary['shortname'] = u'sn2'
+        self.sc_summary['longname'] = 'name2'
+        self.sc_summary['shortname'] = 'sn2'
 
     def tearDown(self):
         import os
@@ -105,7 +105,7 @@ class SQLiteWrapperTestCase(unittest.TestCase):
             self.wrapper.set_entry(self.summary, 'storage1')
             assert self.wrapper.has_entry(id)
             rowwrapper = self.wrapper[id]
-            for key, value in self.summary.iteritems():
+            for key, value in self.summary.items():
                 assert value == rowwrapper[key]
             assert rowwrapper['storage'] == 'storage1'
             rowwrapper['storage'] = 'storage2'
@@ -132,26 +132,26 @@ class SQLiteWrapperTestCase(unittest.TestCase):
             dictionary.pop('type')
             dictionary.pop('attributes')
             dictionary['storage'] = 'storage2'
-            dictionary['date_from'] = u'2009-01-01_12:00:00.000000'
-            dictionary['date_to'] = u'2009-01-01_12:00:00.200000'
+            dictionary['date_from'] = '2009-01-01_12:00:00.000000'
+            dictionary['date_to'] = '2009-01-01_12:00:00.200000'
             search_result = self.wrapper.get_andsearch_result(
                 keys, dictionary, order_by='type', limit=10, offset=0)
             assert len(search_result) == 1
-            expected = [(u'name', u'sn', u'PC', u'aheld', u'12345678910',
-                         u'2009-01-01_12:00:00.123456', u'emd5://PC/aheld/'\
-                             u'2009-01-01_12:00:00.123456/12345678910.field',
-                         u'field', u'storage2')]
+            expected = [('name', 'sn', 'PC', 'aheld', '12345678910',
+                         '2009-01-01_12:00:00.123456', 'emd5://PC/aheld/'\
+                             '2009-01-01_12:00:00.123456/12345678910.field',
+                         'field', 'storage2')]
             assert search_result == expected
             dictionary['type'] = 'field'
             search_result = self.wrapper.get_andsearch_result(keys, dictionary)
             assert search_result == expected
             search_result = self.wrapper.get_andsearch_result(
                 ['longname'], order_by='longname')
-            assert search_result == [(u'index', ), (u'name', ), (u'name2', )]
+            assert search_result == [('index', ), ('name', ), ('name2', )]
             search_result = self.wrapper.get_andsearch_result(
                 ['longname'], {'unit':Quantity(20, '1/m'),
                                'type':'field'})
-            assert search_result == [(u'name', )]
+            assert search_result == [('name', )]
             search_result = self.wrapper.get_andsearch_result(
                 ['unit'], {'type':'field', 'longname':'name'})
             assert search_result == [(Quantity('10.03e-8 mm**-1'), )]
@@ -161,28 +161,28 @@ class SQLiteWrapperTestCase(unittest.TestCase):
             search_result = self.wrapper.get_andsearch_result(
                 ['longname'], {'attributes':{'attribute2':'bla2'}},
                 order_by='longname')
-            assert search_result == [(u'name', ), (u'name2', )]
+            assert search_result == [('name', ), ('name2', )]
             search_result = self.wrapper.get_andsearch_result(
                 ['longname'], {'attributes':{'attribute2':'bla2',
                                              'attribute1':'bla1'}},
                 order_by='longname')
-            assert search_result == [(u'name', ), (u'name2', )]
+            assert search_result == [('name', ), ('name2', )]
             any_value = self.wrapper.any_value
             search_result = self.wrapper.get_andsearch_result(
                 ['longname'], {'attributes':{'attribute1':any_value,
                                              'attribute2':'bla2'}})
-            assert search_result == [(u'name', ), (u'name2', )]
+            assert search_result == [('name', ), ('name2', )]
             search_result = self.wrapper.get_andsearch_result(
                 ['longname'], {'type':'sample',
                                'columns':[{'unit':Quantity(2.0, '1/m')}
                                           , {}]})
-            assert search_result == [(u'name2', )]
+            assert search_result == [('name2', )]
             search_result = self.wrapper.get_andsearch_result(
                 ['longname'],
                 {'type':'field',
                  'dimensions':[{'longname':im_summary['longname']}],
                  'longname':self.summary['longname']})
-            assert search_result == [(u'name', )]
+            assert search_result == [('name', )]
             rowwrapper = self.wrapper[id]
             assert rowwrapper['dimensions'] == self.summary['dimensions']
             search_result = self.wrapper.get_andsearch_result(

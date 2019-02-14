@@ -66,12 +66,12 @@ def fixedPoints(lambdaVec,kappa1=0.0):
         #Distuinguish between sub- and supercritical parameter ranges
         if len(u0Real)==1: #subcritical
             x0.append([u0Real[0],numpy.NaN,numpy.NaN])
-            mask.append(numpy.array(map(lambda x: not x,[True,False,False])))
+            mask.append(numpy.array([not x for x in [True,False,False]]))
             slope.append(numpy.array([computeSlope(u0Real[0]),numpy.NaN,numpy.NaN]))
         else:#supercritical
             u0Sorted = numpy.sort(u0Real)
             x0.append(u0Sorted)
-            mask.append(numpy.array(map(lambda x: not x,[True,True,True])))
-            slope.append(numpy.array(map(computeSlope,u0Sorted)))
+            mask.append(numpy.array([not x for x in [True,True,True]]))
+            slope.append(numpy.array(list(map(computeSlope,u0Sorted))))
     return tuple(map(numpy.vstack, [x0,slope,mask]))
     #return x0,slope,mask

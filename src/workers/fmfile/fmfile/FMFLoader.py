@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The FMF Loader is a class of Pyphant's FMF Toolbox. It loads an FMF
 file from the location given in the worker's configuration.
 """
@@ -46,7 +46,7 @@ class FMFLoader(Worker.Worker):
     VERSION = 1
     REVISION = pkg_resources.get_distribution("pyphant.fmf").version
     name = "Load FMF files"
-    _params = [("filename", u"Filename", "", Connectors.SUBTYPE_FILE)]
+    _params = [("filename", "Filename", "", Connectors.SUBTYPE_FILE)]
 
     def inithook(self):
         fileMask = "FMF and FMF-ZIP (*.fmf, *.zip)|*.fmf;*.zip|FMF (*.fmf)|" \

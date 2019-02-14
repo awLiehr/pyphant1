@@ -41,12 +41,12 @@ def getPyphantPath(subdir=''):
     import os
     homedir = os.path.expanduser('~')
     if homedir == '~':
-        homedir = os.getcwdu()
+        homedir = os.getcwd()
     path = os.path.join(homedir, '.pyphant', subdir)
     # Create the dir in a multi process save way:
     try:
         os.makedirs(path)  # <-- ignores EEXIST in all but top recursion levels
-    except OSError, ose:
+    except OSError as ose:
         if ose.errno != os.errno.EEXIST:
             raise
     return path
@@ -59,7 +59,7 @@ def getUsername():
 
 def getMachine():
     import socket
-    return unicode(socket.getfqdn(), 'utf-8')
+    return str(socket.getfqdn(), 'utf-8')
 
 
 def enableLogging():
@@ -90,7 +90,7 @@ def uc2utf8(stype):
             return arg.encode('utf-8')
         return arg
     if isinstance(stype, ListType):
-        return map(convert, stype)
+        return list(map(convert, stype))
     return convert(stype)
 
 
@@ -104,10 +104,10 @@ def utf82uc(stype):
 
     def convert(arg):
         if isinstance(arg, StringType):
-            return unicode(arg, 'utf')
+            return str(arg, 'utf')
         return arg
     if isinstance(stype, ListType):
-        return map(convert, stype)
+        return list(map(convert, stype))
     return convert(stype)
 
 
@@ -149,7 +149,7 @@ def batch(recipe, input, plug, longname, dobatch=True, temporary=False):
     from pyphant_fmf.Emd5Src import Emd5Src
     DummyWorker = Emd5Src()
     socket.insert(DummyWorker.getPlugs()[0])
-    DummyWorker.paramSelectby.value = u"enter emd5"
+    DummyWorker.paramSelectby.value = "enter emd5"
     from pyphant_fmf.KnowledgeManager import KnowledgeManager
     km = KnowledgeManager.getInstance()
     if dobatch:
@@ -176,7 +176,7 @@ def makeSC(column_data, longnames, shortnames, longname, shortname,
            attributes=None):
     if attributes is None:
         attributes = {}
-    unzipped = zip(*column_data)
+    unzipped = list(zip(*column_data))
     assert len(unzipped) == len(longnames) == len(shortnames)
 
     def get_column_fc(col, ln, sn):

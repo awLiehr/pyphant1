@@ -95,7 +95,7 @@ import tarfile
 import zipfile
 import re
 import datetime
-import StringIO
+import io
 from optparse import OptionParser
 import pyphant.core.Helpers
 
@@ -108,9 +108,9 @@ parser.add_option(
 (options, args) = parser.parse_args()
 archiveName = args[0]
 iniFormat = options.iniFormat
-print "Converting %s from %s format to Full Metadata File format." % (
+print("Converting %s from %s format to Full Metadata File format." % (
     archiveName, iniFormat
-    )
+    ))
 
 
 class archive:
@@ -134,7 +134,7 @@ class archive:
             return datfile.readlines()
         elif self.type == 'ZIP':
             datfile = self.archiveIN.read(filename)
-            return StringIO.StringIO(datfile)
+            return io.StringIO(datfile)
 
     def close(self):
         self.archiveIN.close()
@@ -217,7 +217,7 @@ for datInfo in archiveIN.names():
         stream += line
     info = zipfile.ZipInfo(datInfo, date_time=modDate.utctimetuple()[:6])
     info.compress_type = zipfile.ZIP_DEFLATED
-    info.external_attr = 2175008768L
+    info.external_attr = 2175008768
     if iniFormat == 'RiedeINI':
         zip.writestr(info, stream.encode('cp1252'))
     elif iniFormat == 'KSH-INI':

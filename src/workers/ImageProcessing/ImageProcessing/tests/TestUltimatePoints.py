@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides unittest classes for UltimatePointsCalculator worker
+"""Provides unittest classes for UltimatePointsCalculator worker
 """
 
 
@@ -54,7 +54,7 @@ class UltimatePointsCalculatorTestCase(unittest.TestCase):
         result = upc.findUltimatePoints(image)
         self.assertEqual(result['i'].unit, Quantity('1 mum'))
         self.assertEqual(result['j'].unit, Quantity('1 mum'))
-        indices = zip(result['j'].data, result['i'].data)
+        indices = list(zip(result['j'].data, result['i'].data))
         self.assertTrue((1, 2) in indices)
         self.assertTrue((5, 3) in indices)
         self.assertEqual(len(indices), 2)

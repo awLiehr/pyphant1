@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 import numpy
@@ -48,14 +48,14 @@ class OscMapper(Worker.Worker):
     REVISION = pkg_resources.get_distribution("pyphant.osc").version
     name = "Mapper"
     _sockets = [("osc", Connectors.TYPE_ARRAY)]
-    _params = [("xAxis", u"x-Axis", [u"horizontal_table_position"], None),
-               ("yAxis", u"y-Axis", [u"vertical_table_position"], None),
-               ("field", u"Field", [u"thickness"], None),
-               ("extentX", u"Extension of x-axis [%%]", 10, None),
-               ("extentY", u"Extension of y-axis [%%]", 10, None),
-               ("overrideV", u"Override value limits", False, None),
-               ("vmin", u"Minimal value", "0 nm", None),
-               ("vmax", u"Maximal value", "100 nm", None)]
+    _params = [("xAxis", "x-Axis", ["horizontal_table_position"], None),
+               ("yAxis", "y-Axis", ["vertical_table_position"], None),
+               ("field", "Field", ["thickness"], None),
+               ("extentX", "Extension of x-axis [%%]", 10, None),
+               ("extentY", "Extension of y-axis [%%]", 10, None),
+               ("overrideV", "Override value limits", False, None),
+               ("vmin", "Minimal value", "0 nm", None),
+               ("vmax", "Maximal value", "100 nm", None)]
 
     def inithook(self):
         self._logger = logging.getLogger("pyphant")
@@ -63,7 +63,7 @@ class OscMapper(Worker.Worker):
     def refreshParams(self, subscriber=None):
         if self.socketOsc.isFull():
             templ = self.socketOsc.getResult(subscriber)
-            colNames = templ.longnames.keys()
+            colNames = list(templ.longnames.keys())
             self.paramXAxis.possibleValues = colNames
             self.paramYAxis.possibleValues = colNames
             self.paramField.possibleValues = colNames
@@ -88,7 +88,7 @@ class OscMapper(Worker.Worker):
         img = numpy.ones((yInd.stepCount, xInd.stepCount),
                          dtype='float') * numpy.NaN
         mask = numpy.ones((yInd.stepCount, xInd.stepCount), dtype='bool')
-        for i in xrange(xf.size):
+        for i in range(xf.size):
             xi = xInd[xf[i]]
             yi = yInd[yf[i]]
             if not mask[yi, xi]:
@@ -104,7 +104,7 @@ class OscMapper(Worker.Worker):
         result = DataContainer.FieldContainer(
             img, fCon.unit, mask=mask,
             dimensions=[yDim, xDim],
-            longname=u'Map of %s' % fCon.longname,
+            longname='Map of %s' % fCon.longname,
             shortname=fCon.shortname
             )
         return result

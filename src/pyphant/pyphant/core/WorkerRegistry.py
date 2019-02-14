@@ -86,13 +86,13 @@ class WorkerRegistry(singletonmixin.Singleton):
                     try:
                         moduleName = worker.module_name + "." + module
                         self._logger.info("Trying to import " + moduleName)
-                        exec 'import ' + moduleName
+                        exec('import ' + moduleName)
                         self._logger.info(
                             "Import module %s in version %s" % (
                                 moduleName, version
                                 )
                             )
-                    except ImportError, e:
+                    except ImportError as e:
                         self._logger.warning(
                             "worker archive " + worker.module_name \
                             + " contains invalid worker " + module \

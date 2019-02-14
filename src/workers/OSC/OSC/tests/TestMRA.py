@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides unittest classes TestMRA and TestMRADiscontinuousDiscretisation.
+"""Provides unittest classes TestMRA and TestMRADiscontinuousDiscretisation.
 """
 
 
@@ -86,7 +86,7 @@ class TestMRA(unittest.TestCase):
         w.paramScale.value = "1.0m"
         result = w.mra(self.V)
         #Testing
-        i = numpy.array(range(self.n))
+        i = numpy.array(list(range(self.n)))
         index = numpy.logical_and(self.u > 0.7, self.u < 0.72)
         index = MRA.findMinima(self.V.data, 5)
         numpy.testing.assert_array_almost_equal(
@@ -158,7 +158,7 @@ class TestExtremumFinderTable(unittest.TestCase):
             )
         #Prepare potential
         V = []
-        for i in xrange(len(lambField.data)):
+        for i in range(len(lambField.data)):
             u = xField.data
             V.append(
                 -lambField.data[i] / 2 * u ** 2 + u ** 4 / 4 - u * self.kappa1

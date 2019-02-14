@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 Pyphant module providing worker for finding the local extrema of 1D functions.
 """
 
@@ -46,8 +46,8 @@ class ComputeFunctional(Worker.Worker):
     REVISION = pkg_resources.get_distribution("pyphant.osc").version
     name = "Compute Functional"
     _sockets = [("field", Connectors.TYPE_ARRAY)]
-    _params = [("extentX", u"Extension of x-axis [%%]", 10, None),
-               ("extentY", u"Extension of y-axis [%%]", 10, None)]
+    _params = [("extentX", "Extension of x-axis [%%]", 10, None),
+               ("extentY", "Extension of y-axis [%%]", 10, None)]
 
     def computeDistances(self, field, subscriber=1, percentage=0):
         xGrid, yGrid = numpy.meshgrid(
@@ -95,9 +95,9 @@ class ComputeFunctional(Worker.Worker):
         ni = functional.shape[0]
         nj = functional.shape[1]
         increment = 50.0 / (ni * nj)
-        for i in xrange(ni):
-            for j in xrange(nj):
-                for k in xrange(len(x)):
+        for i in range(ni):
+            for j in range(nj):
+                for k in range(len(x)):
                     distances[k] = numpy.sqrt(
                         (x[k] - xDim.data[i]) ** 2 + \
                         (y[k] - yDim.data[j]) ** 2

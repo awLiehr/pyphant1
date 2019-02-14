@@ -43,7 +43,7 @@ class PrimitiveVisualizer(object):
         self.execute()
 
     def execute(self):
-        print self.fieldContainer
+        print(self.fieldContainer)
 
 
 DataVisReg.getInstance().registerVisualizer(

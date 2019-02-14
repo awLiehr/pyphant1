@@ -37,7 +37,7 @@ local KnowledgeManager and arbitrary many remote KnowledgeManagers.
 It comes with a RoutingHTTPServer and an optional WebInterface.
 """
 
-from __future__ import with_statement
+
 from pyphant.core.RoutingHTTPServer import (RoutingHTTPServer,
                                             UnreachableError)
 import sqlite3
@@ -45,7 +45,7 @@ from pyphant.core.Helpers import getPyphantPath
 from pyphant.core.SQLiteWrapper import create_table
 from time import time
 from urllib2 import (urlopen, URLError, HTTPError)
-from urllib import urlencode
+from urllib.parse import urlencode
 import logging
 from pyphant.core.KnowledgeManager import (DCNotFoundError, KnowledgeManager)
 from pyphant.core.bottle import (request, send_file)
@@ -179,8 +179,8 @@ class KnowledgeNode(RoutingHTTPServer):
     """
 
     def __init__(self, local_km=None,
-                 host=u'127.0.0.1', port=8080, start=False,
-                 web_interface=False, dbase=u'default'):
+                 host='127.0.0.1', port=8080, start=False,
+                 web_interface=False, dbase='default'):
         """
         Arguments:
         - `local_km`: Local KnowledgeManager instance to hook up to.
@@ -199,7 +199,7 @@ class KnowledgeNode(RoutingHTTPServer):
             local_km = KnowledgeManager.getInstance()
         self.km = local_km
         self.remotes = []
-        if dbase == u'default':
+        if dbase == 'default':
             self._dbase = os.path.join(getPyphantPath('sqlite3'),
                                        'kn_remotes.sqlite3')
         else:
@@ -381,7 +381,7 @@ def get_kn_autoport(ports, logger=None, *args, **kargs):
 
     def log(text):
         if logger is None:
-            print text
+            print(text)
         else:
             logger.warn(text)
 
@@ -390,7 +390,7 @@ def get_kn_autoport(ports, logger=None, *args, **kargs):
         try:
             kn = KnowledgeNode(port=port, *args, **kargs)
             return kn
-        except socket.error, err:
+        except socket.error as err:
             last_error = err
             try:
                 #Python 2.6

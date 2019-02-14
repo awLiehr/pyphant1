@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The Slicing Worker is a class of Pyphant's tools toolbox. It cuts out one
 part of a field and provides it as a new field to work on.
 """
@@ -106,12 +106,12 @@ class Slicing(Worker.Worker):
                     end = len(field.dimensions[dim].data)
                 elif arg[1] == ':':
                     start = 0
-                    end   = long(arg[2:]) + 1
+                    end   = int(arg[2:]) + 1
                 elif arg[-1] == ':':
-                    start = long(arg[1: -1])
+                    start = int(arg[1: -1])
                     end = len(field.dimensions[dim].data)
                 else:
-                    ind = map(long, arg[1:].split(':'))
+                    ind = list(map(int, arg[1:].split(':')))
                     start = ind[0]
                     if len(ind) == 1:
                         end = ind[0] + 1

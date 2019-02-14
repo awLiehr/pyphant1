@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The Thresholding Worker is a class of Pyphant's Image Processing
 Toolbox. The threshold can be edited in the worker's configuration. It
 returns a binary image where pixels that comprise features are set to
@@ -78,6 +78,6 @@ class ThresholdingWorker(Worker.Worker):
                                   ImageProcessing.BACKGROUND_COLOR)
         result = DataContainer.FieldContainer(resultArray,
                                     dimensions=copy.deepcopy(image.dimensions),
-                                    longname=u"Binary Image", shortname=u"B")
+                                    longname="Binary Image", shortname="B")
         result.seal()
         return result

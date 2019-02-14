@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides unittest classes for AutoFocus, LoadZStack
+"""Provides unittest classes for AutoFocus, LoadZStack
 and MarkInclusions worker.
 """
 
@@ -52,13 +52,13 @@ class ZStackTestCase(unittest.TestCase):
         pass
 
     def check(self, rng, value):
-        print rng, value
+        print(rng, value)
         assert value >= rng[0] - rng[1] and value <= rng[0] + rng[1], \
                "Value %f not in range (%f, %f)" % (value, rng[0] - rng[1],
                                                    rng[0] + rng[1])
 
     def testZStack(self):
-        print "Importing ZStack..."
+        print("Importing ZStack...")
         from ImageProcessing.LoadZStack import LoadZStack
         loader = LoadZStack()
         loader.paramPath.value = importDir
@@ -66,12 +66,12 @@ class ZStackTestCase(unittest.TestCase):
         loader.paramDy.value = '1.29 mum'
         loader.paramDx.value = '1.29 mum'
         zstack = loader.loadImageAsGreyScale()
-        print "Done."
-        print "Calculating ZStack-statistics..."
+        print("Done.")
+        print("Calculating ZStack-statistics...")
         from ImageProcessing.AutoFocus import AutoFocus
         afw = AutoFocus()
         statistics = afw.getStatistics(zstack)
-        print "Done."
+        print("Done.")
         assert len(statistics['diameter'].data) == 2
         imax = statistics['diameter'].data.argmax()
         imin = statistics['diameter'].data.argmin()
@@ -86,7 +86,7 @@ class ZStackTestCase(unittest.TestCase):
         self.check((7.0 * mul, mul), statistics['diameter'].data[imin])
 
     def testSingle(self):
-        print "Importing single image..."
+        print("Importing single image...")
         from ImageProcessing.LoadZStack import LoadZStack
         loader = LoadZStack()
         loader.paramPath.value = os.path.join(importDir, 'TestZStack_z00.tif')
@@ -96,12 +96,12 @@ class ZStackTestCase(unittest.TestCase):
         loader.paramStartz.value = '300.0 mum'
         loader.paramZClip.value = '3:4'
         zstack = loader.loadImageAsGreyScale()
-        print "Done."
-        print "Calculating single image statistics..."
+        print("Done.")
+        print("Calculating single image statistics...")
         from ImageProcessing.AutoFocus import AutoFocus
         afw = AutoFocus()
         statistics = afw.getStatistics(zstack)
-        print "Done."
+        print("Done.")
         assert len(statistics['diameter'].data) == 2
         imax = statistics['diameter'].data.argmax()
         imin = statistics['diameter'].data.argmin()

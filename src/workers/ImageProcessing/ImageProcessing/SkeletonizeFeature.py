@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 from pyphant.core import Worker, Connectors, DataContainer
@@ -43,7 +43,7 @@ import pkg_resources
 BC = IP.BACKGROUND_COLOR
 FC = IP.FEATURE_COLOR
 corner = numpy.array([[BC, BC, BC], [FC, FC, BC], [FC, FC, BC]])
-corners = map(lambda i: numpy.rot90(corner, k=i), range(4))
+corners = [numpy.rot90(corner, k=i) for i in range(4)]
 
 
 class SkeletonizeFeature(Worker.Worker):
@@ -61,7 +61,7 @@ class SkeletonizeFeature(Worker.Worker):
         result = DataContainer.FieldContainer(skeleton,
                         dimensions=copy.deepcopy(image.dimensions),
                         unit=image.unit,
-                        longname=u"Binary Image", shortname=u"B")
+                        longname="Binary Image", shortname="B")
         result.seal()
         return result
 

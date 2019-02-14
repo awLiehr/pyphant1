@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides unittest classes FieldContainerTestCase.
+"""Provides unittest classes FieldContainerTestCase.
 """
 
 
@@ -49,8 +49,8 @@ import tables
 class ContainerTestCase(unittest.TestCase):
     def setUp(self):
         self.testData = scipy.array([[0.,1.,2.],[3.,4.,5.],[6.,7.,8.]])
-        self.longname = u"Sampled Data"
-        self.shortname = u"I\\omega"
+        self.longname = "Sampled Data"
+        self.shortname = "I\\omega"
         self.unit = Quantity('3.14 m')
         self.attributes = {
             'id': 'dummy id',
@@ -75,7 +75,7 @@ class ContainerTestCase(unittest.TestCase):
 
 class FieldContainerTestCase(ContainerTestCase):
     def testSaveRestore(self):
-        self.field.creator=u"Klaus"
+        self.field.creator="Klaus"
         self.field.seal()
         self.eln.createGroup(self.eln.root,'testSaveRestoreField')
         saveField(self.eln,self.eln.root.testSaveRestoreField,self.field)
@@ -84,8 +84,8 @@ class FieldContainerTestCase(ContainerTestCase):
 
     def testUnicodeFields(self):
         self.field.seal()
-        unicodeArray = numpy.array([u'Hallo World!',u'Hallo Wörld!'])
-        unicodeField = FieldContainer(unicodeArray,longname=u"blabla",
+        unicodeArray = numpy.array(['Hallo World!','Hallo Wörld!'])
+        unicodeField = FieldContainer(unicodeArray,longname="blabla",
                                     shortname=self.shortname,
                                     unit = 1,
                                     attributes = self.attributes
@@ -101,7 +101,7 @@ class ObjectArrayTestCase(ContainerTestCase):
     def testDateTime(self):
         """Test the correct saving and  restoring of object arrays composed from datetime objects."""
         objectArray = numpy.array([datetime.datetime.now() for i in range(10)])
-        objectField = FieldContainer(objectArray,longname=u"timestamp",
+        objectField = FieldContainer(objectArray,longname="timestamp",
                                     shortname='t')
         objectField.seal()
         self.eln.createGroup(self.eln.root,'testObjectFields')
@@ -183,7 +183,7 @@ class ExecutionOrderTestCase(unittest.TestCase):
         h5 = tables.openFile(self.path)
         orders = loadExecutionOrders(h5)
         h5.close()
-        self.assertEquals(sorted(orders), sorted(self.orders))
+        self.assertEqual(sorted(orders), sorted(self.orders))
 
 if __name__ == "__main__":
     import sys

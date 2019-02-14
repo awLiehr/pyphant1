@@ -45,7 +45,7 @@ import copy
 def processArgs(h5):
     argv = sys.argv[1:]
     help = '-h' in argv or '--help' in argv
-    args = filter(lambda a: not a in ['-h', '--help'], argv)
+    args = [a for a in argv if not a in ['-h', '--help']]
     parser = optparse.OptionParser()
     recipe = PyTablesPersister.loadRecipe(h5)
     plugs = recipe.getAllPlugs()
@@ -55,7 +55,7 @@ def processArgs(h5):
             help="Request result of plug %s" % (p.id, ),
             action="append_const", const=p, dest="requestedResults"
             )
-    (options, args) = parser.parse_args(filter(lambda o: 'plug' in o, argv))
+    (options, args) = parser.parse_args([o for o in argv if 'plug' in o])
     if hasattr(options, "requestedResults") and \
             options.requestedResults and len(options.requestedResults) > 0:
         openSockets = sum(
@@ -106,7 +106,7 @@ def f2dc(f):
 def globOrder(order, h5):
     km = KnowledgeManager.getInstance()
     sockMap = {}
-    for sSpec in order[0].iteritems():
+    for sSpec in order[0].items():
         if sSpec[1].startswith('emd5://'):
             sockMap[sSpec[0]] = [sSpec[1]]
         else:
@@ -134,19 +134,19 @@ def main():
         order = globOrder(order, None)
         singles = dict(
             [(socket, id_[0]) \
-                 for socket, id_ in order[0].iteritems() if len(id_) == 1]
+                 for socket, id_ in order[0].items() if len(id_) == 1]
             )
         lists = dict(
             [(socket, id_) \
-                 for socket, id_ in order[0].iteritems() if len(id_) > 1]
+                 for socket, id_ in order[0].items() if len(id_) > 1]
             )
-        lens = [len(l) for l in lists.itervalues()]
+        lens = [len(l) for l in lists.values()]
         assert max(lens) == min(lens), "Illegal lengths."
         count = lens[0]
         orderList = []
-        for i in xrange(count):
+        for i in range(count):
             sockMap = copy.deepcopy(singles)
-            for s, l in lists.iteritems():
+            for s, l in lists.items():
                 sockMap[s] = l[i]
             orderList.append((sockMap, order[1]))
         orderLists.append(orderList)
@@ -168,7 +168,7 @@ def main():
         h5 = tables.openFile(filename, 'r+')
         for o in orderList:
             PyTablesPersister.saveExecutionOrder(h5, o)
-            for data in o[0].values():
+            for data in list(o[0].values()):
                 dc = km.getDataContainer(data)
                 PyTablesPersister.saveResult(dc, h5)
         h5.close()

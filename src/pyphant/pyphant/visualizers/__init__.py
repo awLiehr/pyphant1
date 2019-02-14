@@ -31,8 +31,8 @@
 
 """exposes visualizers"""
 
-import ImageVisualizer
-import Chart
-import KMVisualizer
-import ConfigurablePlot
-import ZStackVisualizer
+from . import ImageVisualizer
+from . import Chart
+from . import KMVisualizer
+from . import ConfigurablePlot
+from . import ZStackVisualizer

@@ -36,6 +36,7 @@ from pyphant.quantities import Quantity, _unit_table, PhysicalUnit,\
                                NumberDict, _base_names
 import numpy as np
 import numpy.oldnumeric
+from functools import reduce
 
 
 def int_sum_new(a, axis=0):
@@ -120,18 +121,18 @@ def pow_new(physunit, other):
     if isinstance(other, int):
         return PhysicalUnit(other * physunit.names,
                             pow(physunit.factor, other),
-                            map(lambda x, p=other: x * p, physunit.powers))
+                            list(map(lambda x, p=other: x * p, physunit.powers)))
     if (isinstance(other, float)) and (other != 0.):
         inv_exp = 1. / other
         rounded = round(inv_exp)
         if abs(inv_exp - rounded) < 1.e-10:
             if reduce(lambda a, b: a and b,
-                      map(lambda x, e=rounded: x % e == 0, physunit.powers)):
+                      list(map(lambda x, e=rounded: x % e == 0, physunit.powers))):
                 f = pow(physunit.factor, other)
-                p = map(lambda x, p=rounded: x / p, physunit.powers)
+                p = list(map(lambda x, p=rounded: x / p, physunit.powers))
                 if reduce(lambda a, b: a and b,
-                          map(lambda x, e=rounded: x % e == 0,
-                              physunit.names.values())):
+                          list(map(lambda x, e=rounded: x % e == 0,
+                              list(physunit.names.values())))):
                     names = physunit.names / rounded
                 else:
                     names = NumberDict()
@@ -151,18 +152,18 @@ def pow_old(physunit, other):
     if isinstance(other, int):
         return PhysicalUnit(other * physunit.names,
                             pow(physunit.factor, other),
-                            map(lambda x, p=other: x * p, physunit.powers))
+                            list(map(lambda x, p=other: x * p, physunit.powers)))
     if isinstance(other, float):
         inv_exp = 1. / other
         rounded = int(numpy.oldnumeric.floor(inv_exp + 0.5))
         if abs(inv_exp - rounded) < 1.e-10:
             if reduce(lambda a, b: a and b,
-                      map(lambda x, e=rounded: x % e == 0, physunit.powers)):
+                      list(map(lambda x, e=rounded: x % e == 0, physunit.powers))):
                 f = pow(physunit.factor, other)
-                p = map(lambda x, p=rounded: x / p, physunit.powers)
+                p = list(map(lambda x, p=rounded: x / p, physunit.powers))
                 if reduce(lambda a, b: a and b,
-                          map(lambda x, e=rounded: x % e == 0,
-                              physunit.names.values())):
+                          list(map(lambda x, e=rounded: x % e == 0,
+                              list(physunit.names.values())))):
                     names = physunit.names / rounded
                 else:
                     names = NumberDict()

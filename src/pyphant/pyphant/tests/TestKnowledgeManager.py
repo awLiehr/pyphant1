@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides unittest classes
+"""Provides unittest classes
 """
 
 
@@ -41,12 +41,13 @@ import pyphant.core.PyTablesPersister as ptp
 from pyphant.core.DataContainer import (FieldContainer, SampleContainer)
 import numpy as N
 import tables
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import tempfile
 import os
 import logging
 from time import time
 import random
+from functools import reduce
 
 
 class KnowledgeManagerTestCase(unittest.TestCase):
@@ -63,7 +64,7 @@ class KnowledgeManagerTestCase(unittest.TestCase):
         ptp.saveResult(self._fc, h5)
         h5.close()
         km = KnowledgeManager.getInstance()
-        from urllib import pathname2url
+        from urllib.request import pathname2url
         url = pathname2url(h5name)
         if not url.startswith('///'):
             url = '//' + url
@@ -78,7 +79,7 @@ class KnowledgeManagerTestCase(unittest.TestCase):
         remote_dir = ""
         url = "http://" + host + remote_dir + "/knowledgemanager-http-test.h5"
         # Get remote file and load DataContainer
-        filename, headers = urllib.urlretrieve(url)
+        filename, headers = urllib.request.urlretrieve(url)
         h5 = tables.openFile(filename, 'r')
         for g in h5.walkGroups("/results"):
             if (len(g._v_attrs.TITLE)>0) \
@@ -146,15 +147,15 @@ current: I(V) [A]
         km.getDataContainer(dc_id)
 
     def testCache(self):
-        print "Preparing FCs for cache test (cache size: %d MB)..."\
-              % (CACHE_MAX_SIZE / 1024 / 1024)
+        print("Preparing FCs for cache test (cache size: %d MB)..."\
+              % (CACHE_MAX_SIZE / 1024 / 1024))
         km = KnowledgeManager.getInstance()
         sizes = [(20, ), (10, 10, 10), (200, 200), (700, 700), (2000, 2000)]
         byte_sizes = [reduce(lambda x, y:x * y, size) * 8 for size in sizes]
         ids = []
         rand_id_pool = []
         assert_dict = {}
-        for num in xrange(2 * 20):
+        for num in range(2 * 20):
             fc = FieldContainer(N.ones((500, 500)))
             fc.data.flat[0] = num
             fc.seal()
@@ -170,30 +171,30 @@ current: I(V) [A]
             uc_acc_time = 0.0
             c_acc_time = 0.0
             reps = 30
-            for rep in xrange(reps):
+            for rep in range(reps):
                 t1 = time()
                 km.getDataContainer(id, use_cache=False)
                 t2 = time()
                 uc_acc_time += t2 - t1
             km._cache = []
             km._cache_size = 0
-            for rep in xrange(reps):
+            for rep in range(reps):
                 t1 = time()
                 km.getDataContainer(id)
                 t2 = time()
                 c_acc_time += t2 - t1
             uc_avr = 1000.0 * uc_acc_time / reps
             c_avr = 1000.0 * c_acc_time / reps
-            print "Avr. access time for %0.2f kB sequential read: "\
+            print("Avr. access time for %0.2f kB sequential read: "\
                   "%0.3f ms unchached, %0.3f ms cached" % (float(bytes) / 1024,
-                                                           uc_avr, c_avr)
+                                                           uc_avr, c_avr))
         km._cache = []
         km._cache_size = 0
         rand_ids = []
         reps = 500
         import pyphant.core.KnowledgeManager
         pyphant.core.KnowledgeManager.CACHE_MAX_NUMBER = 20
-        for run in xrange(reps):
+        for run in range(reps):
             rand_ids.append(rand_id_pool[
                 random.randint(0, len(rand_id_pool) - 1)])
         uc_acc_time = 0.0
@@ -215,9 +216,9 @@ current: I(V) [A]
         uc_avr = 1000.0 * uc_acc_time / reps
         c_avr = 1000.0 * c_acc_time / reps
         bytes = float(500 * 500 * 8) / 1024
-        print "Avr. access time for %0.2f kB random read: "\
-              "%0.3f ms unchached, %0.3f ms cached" % (bytes, uc_avr, c_avr)
-        print "------ End Cache Test ------"
+        print("Avr. access time for %0.2f kB random read: "\
+              "%0.3f ms unchached, %0.3f ms cached" % (bytes, uc_avr, c_avr))
+        print("------ End Cache Test ------")
 
 
 if __name__ == "__main__":

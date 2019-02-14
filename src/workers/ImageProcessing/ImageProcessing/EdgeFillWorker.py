@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The Edge Fill Worker is a class of Pyphant's Image Processing
 Toolbox. It is used to backfill outlined features again.
 """
@@ -80,8 +80,8 @@ class EdgeFillWorker(Worker.Worker):
                 + [(x, maxY - 1) for x in range(maxX - 1, -1, -1)] \
                 + [(0, y) for y in range(maxY - 2, 0, -1)]
             )
-        seeds = filter(lambda pos: image[pos] == seedColor, seeds)
-        map(lambda pos: self.fillRegion(image, pos, newColor), seeds)
+        seeds = [pos for pos in seeds if image[pos] == seedColor]
+        list(map(lambda pos: self.fillRegion(image, pos, newColor), seeds))
 
     def fillRegion(self, image, seed, newcolor):
         oldcolor = image[seed]

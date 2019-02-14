@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 import numpy
@@ -49,8 +49,8 @@ class ThicknessModeller(Worker.Worker):
 
     @Worker.plug(Connectors.TYPE_IMAGE)
     def calcAbsorption(self, osc, subscriber=0):
-        A = copy.deepcopy(osc[u'absorption'])
-        heights = osc[u'thickness']
+        A = copy.deepcopy(osc['absorption'])
+        heights = osc['thickness']
         indexMap = dict([(h, i) for i, h in enumerate(heights.data)])
         h = copy.deepcopy(heights.data)
         h.sort()

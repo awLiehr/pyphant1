@@ -49,7 +49,7 @@ def main():
     h5.close()
     from pyphant.core.Emd5Src import Emd5Src
     for order in executionOrders:
-        for socket, emd5 in order[0].iteritems():
+        for socket, emd5 in order[0].items():
             sSpec = socket.split('.')
             w = recipe.getWorker(sSpec[0])
             s = getattr(w, sSpec[-1])

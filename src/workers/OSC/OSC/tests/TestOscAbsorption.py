@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides unittest class TestOscAbsorption.
+"""Provides unittest class TestOscAbsorption.
 """
 
 
@@ -65,7 +65,7 @@ class TestOscAbsorptionCalculator(unittest.TestCase):
                                    longname = 'position',
                                    shortname = 'x')
         V=[]
-        for i in xrange(len(lambField.data)):
+        for i in range(len(lambField.data)):
             u = xField.data
             V.append(-lambField.data[i]/2* u**2 + u**4/4-u*self.kappa1)
         self.I = DC.FieldContainer(numpy.array(V),
@@ -94,8 +94,8 @@ class TestOscAbsorptionCalculator(unittest.TestCase):
                        DC.FieldContainer(self.x,longname='position',shortname='x',unit='1m')]
         expectedResult = DC.FieldContainer(numpy.ones((self.m,self.n),'float')-self.I.data,
                                            dimensions=expectedDim,
-                                           longname=u'absorption',
-                                           shortname=ur'\tilde{A}')
+                                           longname='absorption',
+                                           shortname=r'\tilde{A}')
         self.assertEqual(result,expectedResult)
 
     def testCalculationWithClipping(self):
@@ -112,8 +112,8 @@ class TestOscAbsorptionCalculator(unittest.TestCase):
         afoot[afoot>1]=1
         expectedResult = DC.FieldContainer(afoot,
                                            dimensions=expectedDim,
-                                           longname=u'absorption',
-                                           shortname=ur'\tilde{A}')
+                                           longname='absorption',
+                                           shortname=r'\tilde{A}')
         self.assertEqual(result,expectedResult)
 
     def testNegligibleNoise(self):
@@ -127,8 +127,8 @@ class TestOscAbsorptionCalculator(unittest.TestCase):
                        DC.FieldContainer(self.x,longname='position',shortname='x',unit='1m')]
         expectedResult = DC.FieldContainer(numpy.ones((self.m,self.n),'float')-self.I.data,
                                            dimensions=expectedDim,
-                                           longname=u'absorption',
-                                           shortname=ur'\tilde{A}')
+                                           longname='absorption',
+                                           shortname=r'\tilde{A}')
         self.assertEqual(result,expectedResult)
 
     def testSignificantNoise(self):
@@ -141,8 +141,8 @@ class TestOscAbsorptionCalculator(unittest.TestCase):
         expectedDim = copy.deepcopy(self.sampleC['I'].dimensions)
         expectedResult = DC.FieldContainer(numpy.ones((self.m,self.n),'float')-self.I.data,
                                            dimensions=expectedDim,
-                                           longname=u'absorption',
-                                           shortname=ur'\tilde{A}')
+                                           longname='absorption',
+                                           shortname=r'\tilde{A}')
         self.assertEqual(result,expectedResult)
 
 if __name__ == '__main__':

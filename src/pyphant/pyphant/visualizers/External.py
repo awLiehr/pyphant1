@@ -67,14 +67,14 @@ class ExternalDAT(object):
             )
         if dialog.ShowModal() == wx.ID_OK:
             path = dialog.GetPath()
-            print "Selected:", path
+            print("Selected:", path)
         else:
-            print "Nothing was selected."
+            print("Nothing was selected.")
         dialog.Destroy()
         hash, uriType = DataContainer.parseId(self.dataContainer.id)
-        if uriType == u"field":
+        if uriType == "field":
             self.saveField(path)
-        elif uriType == u"sample":
+        elif uriType == "sample":
             self.saveSample(path)
 
     def saveField(self, path):

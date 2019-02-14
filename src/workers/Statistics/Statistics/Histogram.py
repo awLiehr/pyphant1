@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The Historgam Worker is a class of Pyphant's Statistic Toolbox. It
 calcuates a histogram from the provided data. Histograms can be
 visualisd as bar charts or line charts. The rexpective axes are
@@ -69,8 +69,8 @@ class Histogram(Worker.Worker):
                                             longname=vector.longname,
                                             shortname=vector.shortname)
         result = DataContainer.FieldContainer(histo[0], dimensions=[xdim],
-                                              longname=u"Histogram of %s"
+                                              longname="Histogram of %s"
                                               % vector.longname,
-                                              shortname=u"h")
+                                              shortname="h")
         result.seal()
         return result

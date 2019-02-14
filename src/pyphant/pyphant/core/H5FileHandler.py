@@ -45,12 +45,12 @@ from pyphant.core.Helpers import (utf82uc, emd52dict)
 _logger = logging.getLogger("pyphant")
 
 im = IndexMarker()
-im_id = u"emd5://pyphant/pyphant/0001-01-01_00:00:00.000000/%s.field" \
+im_id = "emd5://pyphant/pyphant/0001-01-01_00:00:00.000000/%s.field" \
         % utf82uc(im.hash)
 im_summary = {'id': im_id, 'longname': utf82uc(im.longname),
               'shortname': utf82uc(im.shortname), 'hash': utf82uc(im.hash),
-              'creator': u'pyphant', 'machine': u'pyphant',
-              'date': u'0001-01-01_00:00:00.000000',
+              'creator': 'pyphant', 'machine': 'pyphant',
+              'date': '0001-01-01_00:00:00.000000',
               'unit': 1, 'dimensions': [im_id], 'attributes': {}}
 
 
@@ -101,7 +101,7 @@ class H5FileHandler(object):
         except (AttributeError, tables.NoSuchNodeError):
             raise AttributeError("Container %s not found in file %s."
                                  % (dcId, self.filename))
-        if isinstance(uriType, unicode):
+        if isinstance(uriType, str):
             uriType = uriType.encode('utf-8')
         return (resNode, uriType)
 
@@ -111,7 +111,7 @@ class H5FileHandler(object):
         dcId belongs to an IndexMarker
         """
         resNode, uriType = self.getNodeAndTypeFromId(dcId)
-        if uriType == u'field':
+        if uriType == 'field':
             try:
                 resNode._g_checkHasChild('dimensions')
             except tables.NoSuchNodeError:
@@ -171,7 +171,7 @@ class H5FileHandler(object):
                     else:
                         summary[currDcId] = tmp
         elif self.isIndexMarker(dcId):
-            return u'IndexMarker'
+            return 'IndexMarker'
         else:
             summary = {}
             summary['id'] = dcId
@@ -235,7 +235,7 @@ class H5FileHandler(object):
         result -- sealed DC instance
         """
         dcHash, uriType = DataContainer.parseId(result.id)
-        resId = u"result_" + dcHash
+        resId = "result_" + dcHash
         try:
             resultGroup = self.handle.getNode("/results/" + resId)
         except tables.NoSuchNodeError:

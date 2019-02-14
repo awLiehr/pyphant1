@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 This module provides the facilities to persist a Recipe including any
 generated data into a PyTables structure or a HDF5 file.
 A rudimentary description of the used file-format follows:
@@ -79,7 +79,7 @@ _reservedAttributes = (
 
 
 class Connection(tables.IsDescription):
-    destinationWorker = tables.StringCol(len("worker_" + str(sys.maxint)) + 1)
+    destinationWorker = tables.StringCol(len("worker_" + str(sys.maxsize)) + 1)
     destinationSocket = tables.StringCol(64)
 
 
@@ -101,12 +101,12 @@ def saveExecutionOrder(h5, order):
     orderGroup = h5.createGroup(executionOrderGroup, name)
 
     class InputDescription(tables.IsDescription):
-        socket = StringCol(max(map(len, order[0].keys())))
-        data = StringCol(max(map(len, order[0].values())))
+        socket = StringCol(max(list(map(len, list(order[0].keys())))))
+        data = StringCol(max(list(map(len, list(order[0].values())))))
 
     input = h5.createTable(orderGroup, 'input', InputDescription, "Socket Map")
     m = input.row
-    for s, d in order[0].iteritems():
+    for s, d in order[0].items():
         m['socket'] = s
         m['data'] = d
         m.append()
@@ -132,13 +132,13 @@ def saveWorker(h5, recipeGroup, worker, saveResults=True):
 
 def saveParameters(h5, workerGroup, worker):
     paramGroup = h5.createGroup(workerGroup, "parameters")
-    for (paramName, param) in worker._params.iteritems():
+    for (paramName, param) in worker._params.items():
         h5.setNodeAttr(paramGroup, paramName, param.value)
 
 
 def savePlugs(h5, workerGroup, worker, saveResults=True):
     plugs = h5.createGroup(workerGroup, "plugs")
-    for (plugName, plug) in worker._plugs.iteritems():
+    for (plugName, plug) in worker._plugs.items():
         plugGroup = h5.createGroup(plugs, plugName)
         if plug.resultIsAvailable() and saveResults:
             resId = saveResult(plug._result, h5)
@@ -168,7 +168,7 @@ def saveBaseAttributes(h5, workerGroup, worker):
 
 def saveResult(result, h5):
     hash, uriType = DataContainer.parseId(result.id)
-    resId = u"result_" + hash
+    resId = "result_" + hash
     try:
         resultGroup = h5.getNode("/results/" + resId)
     except tables.NoSuchNodeError:
@@ -193,7 +193,7 @@ def saveSample(h5, resultGroup, result):
     h5.setNodeAttr(resultGroup, "shortname", result.shortname.encode("utf-8"))
     h5.setNodeAttr(resultGroup, "creator", result.creator.encode("utf-8"))
     h5.setNodeAttr(resultGroup, "machine", result.machine.encode("utf-8"))
-    for key, value in result.attributes.iteritems():
+    for key, value in result.attributes.items():
         if key in _reservedAttributes:
             raise ValueError("Attributes should not be named %s, "
                              "but one was in fact called %s!"
@@ -209,14 +209,14 @@ def saveSample(h5, resultGroup, result):
 def saveField(h5, resultGroup, result):
     def dump(inputList):
         def conversion(arg):
-            if type(arg) == type(u' '):
+            if type(arg) == type(' '):
                 return arg.encode('utf-8')
             else:
                 return arg.__repr__()
         if type(inputList) == type([]):
-            return map(conversion, inputList)
+            return list(map(conversion, inputList))
         else:
-            return map(dump, inputList)
+            return list(map(dump, inputList))
     if result.data.dtype.char in ['U', 'O']:
         unicodeData = scipy.array(dump(result.data.tolist()))
         h5.createArray(
@@ -226,7 +226,7 @@ def saveField(h5, resultGroup, result):
         h5.createArray(
             resultGroup, "data", result.data, result.longname.encode("utf-8")
             )
-    for key, value in result.attributes.iteritems():
+    for key, value in result.attributes.items():
         h5.setNodeAttr(resultGroup.data, key, value)
     h5.setNodeAttr(resultGroup, "longname", result.longname.encode("utf-8"))
     h5.setNodeAttr(resultGroup, "shortname", result.shortname.encode("utf-8"))
@@ -235,17 +235,17 @@ def saveField(h5, resultGroup, result):
 
     if result.error != None:
         h5.createArray(resultGroup, "error", result.error,
-                       (u"Error of " + result.longname).encode("utf-8"))
+                       ("Error of " + result.longname).encode("utf-8"))
     if result.mask != None:
         h5.createArray(resultGroup, "mask", result.mask,
-                       (u"Mask of " + result.longname).encode("utf-8"))
+                       ("Mask of " + result.longname).encode("utf-8"))
     h5.setNodeAttr(resultGroup, "unit", repr(result.unit).encode("utf-8"))
     if result.dimensions != DataContainer.INDEX:
         idLen = max([len(dim.id.encode("utf-8")) for dim in result.dimensions])
         dimTable = h5.createTable(
             resultGroup, "dimensions",
             {"hash": StringCol(32), "id": StringCol(idLen)},
-            (u"Dimensions of " + result.longname).encode("utf-8"),
+            ("Dimensions of " + result.longname).encode("utf-8"),
             expectedrows=len(result.dimensions)
             )
         for dim in result.dimensions:
@@ -264,7 +264,7 @@ def instantiateWorker(parent, workerGroup):
     # better pass as dict to eval
     annotations = workerGroup._v_attrs.Annotations
     module = workerGroup._v_attrs.module
-    exec "import " + module  # is this save?
+    exec("import " + module)  # is this save?
     worker = eval(
         module + "." + workerGroup._v_attrs.clazz + "(parent, annotations)"
         )
@@ -276,7 +276,7 @@ def restoreParamsToWorker(worker, workerGroup):
         worker.refreshParams()
     except:
         _logger.warning(
-            u"Attempted refreshParam failed for %s. Check Parameters!" % (
+            "Attempted refreshParam failed for %s. Check Parameters!" % (
                 worker.name,
                 ),
             exc_info=True
@@ -284,7 +284,7 @@ def restoreParamsToWorker(worker, workerGroup):
     for paramName in workerGroup.parameters._v_attrs._v_attrnamesuser:
         param = getattr(workerGroup.parameters._v_attrs, paramName)
         if type(param) == scipy.ndarray:
-            param = unicode(param)
+            param = str(param)
         elif type(param) == scipy.string_:
             param = str(param)
         elif type(param) == scipy.int32:
@@ -293,7 +293,7 @@ def restoreParamsToWorker(worker, workerGroup):
             worker.getParam(paramName).overrideValue(param)
         except KeyError:
             _logger.warning(
-                u'Could not restore "%s" to parameter: "%s"' % (
+                'Could not restore "%s" to parameter: "%s"' % (
                     param, paramName
                     )
                 )
@@ -350,9 +350,9 @@ def restoreResultsToWorkers(recipeGroup, workers, h5):
                 resId = plugGroup._v_attrs.result
                 resNode = h5.getNode("/results/" + resId)
                 hash, uriType = DataContainer.parseId(resNode._v_title)
-                if uriType == u'field':
+                if uriType == 'field':
                     result = loadField(h5, resNode)
-                elif uriType == u'sample':
+                elif uriType == 'sample':
                     _logger.info("Trying to load sample data...")
                     result = loadSample(h5, resNode)
                     _logger.info("...successfully loaded.")
@@ -363,16 +363,16 @@ def restoreResultsToWorkers(recipeGroup, workers, h5):
                             )
                         )
                 plug._result = result
-            except (AttributeError, tables.NoSuchNodeError), e:
+            except (AttributeError, tables.NoSuchNodeError) as e:
                 _logger.info("Exception: " + str(e))
 
 
 def loadField(h5, resNode):
-    longname = unicode(h5.getNodeAttr(resNode, "longname"), 'utf-8')
-    shortname = unicode(h5.getNodeAttr(resNode, "shortname"), 'utf-8')
+    longname = str(h5.getNodeAttr(resNode, "longname"), 'utf-8')
+    shortname = str(h5.getNodeAttr(resNode, "shortname"), 'utf-8')
     try:
-        creator = unicode(h5.getNodeAttr(resNode, "creator"), 'utf-8')
-        machine = unicode(h5.getNodeAttr(resNode, "machine"), 'utf-8')
+        creator = str(h5.getNodeAttr(resNode, "creator"), 'utf-8')
+        machine = str(h5.getNodeAttr(resNode, "machine"), 'utf-8')
     except:
         from pyphant.core.Helpers import emd52dict
         emd5dict = emd52dict(resNode._v_title)
@@ -383,11 +383,11 @@ def loadField(h5, resNode):
     def loads(inputList):
         if type(inputList) == type([]):
             try:
-                return map(lambda s: eval(s), inputList)
+                return [eval(s) for s in inputList]
             except:
-                return map(lambda s: unicode(s, 'utf-8'), inputList)
+                return [str(s, 'utf-8') for s in inputList]
         else:
-            return map(loads, inputList)
+            return list(map(loads, inputList))
     if data.dtype.char == 'S':
         data = scipy.array(loads(data.tolist()))
     attributes = {}
@@ -401,7 +401,7 @@ def loadField(h5, resNode):
         mask = scipy.array(resNode.mask.read())
     except tables.NoSuchNodeError:
         mask = None
-    unit = eval(unicode(h5.getNodeAttr(resNode, "unit"), 'utf-8'))
+    unit = eval(str(h5.getNodeAttr(resNode, "unit"), 'utf-8'))
     try:
         dimTable = resNode.dimensions
         dimensions = [
@@ -428,10 +428,10 @@ def loadSample(h5, resNode):
     result = DataContainer.SampleContainer.__new__(
         DataContainer.SampleContainer
         )
-    result.longname = unicode(h5.getNodeAttr(resNode, "longname"), 'utf-8')
-    result.shortname = unicode(h5.getNodeAttr(resNode, "shortname"), 'utf-8')
-    result.creator = unicode(h5.getNodeAttr(resNode, "creator"), 'utf-8')
-    result.machine = unicode(h5.getNodeAttr(resNode, "machine"), 'utf-8')
+    result.longname = str(h5.getNodeAttr(resNode, "longname"), 'utf-8')
+    result.shortname = str(h5.getNodeAttr(resNode, "shortname"), 'utf-8')
+    result.creator = str(h5.getNodeAttr(resNode, "creator"), 'utf-8')
+    result.machine = str(h5.getNodeAttr(resNode, "machine"), 'utf-8')
     result.attributes = {}
     for key in resNode._v_attrs._v_attrnamesuser:
         if key not in _reservedAttributes:

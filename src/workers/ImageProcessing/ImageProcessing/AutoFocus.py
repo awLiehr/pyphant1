@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 This module provides the refactored AutoFocus Worker and its little helpers
 """
 
@@ -110,7 +110,7 @@ class Inclusion(object):
         fpDict[2] = ndimage.binary_dilation(fpDict[1])
         fpDict[-1] = ndimage.binary_erosion(footprint)
         fpDict[-2] = ndimage.binary_erosion(fpDict[-1])
-        fpDilList = [(fpDict[i], fpDict[i + 1]) for i in xrange(-2, 2)]
+        fpDilList = [(fpDict[i], fpDict[i + 1]) for i in range(-2, 2)]
         ffpList = [focusFootprint(fpDil) for fpDil in fpDilList]
         maxffp = max(ffpList, key=lambda x: x[0])
         area = maxffp[1].sum()

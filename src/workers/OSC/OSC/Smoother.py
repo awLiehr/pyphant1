@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 The Smoother Worker is a class of Pyphant's OSC Toolbox. It is used to
 reduce noise from a field. The numer of smoothing runs can be edited.
 """
@@ -66,7 +66,7 @@ class Smoother(Worker.Worker):
         x = xDim.data
         smoothedData = []
         count = osc.data.shape[0]
-        for i in xrange(count):
+        for i in range(count):
             y = osc.data[i]
             if osc.error != None:
                 error = copy.deepcopy(osc.error[i])
@@ -96,7 +96,7 @@ class Smoother(Worker.Worker):
             error=osc.error,
             unit=osc.unit,
             dimensions=osc.dimensions,
-            longname=u'Smoothed %s' % osc.longname,
+            longname='Smoothed %s' % osc.longname,
             shortname='\\widetilde{%s}' % osc.shortname
             )
         result.seal()

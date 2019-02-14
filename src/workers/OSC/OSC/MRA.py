@@ -31,7 +31,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 import numpy
@@ -119,12 +119,12 @@ def mra1d(dim, field, n, numb_edge):
 
 
 def pos_error_to_data_container(p_e):
-    n = max(map(lambda (p, e): len(p), p_e))
+    n = max([len(p_e1[0]) for p_e1 in p_e])
     m = len(p_e)
     pos = numpy.ones((m, n), 'float') * numpy.NaN
     error = pos.copy()
-    for i in xrange(m):
-        for j in xrange(len(p_e[i][0])):
+    for i in range(m):
+        for j in range(len(p_e[i][0])):
             pos[i, j] = p_e[i][0][j]
             error[i, j] = p_e[i][1][j]
     return n, pos, error
@@ -137,10 +137,10 @@ class MRA(Worker.Worker):
     name = "Multi Resolution Analyzer"
     _sockets = [("field", Connectors.TYPE_IMAGE)]
     _params = [
-        ("scale", u"Scale", "200 nm", None),
-        ("numb_edge", u"Width of edge to discard extrema in [%%]", 5, None),
-        ("longname", u"Name of result", 'default', None),
-        ("symbol", u"Symbol of result", 'default', None)
+        ("scale", "Scale", "200 nm", None),
+        ("numb_edge", "Width of edge to discard extrema in [%%]", 5, None),
+        ("longname", "Name of result", 'default', None),
+        ("symbol", "Symbol of result", 'default', None)
         ]
 
     @Worker.plug(Connectors.TYPE_ARRAY)
@@ -165,7 +165,7 @@ class MRA(Worker.Worker):
                     p_e.append((([], []), ([], [])))
                 acc += inc
                 subscriber %= acc
-            minima, maxima = zip(*p_e)
+            minima, maxima = list(zip(*p_e))
             n_min, pos_min, err_min = pos_error_to_data_container(minima)
             n_max, pos_max, err_max = pos_error_to_data_container(maxima)
             dims_min = [

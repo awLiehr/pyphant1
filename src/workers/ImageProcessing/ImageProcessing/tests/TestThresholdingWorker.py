@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 
@@ -57,7 +57,7 @@ class TestThresholding(unittest.TestCase):
     def testThreshold(self):
         """Test thresholding of an intermediate graylevel."""
         self.worker.paramUnit.value = 'ignore'
-        for th in xrange(self.dim + 1):
+        for th in range(self.dim + 1):
             self.worker.paramThreshold.value = th
             self.testArray[:th,:] = I.FEATURE_COLOR
             self.testArray[th:,:] = I.BACKGROUND_COLOR
@@ -67,7 +67,7 @@ class TestThresholding(unittest.TestCase):
     def testUnitThreshold(self):
         """Test thresholding of an intermediate graylevel with units."""
         self.worker.paramUnit.value = 'V / km'
-        for th in xrange(self.dim + 1):
+        for th in range(self.dim + 1):
             self.worker.paramThreshold.value = 5000 * th
             self.testArray[:th,:] = I.FEATURE_COLOR
             self.testArray[th:,:] = I.BACKGROUND_COLOR

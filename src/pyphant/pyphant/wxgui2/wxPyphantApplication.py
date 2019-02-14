@@ -44,7 +44,7 @@ LOGDIR = getPyphantPath()
 import logging
 from logging.handlers import MemoryHandler
 logging.basicConfig(level=logging.NOTSET,
-                    filename=os.path.join(LOGDIR, u'pyphant.log'),
+                    filename=os.path.join(LOGDIR, 'pyphant.log'),
                     filemode='w',
                     format="%(asctime)s - %(levelname)s:%(name)s:%(thread)"\
                     "d:%(module)s.%(funcName)s(l %(lineno)d):%(message)s")
@@ -86,7 +86,7 @@ class wxPyphantApplication(wx.App):
         return True
 
     def excepthook(self, type, value, trace):
-        self._logger.error(u"An unhandled exception occured.",
+        self._logger.error("An unhandled exception occured.",
                            exc_info=(type, value, trace))
         sys.__excepthook__(type, value, trace)
 
@@ -158,7 +158,7 @@ class wxPyphantFrame(wx.Frame):
             self._workerRepository.Expand(self._workerRepository.RootItem)
         except:
             self._wxPyphantApp._logger.error(
-                u"An exception occured while loading the toolboxes.",
+                "An exception occured while loading the toolboxes.",
                 exc_info=sys.exc_info())
             wx.MessageBox(
                 "An error has occurred while importing "\
@@ -249,7 +249,7 @@ class wxPyphantFrame(wx.Frame):
                         self, recipe)
                 except:
                     self._wxPyphantApp._logger.error(
-                        u"An exception occured while loading a recipe.",
+                        "An exception occured while loading a recipe.",
                         exc_info=sys.exc_info())
                     wx.MessageBox(
                         "An error has occurred while opening "\
@@ -367,8 +367,8 @@ class wxPyphantFrame(wx.Frame):
     def onUpdatePyphant(self, event):
         packageName = self._updateMenu.FindItemById(event.Id)\
                       .GetItemLabelText()[7:]
-        cpt = u"Update Manager"
-        msg = u"Trying to update package '%s'.\nYou will be notified "\
+        cpt = "Update Manager"
+        msg = "Trying to update package '%s'.\nYou will be notified "\
               "when the process has finished.\n"\
               "Please press 'OK' now to begin." % packageName
         dlg = wx.MessageDialog(self, msg, cpt, style=wx.OK | wx.CANCEL)
@@ -381,13 +381,13 @@ class wxPyphantFrame(wx.Frame):
             error = pyphant.core.UpdateManager.updatePackage(
                 self.updateIds[event.Id]
                 )
-        except Exception, exc:
+        except Exception as exc:
             error = "%s:\n%s" % (exc.__class__.__name__, exc.message)
         if error is not None and len(error) > 0:
-            msg = u"An error occured during the update of '%s':\n%s"\
+            msg = "An error occured during the update of '%s':\n%s"\
                   % (packageName, error)
         else:
-            msg = u"Finished updating '%s'." % packageName
+            msg = "Finished updating '%s'." % packageName
         dlg = wx.MessageDialog(self, msg, cpt, style=wx.OK)
         dlg.ShowModal()
         dlg.Destroy()
@@ -510,7 +510,7 @@ class wxPyphantFrame(wx.Frame):
             try:
                 logg = self._wxPyphantApp._logger
                 from pyphant.core.KnowledgeNode import get_kn_autoport
-                ports = [8080] + range(48621, 48771)
+                ports = [8080] + list(range(48621, 48771))
                 self._wxPyphantApp._knowledgeNode = get_kn_autoport(
                     ports, logg, start=True, web_interface=True)
                 url = self._wxPyphantApp._knowledgeNode.url
@@ -518,7 +518,7 @@ class wxPyphantFrame(wx.Frame):
                        "Sharing is experimental and therefore restric"\
                        "ted\nto the loopback interface." % url
                 webbrowser.open_new(url)
-            except Exception, exep:
+            except Exception as exep:
                 msg += "Could not start web server."
                 from socket import error as socket_error
                 if isinstance(exep, socket_error):
@@ -565,12 +565,12 @@ class mySplashScreen(wx.Frame):
         self.timer.Start(5000, oneShot=True)
         self.Bind(wx.EVT_TIMER, self.OnExit)
 
-        import StringIO
+        import io
         import base64
         from pyphant.wxgui2 import pyphantLogo
 
         png = base64.decodestring(pyphantLogo.pic_b64)
-        stream = StringIO.StringIO(png)
+        stream = io.StringIO(png)
         wxImage = wx.ImageFromStream(stream)
         wxImage.ConvertAlphaToMask(10)
         self.bmp = wxImage.ConvertToBitmap()

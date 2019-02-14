@@ -35,11 +35,11 @@ This module provides the WebInterface class for the KnowledgeNode
 as well as some HTTP and HTML helper classes.
 """
 
-from __future__ import with_statement
+
 from types import (ListType, TupleType)
 from pyphant.core.bottle import (template, send_file, request)
 from pyphant.core.Helpers import getPyphantPath
-from urllib import urlencode
+from urllib.parse import urlencode
 from pyphant.core.KnowledgeNode import RemoteError
 from pyphant.core.KnowledgeManager import DCNotFoundError
 from pyphant.core.SQLiteWrapper import SQLiteWrapper
@@ -71,7 +71,7 @@ def validate_keys(keys, mapping):
     try:
         validate([(k, lambda k: k in mapping, "Missing parameter: %s") \
                   for k in keys])
-    except ValueError, verr:
+    except ValueError as verr:
         return template('message', heading='Parameter Error',
                         message=verr.args[0], back_url='/')
     return True
@@ -320,7 +320,7 @@ class HTMLAttrTable(HTMLTable):
         with SQLiteWrapper(kn.km.dbase) as wrapper:
             attrs = wrapper[dc_id]['attributes']
         rows = [('attribute', 'value')]
-        rows.extend(attrs.items())
+        rows.extend(list(attrs.items()))
         HTMLTable.__init__(self, rows)
 
 
@@ -430,13 +430,13 @@ class WebInterface(object):
                        lambda a: a in action_dict,
                        "Invalid value for parameter 'action': %s")]
                      )
-        except ValueError, valerr:
+        except ValueError as valerr:
             return template('message', heading='Parameter Error',
                             message=valerr.args[0], back_url='/remotes/')
         port = int(qry['port'])
         try:
             action_dict[qry['action']](qry['host'], port)
-        except RemoteError, remerr:
+        except RemoteError as remerr:
             return template('message', heading='Error', message=remerr.args[0],
                             back_url='/remotes/')
         return self.remotes()
@@ -475,12 +475,12 @@ class WebInterface(object):
             raise DCNotFoundError(template(
                 'message', heading='Parameter Error', back_url='/',
                 message="Could not find data container '%s'" % dc_id))
-        return zip(keys, result[0])
+        return list(zip(keys, result[0]))
 
     def fieldcontainer(self, fc_id):
         try:
             common_rows = self.common_summary(fc_id)
-        except DCNotFoundError, dcnferr:
+        except DCNotFoundError as dcnferr:
             return dcnferr.args[0]
         rows = [['scheme', HTMLFCScheme(fc_id, self.kn)]]
         rows.extend(common_rows[:-1])
@@ -493,7 +493,7 @@ class WebInterface(object):
     def samplecontainer(self, sc_id):
         try:
             common_rows = self.common_summary(sc_id)
-        except DCNotFoundError, dcnferr:
+        except DCNotFoundError as dcnferr:
             return dcnferr.args[0]
         scheme = HTMLSCScheme(sc_id, self.kn)
         rows = [['scheme', scheme]]
@@ -553,7 +553,7 @@ class WebInterface(object):
 
         def testany(str1):
             str2 = utf82uc(str1)
-            if str2 == u"":
+            if str2 == "":
                 str2 = self.kn.km.any_value
             return str2
 

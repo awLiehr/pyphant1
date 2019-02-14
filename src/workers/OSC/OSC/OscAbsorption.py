@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 import numpy
@@ -75,7 +75,7 @@ def grid2Index(field, extension=0):
     if numpy.allclose(fi, fic):
         indexDict = IndexDict(offset, fmax, fstep)
     else:
-        _logger.warning(u"There seems to be a problem with the discretisation.\
+        _logger.warning("There seems to be a problem with the discretisation.\
                             We are choosing 100 points.")
         fstep = (fmax - offset) / 100.
         indexDict = IndexDict(offset, fmax, fstep)
@@ -114,16 +114,16 @@ class OscAbsorptionCalculator(Worker.Worker):
 
     @Worker.plug(Connectors.TYPE_IMAGE)
     def calcAbsorption(self, osc, subscriber=0):
-        I = osc[u'I']
-        I_d = osc[u'I_d']
-        I_0 = osc[u'I_0']
+        I = osc['I']
+        I_d = osc['I_d']
+        I_0 = osc['I_0']
         A = - ((I.data - I_d.data) / (I_0.data - I_d.data) - 1)
         if self.paramClipping.value == 1:
             A[A > 1] = 1
             A[A < 0] = 0
         Abso = DataContainer.FieldContainer(A,
-                                            longname=u'absorption',
-                                            shortname=ur'\tilde{A}')
+                                            longname='absorption',
+                                            shortname=r'\tilde{A}')
         Abso.dimensions[-1] = I.dimensions[-1]
         if self.paramMask_lamp.value == 1:
             removePeak(Abso, Quantity('654nm'), Quantity('660nm'))

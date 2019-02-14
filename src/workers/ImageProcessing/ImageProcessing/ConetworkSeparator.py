@@ -29,7 +29,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 from pyphant.core import Worker, Connectors, DataContainer
@@ -72,7 +72,7 @@ class ConetworkThresholding(Worker.Worker):
         result = DataContainer.FieldContainer(
             resultArray,
             dimensions=copy.deepcopy(image.dimensions),
-            longname=u"Binary Image", shortname=u"B"
+            longname="Binary Image", shortname="B"
             )
         result.seal()
         return result

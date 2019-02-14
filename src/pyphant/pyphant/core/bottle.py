@@ -77,19 +77,19 @@ import threading
 import time
 import email.utils
 from wsgiref.headers import Headers as HeaderWrapper
-from Cookie import SimpleCookie
-import anydbm as dbm
+from http.cookies import SimpleCookie
+import dbm as dbm
 import subprocess
-import thread
+import _thread
 
 
 try:
-    from urlparse import parse_qs
+    from urllib.parse import parse_qs
 except ImportError:
     from cgi import parse_qs
 
 try:
-    import cPickle as pickle
+    import pickle as pickle
 except ImportError:
     import pickle as pickle
 
@@ -276,9 +276,9 @@ class Bottle(object):
                     raise HTTPError(404, "Not found")
                 output = handler(**args)
                 db.close()
-            except BreakTheBottle, e:
+            except BreakTheBottle as e:
                 output = e.output
-            except HTTPError, e:
+            except HTTPError as e:
                 response.status = e.http_status
                 output = self.error_handler.get(response.status, str)(e)
             # output casting
@@ -290,7 +290,7 @@ class Bottle(object):
             elif self.autojson and json_dumps and isinstance(output, dict):
                 output = json_dumps(output)
                 response.content_type = 'application/json'
-            if isinstance(output, unicode):
+            if isinstance(output, str):
                 response.header['Content-Length'] = str(len(output))
                 output = [output.encode(response.charset)]
             if isinstance(output, str):
@@ -301,7 +301,7 @@ class Bottle(object):
                 'which is not iterable.' % (request.path, type(output).__name__))
         except (KeyboardInterrupt, SystemExit, MemoryError):
             raise
-        except Exception, e:
+        except Exception as e:
             response.status = 500
             if self.catchall:
                 err = "Unhandled Exception: %s\n" % (repr(e))
@@ -358,7 +358,7 @@ class Request(threading.local):
         if self._GET is None:
             data = parse_qs(self.query_string, keep_blank_values=True)
             self._GET = {}
-            for key, value in data.iteritems():
+            for key, value in data.items():
                 if len(value) == 1:
                     self._GET[key] = value[0]
                 else:
@@ -396,7 +396,7 @@ class Request(threading.local):
         if self._COOKIES is None:
             raw_dict = SimpleCookie(self._environ.get('HTTP_COOKIE',''))
             self._COOKIES = {}
-            for cookie in raw_dict.itervalues():
+            for cookie in raw_dict.values():
                 self._COOKIES[cookie.key] = cookie.value
         return self._COOKIES
 
@@ -416,9 +416,9 @@ class Response(threading.local):
 
     def wsgiheaders(self):
         ''' Returns a wsgi conform list of header/value pairs '''
-        for c in self.COOKIES.itervalues():
+        for c in self.COOKIES.values():
             self.header.add_header('Set-Cookie', c.OutputString())
-        return [(h.title(), str(v)) for h, v in self.header.items()]
+        return [(h.title(), str(v)) for h, v in list(self.header.items())]
 
     @property
     def COOKIES(self):
@@ -432,7 +432,7 @@ class Response(threading.local):
         expires, path, comment, domain, max-age, secure, version, httponly
         """
         self.COOKIES[key] = value
-        for k, v in kargs.iteritems():
+        for k, v in kargs.items():
             self.COOKIES[key][k] = v
 
     def get_content_type(self):
@@ -530,12 +530,12 @@ def validate(**vkargs):
     """
     def decorator(func):
         def wrapper(**kargs):
-            for key, value in vkargs.iteritems():
+            for key, value in vkargs.items():
                 if key not in kargs:
                     abort(403, 'Missing parameter: %s' % key)
                 try:
                     kargs[key] = value(kargs[key])
-                except ValueError, e:
+                except ValueError as e:
                     abort(403, 'Wrong parameter format for: %s' % key)
             return func(**kargs)
         return wrapper
@@ -637,7 +637,7 @@ class FapwsServer(ServerAdapter):
         def app(environ, start_response):
             environ['wsgi.multiprocess'] = False
             result = handler(environ, start_response)
-            if isinstance(result, basestring):
+            if isinstance(result, str):
                 # fapws doesn't handle strings correctly
                 return iter(result)
             else:
@@ -666,12 +666,12 @@ def run(app=None, server=WSGIRefServer, host='127.0.0.1', port=8080,
 
     if not quiet and isinstance(server, ServerAdapter):
         if not reloader or os.environ.get('BOTTLE_CHILD') == 'true':
-            print "Bottle server starting up (using %s)..." % repr(server)
-            print "Listening on http://%s:%d/" % (server.host, server.port)
-            print "Use Ctrl-C to quit."
-            print
+            print("Bottle server starting up (using %s)..." % repr(server))
+            print("Listening on http://%s:%d/" % (server.host, server.port))
+            print("Use Ctrl-C to quit.")
+            print()
         else:
-            print "Bottle auto reloader starting up..."
+            print("Bottle auto reloader starting up...")
 
     try:
         if reloader and interval:
@@ -679,30 +679,30 @@ def run(app=None, server=WSGIRefServer, host='127.0.0.1', port=8080,
         else:
             server.run(app)
     except KeyboardInterrupt:
-        print "Shutting Down..."
+        print("Shutting Down...")
 
 
 def reloader_run(server, app, interval):
     if os.environ.get('BOTTLE_CHILD') == 'true':
         # We are a child process
         files = dict()
-        for module in sys.modules.values():
+        for module in list(sys.modules.values()):
             file_path = getattr(module, '__file__', None)
             if file_path and os.path.isfile(file_path):
                 file_split = os.path.splitext(file_path)
                 if file_split[1] in ('.py', '.pyc', '.pyo'):
                     file_path = file_split[0] + '.py'
                     files[file_path] = os.stat(file_path).st_mtime
-        thread.start_new_thread(server.run, (app,))
+        _thread.start_new_thread(server.run, (app,))
         while True:
             time.sleep(interval)
-            for file_path, file_mtime in files.iteritems():
+            for file_path, file_mtime in files.items():
                 if not os.path.exists(file_path):
-                    print "File changed: %s (deleted)" % file_path
+                    print("File changed: %s (deleted)" % file_path)
                 elif os.stat(file_path).st_mtime > file_mtime:
-                    print "File changed: %s (modified)" % file_path
+                    print("File changed: %s (modified)" % file_path)
                 else: continue
-                print "Restarting..."
+                print("Restarting...")
                 app.serve = False
                 time.sleep(interval) # be nice and wait for running requests
                 sys.exit(3)
@@ -770,7 +770,7 @@ class MakoTemplate(BaseTemplate):
     def prepare(self):
         from mako.template import Template
         from mako.lookup import TemplateLookup
-        mylookup = TemplateLookup(directories=map(os.path.abspath, self.lookup)+['./'])
+        mylookup = TemplateLookup(directories=list(map(os.path.abspath, self.lookup))+['./'])
         if self.template:
             self.tpl = Template(self.template,
                                 lookup=mylookup,
@@ -1089,7 +1089,7 @@ class BottleDB(threading.local):
             if key not in self.open:
                 self.open[key] = BottleBucket(key)
             self.open[key].clear()
-            for k, v in value.iteritems():
+            for k, v in value.items():
                 self.open[key][k] = v
         else:
             raise ValueError("Only dicts and BottleBuckets are allowed.")

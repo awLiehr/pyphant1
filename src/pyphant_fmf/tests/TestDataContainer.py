@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides unittest classes FieldContainerTestCase, SampleContainerTest.
+"""Provides unittest classes FieldContainerTestCase, SampleContainerTest.
 """
 
 
@@ -86,8 +86,8 @@ class FieldContainerTestCase(unittest.TestCase):
     def setUp(self):
         self.testData = scipy.array([[0., 1., 2.], [3., 4., 5.], [6., 7., 8.]])
         self.testMask = self.testData > 5
-        self.longname = u"Sampled Data"
-        self.shortname = u"I\\omega"
+        self.longname = "Sampled Data"
+        self.shortname = "I\\omega"
         self.unit = Quantity('3.14 m')
 
     def testGenerateIndex(self):
@@ -126,7 +126,7 @@ class FieldContainerTestCase(unittest.TestCase):
         self.assertNotEqual(field.hash, None)
         try:
             field.data = scipy.array([1, 2, 3])
-        except TypeError, e:
+        except TypeError as e:
             pass
         else:
             self.fail("Modification of sealed FieldContainer was not \
@@ -140,7 +140,7 @@ class FieldContainerTestCase(unittest.TestCase):
                         prohibited.")
         try:
             field.dimensions[0] = copy.deepcopy(field)
-        except TypeError, e:
+        except TypeError as e:
             pass
         else:
             self.fail("Modification of sealed FieldContainer's dimension \
@@ -376,7 +376,7 @@ class FieldContainerTestCase(unittest.TestCase):
         nt.assert_array_almost_equal(sumField.data, field1.data + field2.data)
         self.assertEqual(1, sumField.unit)
         self.assertEqual(sumField.shortname,
-                         u"%s + %s" % (self.shortname, self.shortname))
+                         "%s + %s" % (self.shortname, self.shortname))
         field1 = FieldContainer(self.testData,
                                 '1 m',
                                 longname=self.longname,
@@ -388,14 +388,14 @@ class FieldContainerTestCase(unittest.TestCase):
         sumField = field1 + field2
         nt.assert_array_almost_equal(sumField.data, field1.data / 2+field2.data)
         self.assertEqual(sumField.unit, Quantity('2 m'))
-        self.assertEqual(sumField.shortname, u"%s + %s" \
+        self.assertEqual(sumField.shortname, "%s + %s" \
                              % (self.shortname, self.shortname))
         sumField = field2 + field1
         nt.assert_array_almost_equal(sumField.data,
                                      field1.data / 2 + field2.data)
         self.assertEqual(sumField.unit, Quantity('2 m'))
         self.assertEqual(sumField.shortname,
-                         u"%s + %s" % (self.shortname, self.shortname))
+                         "%s + %s" % (self.shortname, self.shortname))
         field1 = FieldContainer(self.testData,
                                 '1 mm',
                                 longname=self.longname,
@@ -405,7 +405,7 @@ class FieldContainerTestCase(unittest.TestCase):
                                      field1.data / 2000 + field2.data)
         self.assertEqual(sumField.unit, Quantity('2 m'))
         self.assertEqual(sumField.shortname,
-                         u"%s + %s" % (self.shortname, self.shortname))
+                         "%s + %s" % (self.shortname, self.shortname))
 
     def testSubtraction(self):
         field1 = FieldContainer(numpy.random.randn(7, 13),
@@ -420,7 +420,7 @@ class FieldContainerTestCase(unittest.TestCase):
         nt.assert_array_almost_equal(sumField.data, field1.data - field2.data)
         self.assertEqual(1, sumField.unit)
         self.assertEqual(sumField.shortname,
-                         u"%s - %s" % (self.shortname, self.shortname))
+                         "%s - %s" % (self.shortname, self.shortname))
         field1 = FieldContainer(self.testData,
                                 '1 m',
                                 longname=self.longname,
@@ -434,13 +434,13 @@ class FieldContainerTestCase(unittest.TestCase):
                                      field1.data / 2 - field2.data)
         self.assertEqual(sumField.unit, Quantity('2 m'))
         self.assertEqual(sumField.shortname,
-                         u"%s - %s" % (self.shortname, self.shortname))
+                         "%s - %s" % (self.shortname, self.shortname))
         sumField = field2 - field1
         nt.assert_array_almost_equal(sumField.data,
                                      field2.data - field1.data / 2)
         self.assertEqual(sumField.unit, Quantity('2 m'))
         self.assertEqual(sumField.shortname,
-                         u"%s - %s" % (self.shortname, self.shortname))
+                         "%s - %s" % (self.shortname, self.shortname))
         field1 = FieldContainer(self.testData,
                                 '1 mm',
                                 longname=self.longname,
@@ -450,7 +450,7 @@ class FieldContainerTestCase(unittest.TestCase):
                                      field1.data / 2000 - field2.data)
         self.assertEqual(sumField.unit, Quantity('2 m'))
         self.assertEqual(sumField.shortname,
-                         u"%s - %s" % (self.shortname, self.shortname))
+                         "%s - %s" % (self.shortname, self.shortname))
 
 class IsValidFieldContainer(unittest.TestCase):
     def setUp(self):
@@ -500,27 +500,27 @@ class SampleContainerTest(unittest.TestCase):
         self.intSample = FieldContainer(scipy.arange(0, self.rows),
                                         Quantity('1m'),
                                         #dimensions=INDEX,
-                                        longname=u"Integer sample",
-                                        shortname=u"i")
+                                        longname="Integer sample",
+                                        shortname="i")
         self.intSample2 = FieldContainer(2 * scipy.arange(0, self.rows),
                                         Quantity('1m'),
-                                        longname=u"Integer sample No2",
-                                        shortname=u"i2")
+                                        longname="Integer sample No2",
+                                        shortname="i2")
         self.floatSample = FieldContainer(scipy.arange(self.rows / 2,
                                                        self.rows,
                                                        0.5),
                                           Quantity('1s'),
-                                          longname=u"Float sample",
-                                          shortname=u"t")
+                                          longname="Float sample",
+                                          shortname="t")
         self.shortFloatSample1 = FieldContainer(scipy.array([1., 2., 10.]),
                                           Quantity('1.0 s**2'),
-                                          longname=u"Short Float sample 1",
-                                          shortname=u"short1")
+                                          longname="Short Float sample 1",
+                                          shortname="short1")
         self.shortFloatSample2 = FieldContainer(scipy.array([5., 10., 1.]),
                                           Quantity('1.0 kg * m'),
-                                          longname=u"Short Float sample 2",
-                                          shortname=u"short2")
-        self.desc = scipy.dtype({'names':[u'i', u't'],
+                                          longname="Short Float sample 2",
+                                          shortname="short2")
+        self.desc = scipy.dtype({'names':['i', 't'],
                                  'formats':[self.intSample.data.dtype,
                                             self.floatSample.data.dtype],
                                  'titles':[self.intSample.longname,
@@ -528,8 +528,8 @@ class SampleContainerTest(unittest.TestCase):
         self.data = scipy.rec.fromarrays([self.intSample.data,
                                         self.floatSample.data],
                                        dtype=self.desc)
-        self.longname = u"Toller Sample"
-        self.shortname = u"phi"
+        self.longname = "Toller Sample"
+        self.shortname = "phi"
         self.sampleContainer = SampleContainer([self.intSample,
                                                 self.floatSample],
                                                self.longname,
@@ -556,13 +556,13 @@ class AlgebraSampleContainerTests(SampleContainerTest):
         exprStr = 'col("i") / (col("t") + col("t"))'
         expr = compile(exprStr, "<TestCase>", 'eval', ast.PyCF_ONLY_AST)
         replacedExpr = rpn.visit(expr)
-        print rpn.localDict
-        print ast.dump(replacedExpr)
+        print(rpn.localDict)
+        print(ast.dump(replacedExpr))
         rpc = ReplaceCompare(rpn.localDict)
         factorExpr = rpc.visit(replacedExpr)
         rpo = ReplaceOperator(rpn.localDict)
         factorExpr = rpo.visit(factorExpr)
-        print ast.dump(factorExpr)
+        print(ast.dump(factorExpr))
 
     def testCalcColumn(self):
         exprStr = 'col("i") / (col("t") + col("t")) + "1km/s"'
@@ -650,7 +650,7 @@ class AlgebraSampleContainerTests(SampleContainerTest):
         columnOut = self.sampleContainerNeu.calcColumn(
             expr, 'OutMult', 'OutcomeMult')
         columnCheckData = scipy.array(
-            map(lambda x: x ** 2 * 0.5, scipy.arange(0, self.rows)))
+            [x ** 2 * 0.5 for x in scipy.arange(0, self.rows)])
         columnCheck = FieldContainer(columnCheckData,
                                 unit='1 m**2',
                                 longname="Outcome Check",
@@ -733,7 +733,7 @@ class CommonSampleContainerTests(SampleContainerTest):
         self.assertNotEqual(sample.hash, None)
         try:
             sample.data=scipy.array([1, 2, 3])
-        except TypeError, e:
+        except TypeError as e:
             pass
         else:
             self.fail("Modification of sealed FieldContainer was not "
@@ -749,8 +749,8 @@ class CommonSampleContainerTests(SampleContainerTest):
     def testSingleSample(self):
         #string = numpy.rec.fromrecords([(s,) for s in [u'Hello',u'World!',u'Bäh!']])
 #        strings =
-        uField = FieldContainer(scipy.array([u'Hello', u'World!', u'Bäh!']),
-                                longname=u'Text',
+        uField = FieldContainer(scipy.array(['Hello', 'World!', 'Bäh!']),
+                                longname='Text',
                                 shortname='\gamma')
         #was: table  = SampleContainer([uField]). Intent unclear:
         table = SampleContainer([uField])
@@ -758,8 +758,8 @@ class CommonSampleContainerTests(SampleContainerTest):
     def testStringSample(self):
         #string = numpy.rec.fromrecords([(s,) for s in [u'Hello',u'World!',u'Bäh!']])
 #        strings =
-        uField = FieldContainer(scipy.array([u'Hello', u'World!', u'Bäh!']),
-                                longname=u'Text',
+        uField = FieldContainer(scipy.array(['Hello', 'World!', 'Bäh!']),
+                                longname='Text',
                                 shortname='\gamma')
         sample = SampleContainer([uField])
         sample.seal()
@@ -855,7 +855,7 @@ class SampleContainerSlicingTests(SampleContainerTest):
         self.assertEqual(result1[1], result2[1])
 
     def testSimpleUnicodeExpression(self):
-        result = self.sampleContainer.filter(u'"50m" <= col("i") < "57m"')
+        result = self.sampleContainer.filter('"50m" <= col("i") < "57m"')
         self.assertEqual(len(result.columns), 2)
         self.assertEqual(len(result[0].data), 7)
         self.assertEqual(len(result[1].data), 7)
@@ -961,8 +961,8 @@ class SampleContainerSlicingTests(SampleContainerTest):
 class FieldContainerRescaling(unittest.TestCase):
     def setUp(self):
         self.testData = scipy.array([[0,1,2],[3,4,5],[6,7,8]])
-        self.longname = u"Sampled Data"
-        self.shortname = u"I\\omega"
+        self.longname = "Sampled Data"
+        self.shortname = "I\\omega"
         self.unit = Quantity('3.14 m')
 
     def testRescaleUnitless(self):
@@ -1078,7 +1078,7 @@ class FieldContainerSlicing1d(unittest.TestCase):
                                shortname="U",
                                unit="1V",
                                dimensions=[],
-                               attributes={u'Index':(u'i', 0)})
+                               attributes={'Index':('i', 0)})
         assertEqual(section, afoot)
 
     def testRegionIndex(self):
@@ -1141,8 +1141,8 @@ class FieldContainerSlicing1dDim(FieldContainerSlicing1d):
                                shortname="U",
                                unit="1V",
                                dimensions=[self.xDim[0]],
-                               attributes={u'current':\
-                                           (u'I', Quantity("0.3A"))})
+                               attributes={'current':\
+                                           ('I', Quantity("0.3A"))})
         assertEqual(section, afoot)
 
     def testRegionIndex(self):
@@ -1259,7 +1259,7 @@ class FieldContainerSlicing2d(unittest.TestCase):
                                longname="voltage",
                                shortname="U",
                                unit="1V",
-                               attributes={u'Index':(u'j', 0)})
+                               attributes={'Index':('j', 0)})
         self.assertTrue(section.isValid())
         self.assertEqual(section, afoot)
 
@@ -1314,8 +1314,8 @@ class FieldContainerSlicing2dDim(FieldContainerSlicing2d):
                                longname="voltage",
                                shortname="U",
                                unit="1V",
-                               attributes={u'position':\
-                                               (u'p',Quantity("30cm"))},
+                               attributes={'position':\
+                                               ('p',Quantity("30cm"))},
                                dimensions=[self.xDim])
         self.assertTrue(section.isValid())
         self.assertEqual(section, afoot)

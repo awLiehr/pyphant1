@@ -44,7 +44,7 @@ class DummyProvider(Worker.Worker):
     VERSION = 1
     REVISION = pkg_resources.get_distribution("pyphant").version
     name = "DummyProvider"
-    _params = [("source", u"Source", "", None)]
+    _params = [("source", "Source", "", None)]
 
     @Worker.plug(Connectors.TYPE_IMAGE)
     def load(self, subscriber=0):
@@ -62,7 +62,7 @@ class DummyConsumer(Worker.Worker):
     VERSION = 1
     REVISION = pkg_resources.get_distribution("pyphant").version
     name = "DummyConsumer"
-    _params = [("foo", u"Foo", [0], None)]
+    _params = [("foo", "Foo", [0], None)]
     _sockets = [("socket1", Connectors.TYPE_IMAGE)]
 
     def refreshParams(self, subscriber=None):

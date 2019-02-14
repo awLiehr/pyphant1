@@ -30,7 +30,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""Provides unittest class TestHistogram.
+"""Provides unittest class TestHistogram.
 """
 
 
@@ -74,7 +74,7 @@ class TestHistogram(unittest.TestCase):
         numpy.testing.assert_almost_equal(afoot,
                                           result.data,
                                           decimal=self.accuracyLevel)
-        self.failUnless(result.dimensions[0].unit == self.uniform.unit,
+        self.assertTrue(result.dimensions[0].unit == self.uniform.unit,
                         "Unit of result's dimension [%s] has to match "
                         "the unit of the input data [%s]."
                         % (result.dimensions[0].unit, self.uniform.unit))
@@ -98,7 +98,7 @@ class TestHistogram(unittest.TestCase):
         numpy.testing.assert_almost_equal(afoot,
                                           result.data,
                                           decimal=self.accuracyLevel)
-        self.failUnless(result.dimensions[0].unit == self.norm.unit,
+        self.assertTrue(result.dimensions[0].unit == self.norm.unit,
                         "Unit of result's dimension [%s] has to match "
                         "the unit of the input data [%s]."
                         % (result.dimensions[0].unit, self.norm.unit))

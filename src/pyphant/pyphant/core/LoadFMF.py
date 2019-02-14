@@ -37,7 +37,7 @@ import zipfile
 import numpy
 import re
 import copy
-import StringIO
+import io
 import codecs
 from pyphant.core import DataContainer
 from pyphant.quantities import (Quantity, isQuantity)
@@ -84,17 +84,17 @@ def collectAttributes(data, names):
     attributes).
     """
     #Collect attributes, define filename as new attribute
-    atts = {u'filename': names}
+    atts = {'filename': names}
     for filename in names:
         sc = data[filename]
-        for section, sectionDict in sc.attributes.iteritems():
-            for key, treetoken in sectionDict.iteritems():
+        for section, sectionDict in sc.attributes.items():
+            for key, treetoken in sectionDict.items():
                 attlist = atts.setdefault(key, [])
                 attlist.append(treetoken)
     #Separate common attributes from variable attributes
     commonAttr = {}
     variableAttr = {}
-    for k, l in atts.iteritems():
+    for k, l in atts.items():
         v = l[0]
         isConst = True
         for i in l[1:]:
@@ -128,10 +128,10 @@ class column2Field:
             return numpy.NaN
 
     def __call__(self, longname, column):
-        tupples = filter(lambda c: type(c) == type((0,)), column)
+        tupples = [c for c in column if type(c) == type((0,))]
         hasTupples = len(tupples) > 0
         if hasTupples:
-            tuppleLength = max(map(len, tupples))
+            tuppleLength = max(list(map(len, tupples)))
         if hasTupples:
             if tuppleLength == 2:
                 indexDatum = 0
@@ -158,7 +158,7 @@ class column2Field:
             try:
                 data = [element[indexDatum] for element in column]
             except:
-                print longname, column
+                print(longname, column)
                 import sys
                 sys.exit(0)
             error = [element[indexError] for element in column]
@@ -169,10 +169,10 @@ class column2Field:
             else:
                 unit = unitCandidates[0]
             normation = lambda arg: self.norm(arg, unit)
-            field = numpy.array(map(normation, data))
+            field = numpy.array(list(map(normation, data)))
             ErrorNormation = lambda arg: self.norm(arg, unit, error=True)
             result = DataContainer.FieldContainer(field,
-                                error=numpy.array(map(ErrorNormation, error)),
+                                error=numpy.array(list(map(ErrorNormation, error))),
                                 mask=numpy.isnan(field),
                                 unit=Quantity(1.0, unit),
                                 shortname=shortname,
@@ -183,8 +183,8 @@ class column2Field:
                 firstElement = column[0][0]
             else:
                 firstElement = column[0]
-            if type(firstElement) in (type(''), type(u'')):
-                for i in xrange(len(column)):
+            if type(firstElement) in (type(''), type('')):
+                for i in range(len(column)):
                     if type(column[i]) == type([]):
                         column[i] = ','.join(column[i])
             result = DataContainer.FieldContainer(numpy.array(column),
@@ -207,7 +207,7 @@ def unpackAndCollateFields(variableAttr, data):
                     )
                 fieldData[field.longname].append(field.data * conversionFactor)
                 dimensionNames = [dim.longname for dim in field.dimensions
-                                  if dim.longname != u'Index']
+                                  if dim.longname != 'Index']
                 if len(dimensionNames) > 1:
                     _logger.warning("Is specified, but has not been tested!")
                 if dependencies[field.longname] != dimensionNames:
@@ -220,7 +220,7 @@ def unpackAndCollateFields(variableAttr, data):
                 fieldData[field.longname] = [field.data]
                 dependencies[field.longname] = [dim.longname for dim
                                                 in field.dimensions
-                                                if dim.longname != u'Index']
+                                                if dim.longname != 'Index']
                 units[field.longname] = normation(field.unit)
                 shortnames[field.longname] = field.shortname
     return fieldData, dependencies, units, shortnames
@@ -238,13 +238,13 @@ def readZipFile(filename, subscriber=1):
     commonAttr, variableAttr = collectAttributes(data, names)
     #Wrap variable attributes into FieldContainer
     containers = [column2FieldContainer(longname, column) for longname, column
-                  in variableAttr.iteritems()]
+                  in variableAttr.items()]
     #Process SampleContainers of parsed FMF files and skip independent
     #variables, which are used as dimensions.
     fieldData, dependencies, units, shortnames = unpackAndCollateFields(
         variableAttr, data)
     independentFieldsNames = []
-    for fieldName, dependency in dependencies.iteritems():
+    for fieldName, dependency in dependencies.items():
         if dependencies[fieldName] == []:
             independentFieldsNames.append(fieldName)
     for fieldName in independentFieldsNames:
@@ -262,7 +262,7 @@ def readZipFile(filename, subscriber=1):
                                             )
     #Build dependent fields
     #QUESTION: Can a field depend on a dependent field?
-    for field, dependency in dependencies.iteritems():
+    for field, dependency in dependencies.items():
         newField = DataContainer.FieldContainer(numpy.array(fieldData[field]),
                                                 longname=field,
                                                 shortname=shortnames[field],
@@ -274,9 +274,9 @@ def readZipFile(filename, subscriber=1):
         assert newField.isValid()
         containers.append(newField)
     #The next lines are a hack and should be dealt with properly...
-    if u'creator' in commonAttr.keys():
-        creator = commonAttr[u'creator']
-        del commonAttr[u'creator']
+    if 'creator' in list(commonAttr.keys()):
+        creator = commonAttr['creator']
+        del commonAttr['creator']
         result = DataContainer.SampleContainer(containers,
                                                attributes=commonAttr)
         result.creator = creator
@@ -293,8 +293,8 @@ def reshapeField(field):
     dimDicts = [dict([(data, index) for index, data in enumerate(dimdata)])
                 for dimdata in dimData]
     fieldData = numpy.ones([len(d) for d in dimData]) * numpy.nan
-    indicess = zip(*[map(lambda x: dimDicts[index][x], dim.data) \
-                     for index, dim in enumerate(field.dimensions)])
+    indicess = list(zip(*[[dimDicts[index][x] for x in dim.data] \
+                     for index, dim in enumerate(field.dimensions)]))
     for datum, indices in zip(field.data, indicess):
         fieldData[indices] = datum
     newDims = [DataContainer.FieldContainer(dimData[i],
@@ -338,7 +338,7 @@ def loadFMFFromFile(filename, subscriber=0):
 
 
 def readSingleFile(b, pixelName):
-    _logger.info(u"Parsing file %s." % pixelName)
+    _logger.info("Parsing file %s." % pixelName)
     preParsedData, d, FMFversion, commentChar = preParseData(b)
     if commentChar == "#":
         commentChar = "\#"
@@ -443,7 +443,7 @@ def readSingleFile(b, pixelName):
                                 re.VERBOSE)
     try:
         config = FMFConfigObj(d.encode('utf-8').splitlines(), encoding='utf-8')
-    except ConfigObjError, e:
+    except ConfigObjError as e:
         from sys import exit
         exit('%s\nPlease check the syntax of the FMF-file, in particular \
                 the correct usage of comments.' % e)
@@ -476,7 +476,7 @@ def item2value(oldVal, FMFversion='1.1'):
     if type(oldVal) == type([]):
         for c in getConverters(FMFversion):
             try:
-                return map(c, oldVal)
+                return list(map(c, oldVal))
             except:
                 pass
     for c in getConverters(FMFversion):
@@ -488,9 +488,9 @@ def item2value(oldVal, FMFversion='1.1'):
 
 
 def config2tables(preParsedData, config, FMFversion='1.1'):
-    if config.has_key('*table definitions'):
+    if '*table definitions' in config:
         longnames = dict([(i, k) for k, i
-                          in config['*table definitions'].iteritems()])
+                          in config['*table definitions'].items()])
         del config['*table definitions']
     else:
         longnames = {None: 'Table'}
@@ -528,16 +528,16 @@ def data2table(longname, shortname, preParsedData, config, FMFversion='1.1'):
     for col in preParsedData:
         try:
             result = col.astype('i')
-        except ValueError, e:
+        except ValueError as e:
             try:
                 result = col.astype('f')
-            except ValueError, e:
+            except ValueError as e:
                 try:
                     result = col.astype('complex')
-                except ValueError, e:
+                except ValueError as e:
                     result = col
         datTable.append(result)
-    colspec_re = re.compile(ur"(?P<shortname>[^\s([]*)\s*(?P<deps>\([^)]*\))?\s*(?:(?:\\pm|\+-|\+/-)\s*(?P<error>[^\s[]*))?\s*(?P<unit>\[[^]]*])?")
+    colspec_re = re.compile(r"(?P<shortname>[^\s([]*)\s*(?P<deps>\([^)]*\))?\s*(?:(?:\\pm|\+-|\+/-)\s*(?P<error>[^\s[]*))?\s*(?P<unit>\[[^]]*])?")
     fields = []
     fields_by_name = {}
     dimensions_for_fields = {}
@@ -621,21 +621,21 @@ def preParseData(b):
                     localVar[key.strip()] = None
                 if localVar[key.strip()] == 'semicolon':
                     localVar[key.strip()] = ';'
-        except ValueError, e:
+        except ValueError as e:
             from sys import exit
             exit('%s\nPlease, check syntax of headline, presumably a key \
                     and its value are not separated by a colon.' % e)
-    d = unicode(b, localVar['coding'])
-    dataExpr = re.compile(ur"^(\[\*data(?::\s*([^\]]*))?\]\r?\n)([^[]*)",
+    d = str(b, localVar['coding'])
+    dataExpr = re.compile(r"^(\[\*data(?::\s*([^\]]*))?\]\r?\n)([^[]*)",
                           re.MULTILINE | re.DOTALL)
-    commentExpr = re.compile(ur"^%s.*" % (commentChar, ), re.MULTILINE)
+    commentExpr = re.compile(r"^%s.*" % (commentChar, ), re.MULTILINE)
     d = re.sub(commentExpr, '', d)
     preParsedData = {}
 
     def preParseData(match):
         try:
             preParsedData[match.group(2)] = numpy.loadtxt(
-                                            StringIO.StringIO(match.group(3)),
+                                            io.StringIO(match.group(3)),
                                             unpack=True,
                                             comments=commentChar,
                                             dtype='S',
@@ -643,6 +643,6 @@ def preParseData(b):
                                             )
         except Exception:
             return match.group(0)
-        return u""
+        return ""
     d = re.sub(dataExpr, preParseData, d)
     return preParsedData, d, str(localVar['fmf-version']), commentChar
