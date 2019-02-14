@@ -39,9 +39,9 @@ import re
 import copy
 import io
 import codecs
-from pyphant.core import DataContainer
-from pyphant.quantities import (Quantity, isQuantity)
-from pyphant.quantities.ParseQuantities import (parseQuantity, parseVariable,
+from src.pyphant.pyphant.core import DataContainer
+from src.pyphant.pyphant.quantities import (Quantity, isQuantity)
+from src.pyphant.pyphant.quantities.ParseQuantities import (parseQuantity, parseVariable,
                                                 parseDateTime, str2unit)
 import logging
 _logger = logging.getLogger("pyphant")
