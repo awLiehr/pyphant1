@@ -771,12 +771,12 @@ for unit in _base_units:
 _help = []
 
 def _addUnit(name, unit, comment=''):
-    if _unit_table.has_key(name):
-	raise KeyError, 'Unit ' + name + ' already defined'
+    if name in _unit_table:
+        raise KeyError('Unit ' + name + ' already defined')
     if comment:
         _help.append((name, comment, unit))
     if type(unit) == type(''):
-	unit = eval(unit, _unit_table)
+        unit = eval(unit, _unit_table)
         for cruft in ['__builtins__', '__args__']:
             try: del _unit_table[cruft]
             except: pass
