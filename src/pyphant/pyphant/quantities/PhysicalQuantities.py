@@ -649,7 +649,7 @@ def isPhysicalQuantity(x):
 
 def _findUnit(unit):
     if type(unit) == type(''):
-        name = string.strip(unit)
+        name = unit.strip()
         unit = eval(name, _unit_table)
         for cruft in ['__builtins__', '__args__']:
             try: del _unit_table[cruft]
