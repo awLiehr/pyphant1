@@ -503,7 +503,7 @@ class PhysicalUnit:
                                 list(map(lambda a,b: a-b,
                                     other.powers, self.powers)))
         else:
-            return PhysicalUnit({str(other): 1}-self.names,
+            return PhysicalUnit(NumberDict([(str(other), 1)])-self.names,
                                 other/self.factor,
                                 [-x for x in self.powers])
 
