@@ -722,7 +722,7 @@ def _addUnit(name, unit, comment=''):
     if comment:
         _help.append((name, comment, unit))
     if type(unit) == type(''):
-	unit = eval(unit, _unit_table)
+        unit = eval(unit, _unit_table)
         for cruft in ['__builtins__', '__args__']:
             try: del _unit_table[cruft]
             except: pass
@@ -737,8 +737,8 @@ def _addPrefixed(unit):
     else:
         validPrefixes = _prefixes
     for prefix in validPrefixes:
-	name = prefix[0] + unit
-	_addUnit(name, prefix[1]*_unit_table[unit])
+        name = prefix[0] + unit
+        _addUnit(name, prefix[1]*_unit_table[unit])
         _prefixed_names.append(name)
     _help.append(', '.join(_prefixed_names))
 
