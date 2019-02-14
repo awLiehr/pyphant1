@@ -691,9 +691,12 @@ def isQuantity(x):
 # Helper functions
 
 def _findUnit(unit):
-    from types import StringTypes
-    if isinstance(unit, StringTypes):
-        name = string.strip(unit)
+    # import six
+    from six import string_types
+    # from types import StringTypes
+    # if isinstance(unit, StringTypes):
+    if isinstance(unit, string_types):
+        name = unit.strip()
         unit = eval(name, _unit_table)
         for cruft in ['__builtins__', '__args__']:
             try: del _unit_table[cruft]
