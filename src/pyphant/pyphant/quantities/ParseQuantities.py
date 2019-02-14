@@ -30,13 +30,13 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-u"""
+"""
 """
 
 
 import mx.DateTime.ISO
-from pyphant.quantities import Quantity
-from pyphant.quantities.PhysicalQuantities import PhysicalQuantity
+from src.pyphant.pyphant.quantities import Quantity
+from src.pyphant.pyphant.quantities.PhysicalQuantities import PhysicalQuantity
 
 import logging
 _logger = logging.getLogger("pyphant")
