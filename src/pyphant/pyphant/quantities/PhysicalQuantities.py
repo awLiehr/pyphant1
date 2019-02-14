@@ -108,7 +108,7 @@ class NumberDict(dict):
         return new
     __rmul__ = __mul__
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         new = NumberDict()
         for key in list(self.keys()):
             new[key] = self[key]/other
@@ -257,7 +257,7 @@ class PhysicalQuantity:
 
     __rmul__ = __mul__
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         if not isPhysicalQuantity(other):
             return self.__class__(self.value/other, self.unit)
         value = self.value/other.value
@@ -266,7 +266,7 @@ class PhysicalQuantity:
             return value*unit.factor
         else:
             return self.__class__(value, unit)
-    def __rdiv__(self, other):
+    def __rtruediv__(self, other):
         if not isPhysicalQuantity(other):
             return self.__class__(other/self.value, pow(self.unit, -1))
         value = other.value/self.value
@@ -482,7 +482,7 @@ class PhysicalUnit:
 
     __rmul__ = __mul__
 
-    def __div__(self, other):
+    def __truediv__(self, other):
         if self.offset != 0 or (isPhysicalUnit (other) and other.offset != 0):
             raise TypeError("cannot divide units with non-zero offset")
         if isPhysicalUnit(other):
@@ -494,7 +494,7 @@ class PhysicalUnit:
             return PhysicalUnit(self.names+{str(other): -1},
                                 self.factor/other, self.powers)
 
-    def __rdiv__(self, other):
+    def __rtruediv__(self, other):
         if self.offset != 0 or (isPhysicalUnit (other) and other.offset != 0):
             raise TypeError("cannot divide units with non-zero offset")
         if isPhysicalUnit(other):
