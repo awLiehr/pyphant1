@@ -625,7 +625,7 @@ def preParseData(b):
             from sys import exit
             exit('%s\nPlease, check syntax of headline, presumably a key \
                     and its value are not separated by a colon.' % e)
-    d = str(b, localVar['coding'])
+    d = b # TypeError: decoding str is not supported
     dataExpr = re.compile(r"^(\[\*data(?::\s*([^\]]*))?\]\r?\n)([^[]*)",
                           re.MULTILINE | re.DOTALL)
     commentExpr = re.compile(r"^%s.*" % (commentChar, ), re.MULTILINE)
