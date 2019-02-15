@@ -369,9 +369,9 @@ Concerning the ordering of data matrices and the dimension list consult http://w
                 other.unit.unit
                 ).value / other.unit.value
         newSelf = copy.deepcopy(self)
-        newSelf.data *= factor
+        newSelf.data = (newSelf.data * factor)
         if newSelf.error != None:
-            newSelf.error *= factor
+            newSelf.error = (newSelf.error * factor)
         newSelf.unit = copy.deepcopy(other.unit)
         return newSelf
 
