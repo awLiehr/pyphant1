@@ -242,7 +242,7 @@ class SampleContainer(DataContainer):
         if m == None:
             m = hashlib.md5()
         super(SampleContainer, self).generateHash(m)
-        m.update(''.join([c.hash for c in self.columns]))
+        m.update(''.join([c.hash for c in self.columns]).encode('utf-8'))
         return enc(m.hexdigest())
 
     def __deepcopy__(self, memo):

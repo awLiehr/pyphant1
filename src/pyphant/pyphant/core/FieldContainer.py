@@ -318,14 +318,14 @@ Concerning the ordering of data matrices and the dimension list consult http://w
         super(FieldContainer, self).generateHash(m)
         #m.update(str(self.data.tolist()))
         m.update(self.data.dumps())
-        m.update(str(self.unit))
+        m.update(str(self.unit).encode('utf-8'))
         if self.error != None:
             #m.update(str(self.error.tolist()))
             m.update(self.error.dumps())
         if self.mask != None:
             #m.update(str(self.mask.tolist()))
             m.update(self.mask.dumps())
-        [m.update(dim.hash) for dim in self._dimensions]
+        [m.update(dim.hash.encode('utf-8')) for dim in self._dimensions]
         return enc(m.hexdigest())
 
     def seal(self, id=None):
