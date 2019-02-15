@@ -79,7 +79,7 @@ _logger = logging.getLogger("pyphant")
 
 
 #Default string encoding
-enc = lambda s: str(s, "utf-8")
+enc = lambda s: str(s)
 
 
 def parseId(id):
