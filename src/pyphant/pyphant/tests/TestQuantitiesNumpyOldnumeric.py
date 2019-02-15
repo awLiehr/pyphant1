@@ -32,7 +32,7 @@
 
 
 import unittest
-from pyphant.quantities import Quantity, _unit_table, PhysicalUnit,\
+from src.pyphant.pyphant.quantities import Quantity, _unit_table, PhysicalUnit,\
                                NumberDict, _base_names
 import numpy as np
 import numpy.oldnumeric

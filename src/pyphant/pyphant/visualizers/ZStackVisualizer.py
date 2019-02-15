@@ -36,10 +36,10 @@ interpreted as a z-stack of 2D images
 """
 
 
-from pyphant.core.Connectors import TYPE_IMAGE
-from pyphant.wxgui2.DataVisReg import DataVisReg
+from src.pyphant.pyphant.core.Connectors import TYPE_IMAGE
+from src.pyphant.pyphant.wxgui2.DataVisReg import DataVisReg
 import wx
-from pyphant.visualizers.ConfigurablePlot import PlotPanel
+from src.pyphant.pyphant.visualizers.ConfigurablePlot import PlotPanel
 import matplotlib
 import scipy
 import pylab
@@ -108,7 +108,7 @@ class ZStackPlotPanel(PlotPanel):
         ax.set_xlabel(xdim.shortlabel)
         ax.set_ylabel(ydim.shortlabel)
         ax.set_title(img_fc.label)
-        from pyphant.visualizers.ConfigurablePlot import F
+        from src.pyphant.pyphant.visualizers.ConfigurablePlot import F
         self.colorbar = figure.colorbar(
             image, format=F(img_fc), ax=ax)
         return ax

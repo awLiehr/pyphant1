@@ -34,8 +34,8 @@
 This module provides a visualizers that exports DataContainers as ASCII files
 """
 
-from pyphant.core import (Connectors, DataContainer)
-from pyphant.wxgui2.DataVisReg import DataVisReg
+from src.pyphant.pyphant.core import (Connectors, DataContainer)
+from src.pyphant.pyphant.wxgui2.DataVisReg import DataVisReg
 import os
 import wx
 import csv
@@ -44,7 +44,7 @@ import csv
 # from scipy.io import write_array
 from numpy import savetxt as write_array
 
-from pyphant.quantities import isQuantity
+from src.pyphant.pyphant.quantities import isQuantity
 import scipy
 
 

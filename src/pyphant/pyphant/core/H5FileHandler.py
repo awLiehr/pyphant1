@@ -34,14 +34,14 @@
 This module provides the H5FileHandler class.
 """
 import tables
-from pyphant.core import DataContainer
-from pyphant.quantities import Quantity
+from src.pyphant.pyphant.core import DataContainer
+from src.pyphant.pyphant.quantities import Quantity
 PhysicalQuantity = Quantity
 import logging
 import os
-from pyphant.core import PyTablesPersister
-from pyphant.core.DataContainer import IndexMarker
-from pyphant.core.Helpers import (utf82uc, emd52dict)
+from src.pyphant.pyphant.core import PyTablesPersister
+from src.pyphant.pyphant.core.DataContainer import IndexMarker
+from src.pyphant.pyphant.core.Helpers import (utf82uc, emd52dict)
 _logger = logging.getLogger("pyphant")
 
 im = IndexMarker()

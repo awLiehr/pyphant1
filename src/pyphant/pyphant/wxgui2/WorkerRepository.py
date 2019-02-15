@@ -33,7 +33,7 @@
 
 import wx
 import pickle
-from pyphant.core.WorkerRegistry import WorkerRegistry
+from src.pyphant.pyphant.core.WorkerRegistry import WorkerRegistry
 
 
 class WorkerRepository(wx.TreeCtrl):

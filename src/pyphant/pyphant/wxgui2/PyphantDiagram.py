@@ -41,7 +41,7 @@ import pyphant.core.Connectors as Connectors
 import pyphant.core.WorkerRegistry
 import pyphant.wxgui2.wxPyphantApplication
 import pyphant.wxgui2.DataVisReg
-from pyphant.core import Param
+from src.pyphant.pyphant.core import Param
 import pickle as pickle
 
 

@@ -38,7 +38,7 @@ from . import BoundedIntegerTextField
 from . import CheckBox
 from . import ListSelect
 from . import FileButton
-from pyphant.core import Connectors, Param
+from src.pyphant.pyphant.core import Connectors, Param
 import wx
 
 

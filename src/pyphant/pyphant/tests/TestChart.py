@@ -31,7 +31,7 @@
 
 """Provides unittests for ImageVisualizers. Because it is difficult to check the correct visualization of a image, it is just checked, wether the visualizers run without assertions."""
 
-from pyphant.mplbackend import ensure_mpl_backend
+from src.pyphant.pyphant.mplbackend import ensure_mpl_backend
 ensure_mpl_backend('agg')
 
 import sys, os.path
@@ -40,9 +40,9 @@ import unittest
 
 
 import numpy
-from pyphant.visualizers.Chart import LineChart,ScatterPlot
-from pyphant.core import DataContainer as DC
-from pyphant.tests import Helpers
+from src.pyphant.pyphant.visualizers.Chart import LineChart,ScatterPlot
+from src.pyphant.pyphant.core import DataContainer as DC
+from src.pyphant.pyphant.tests import Helpers
 
 outputFormat = 'ps'
 

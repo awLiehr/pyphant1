@@ -33,12 +33,12 @@
 
 import queue
 import wx
-from pyphant.core.Connectors import Computer
+from src.pyphant.pyphant.core.Connectors import Computer
 
 
 class ConfigureFrame(wx.Dialog):
     def __init__(self, parent, paramVisReg, worker):
-        from pyphant.wxgui2.PyphantDiagram import ProgressMeter
+        from src.pyphant.pyphant.wxgui2.PyphantDiagram import ProgressMeter
         self._paramVisReg = paramVisReg
         wx.Dialog.__init__(
             self, parent, -1, "Configure " + worker.getParam("name").value

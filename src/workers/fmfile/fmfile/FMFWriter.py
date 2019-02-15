@@ -33,7 +33,7 @@
 """
 
 import wx
-from pyphant.core.WriteFMF import field2fmf
+from src.pyphant.pyphant.core.WriteFMF import field2fmf
 
 
 class FMFWriter(wx.Frame):

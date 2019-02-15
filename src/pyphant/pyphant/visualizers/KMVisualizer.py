@@ -36,9 +36,9 @@ at the local KnowledgeManager
 """
 
 
-from pyphant.core.Connectors import (TYPE_IMAGE, TYPE_ARRAY)
-from pyphant.wxgui2.DataVisReg import DataVisReg
-from pyphant.core.KnowledgeManager import KnowledgeManager
+from src.pyphant.pyphant.core.Connectors import (TYPE_IMAGE, TYPE_ARRAY)
+from src.pyphant.pyphant.wxgui2.DataVisReg import DataVisReg
+from src.pyphant.pyphant.core.KnowledgeManager import KnowledgeManager
 
 
 class KMVisualizer(object):

@@ -32,8 +32,8 @@
 """Provides unittest classes for core.Helpers"""
 
 import unittest
-from pyphant.core.Helpers import parseFCUnit
-from pyphant.quantities import Quantity
+from src.pyphant.pyphant.core.Helpers import parseFCUnit
+from src.pyphant.pyphant.quantities import Quantity
 
 
 class ParseFCUnitTestCase(unittest.TestCase):

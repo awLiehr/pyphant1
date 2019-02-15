@@ -36,8 +36,8 @@ file from the location given in the worker's configuration.
 """
 
 import os.path
-from pyphant.core import (Worker, Connectors)
-from pyphant.core.LoadFMF import loadFMFFromFile
+from src.pyphant.pyphant.core import (Worker, Connectors)
+from src.pyphant.pyphant.core.LoadFMF import loadFMFFromFile
 import pkg_resources
 
 
