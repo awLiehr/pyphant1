@@ -207,7 +207,7 @@ class PhysicalQuantity:
             self.value = args[0]
             self.unit = _findUnit(args[1])
         else:
-            s = string.strip(args[0])
+            s = args[0].strip()
             match = PhysicalQuantity._number.match(s)
             if match is None:
                 raise TypeError('No number found')
