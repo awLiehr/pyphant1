@@ -40,7 +40,7 @@ import unittest
 import ImageProcessing.Medianiser as IM
 import numpy
 import pyphant.quantities as pq
-from pyphant.core import DataContainer
+from src.pyphant.pyphant.core import DataContainer
 
 class TestMedianizer(unittest.TestCase):
     def setUp(self):

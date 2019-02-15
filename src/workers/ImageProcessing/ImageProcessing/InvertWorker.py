@@ -34,7 +34,7 @@ The Inverter Worker is a class of Pyphant's Image Processing
 Toolbox. It simply inverts an image.
 """
 
-from pyphant.core import (Worker, Connectors)
+from src.pyphant.pyphant.core import (Worker, Connectors)
 import scipy
 import copy
 import pkg_resources
@@ -54,7 +54,7 @@ class InvertWorker(Worker.Worker):
         max = scipy.amax(image.data)
         min = scipy.amin(image.data)
         data = max + min - image.data
-        from pyphant.core.DataContainer import FieldContainer
+        from src.pyphant.pyphant.core.DataContainer import FieldContainer
         result = FieldContainer(data, unit=image.unit,
                                 dimensions=copy.deepcopy(image.dimensions),
                                 mask=copy.deepcopy(image.mask),

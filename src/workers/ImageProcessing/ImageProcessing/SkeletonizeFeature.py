@@ -32,7 +32,7 @@
 """
 """
 
-from pyphant.core import Worker, Connectors, DataContainer
+from src.pyphant.pyphant.core import Worker, Connectors, DataContainer
 from scipy import zeros
 import numpy
 import copy

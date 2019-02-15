@@ -32,7 +32,7 @@
 """
 """
 
-from pyphant.core import (Worker, Connectors, DataContainer)
+from src.pyphant.pyphant.core import (Worker, Connectors, DataContainer)
 import ImageProcessing
 import scipy
 import copy

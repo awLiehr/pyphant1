@@ -35,7 +35,7 @@ column that was once extracted by using the column extractor in the
 orignial chart again.
 """
 
-from pyphant.core import (Worker, Connectors)
+from src.pyphant.pyphant.core import (Worker, Connectors)
 import copy
 import pkg_resources
 

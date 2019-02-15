@@ -33,10 +33,10 @@
 """
 """
 
-from pyphant.core import (Worker, Connectors, DataContainer)
+from src.pyphant.pyphant.core import (Worker, Connectors, DataContainer)
 import numpy
 import copy
-from pyphant.quantities import Quantity as PQ
+from src.pyphant.pyphant.quantities import Quantity as PQ
 import pkg_resources
 
 

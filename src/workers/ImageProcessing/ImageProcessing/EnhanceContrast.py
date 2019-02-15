@@ -33,7 +33,7 @@
 Deprecated
 """
 
-from pyphant.core import (Worker, Connectors, DataContainer)
+from src.pyphant.pyphant.core import (Worker, Connectors, DataContainer)
 import scipy
 import copy
 import pkg_resources

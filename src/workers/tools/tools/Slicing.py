@@ -35,7 +35,7 @@ The Slicing Worker is a class of Pyphant's tools toolbox. It cuts out one
 part of a field and provides it as a new field to work on.
 """
 
-from pyphant.core import (Worker, Connectors, DataContainer)
+from src.pyphant.pyphant.core import (Worker, Connectors, DataContainer)
 from pyphant import quantities
 import copy
 import pkg_resources

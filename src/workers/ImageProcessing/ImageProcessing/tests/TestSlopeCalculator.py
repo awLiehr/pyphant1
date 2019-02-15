@@ -40,7 +40,7 @@ import ImageProcessing as I
 import ImageProcessing.SlopeCalculator as IM
 import pyphant.quantities as pq
 from .TestDistanceMapper import stringFeature
-from pyphant.core import DataContainer
+from src.pyphant.pyphant.core import DataContainer
 
 class TestSlopeCalculator(unittest.TestCase):
     """Tests the correct computation of distance maps for equally spaced features composed from one or more strings."""

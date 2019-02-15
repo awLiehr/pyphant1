@@ -36,8 +36,8 @@
 import unittest
 import numpy
 from ImageProcessing.DiffWorker import DiffWorker
-from pyphant.core.DataContainer import FieldContainer
-from pyphant.quantities import Quantity
+from src.pyphant.pyphant.core.DataContainer import FieldContainer
+from src.pyphant.pyphant.quantities import Quantity
 
 
 class DiffTestCase(unittest.TestCase):

@@ -36,12 +36,12 @@ Toolbox. It simply loads an image from the location given in the
 worker's configuration.
 """
 
-from pyphant.core import (Worker, Connectors, DataContainer)
+from src.pyphant.pyphant.core import (Worker, Connectors, DataContainer)
 import pkg_resources
 import PIL.Image
 import scipy
 import scipy.misc
-from pyphant.core.Helpers import parseFCUnit
+from src.pyphant.pyphant.core.Helpers import parseFCUnit
 
 
 class ImageLoaderWorker(Worker.Worker):

@@ -35,8 +35,8 @@ Toolbox. By using this worker one gray-scale image can be applied as a
 mask on another image.
 """
 
-from pyphant.core import (Worker, Connectors)
-from pyphant.core.DataContainer import (FieldContainer, SampleContainer)
+from src.pyphant.pyphant.core import (Worker, Connectors)
+from src.pyphant.pyphant.core.DataContainer import (FieldContainer, SampleContainer)
 from ImageProcessing import FEATURE_COLOR
 import scipy
 import copy

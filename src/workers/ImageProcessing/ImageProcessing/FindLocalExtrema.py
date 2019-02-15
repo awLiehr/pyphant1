@@ -33,7 +33,7 @@
 TODO
 """
 
-from pyphant.core import (Worker, Connectors)
+from src.pyphant.pyphant.core import (Worker, Connectors)
 import copy
 from scipy import ndimage
 from numpy import (alltrue, zeros, int32)
@@ -103,7 +103,7 @@ class FindLocalExtrema(Worker.Worker):
     def find(self, image, subscriber=0):
         newdata = self.findExtrema(image.data)
         longname = "FindLocalExtrema"
-        from pyphant.core.DataContainer import FieldContainer
+        from src.pyphant.pyphant.core.DataContainer import FieldContainer
         result = FieldContainer(
             newdata,
             copy.deepcopy(image.unit),

@@ -33,7 +33,7 @@
 """
 """
 
-from pyphant.core import (Worker, Connectors, DataContainer)
+from src.pyphant.pyphant.core import (Worker, Connectors, DataContainer)
 import copy
 import pkg_resources
 

@@ -39,8 +39,8 @@ import sys,copy
 import unittest
 import numpy, scipy, scipy.optimize
 import OSC.MRA as MRA
-from pyphant.core import DataContainer as DC
-from pyphant.tests.Helpers import fixedPoints
+from src.pyphant.pyphant.core import DataContainer as DC
+from src.pyphant.pyphant.tests.Helpers import fixedPoints
 
 
 class TestMRA(unittest.TestCase):

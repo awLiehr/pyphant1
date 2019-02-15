@@ -38,7 +38,7 @@ import unittest
 
 class TestInstantiate(unittest.TestCase):
     def testInstantiate(self):
-        from pyphant.core.WorkerRegistry import WorkerRegistry
+        from src.pyphant.pyphant.core.WorkerRegistry import WorkerRegistry
         wreg = WorkerRegistry.getInstance()
         workerInfos = [t for t in wreg.getToolBoxInfoList() \
                        if t.name == 'Statistics'][0].workerInfos

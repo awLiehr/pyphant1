@@ -40,7 +40,7 @@ import unittest
 import ImageProcessing as I
 import ImageProcessing.ThresholdingWorker as IM
 import numpy
-from pyphant.core import DataContainer
+from src.pyphant.pyphant.core import DataContainer
 
 class TestThresholding(unittest.TestCase):
     def setUp(self):
