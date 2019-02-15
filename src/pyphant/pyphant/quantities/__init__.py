@@ -212,7 +212,7 @@ class Quantity:
             match = Quantity._number.match(s)
             if match is None:
                 raise TypeError('No number found')
-            self.value = string.atof(match.group(0))
+            self.value = float(match.group(0))
             self.unit = _findUnit(s[len(match.group(0)):])
 
     _number = re.compile('[+-]?[0-9]+(\\.[0-9]*)?([eE][+-]?[0-9]+)?')
