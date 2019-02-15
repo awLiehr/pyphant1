@@ -59,7 +59,7 @@ def getUsername():
 
 def getMachine():
     import socket
-    return str(socket.getfqdn(), 'utf-8')
+    return socket.getfqdn()
 
 
 def enableLogging():
