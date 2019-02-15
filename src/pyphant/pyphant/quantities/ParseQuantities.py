@@ -77,7 +77,7 @@ def str2unit(unitStr, FMFversion='1.1'):
         unit = None
     if FMFversion == '1.0':
         try:
-            unit1_0 = PhysicalQuantity(unitStr.encode('utf-8'))
+            unit1_0 = PhysicalQuantity(unitStr)
             unit1_1 = Quantity(str(unit1_0.inBaseUnits()))
         except:
             unit1_1 = None
