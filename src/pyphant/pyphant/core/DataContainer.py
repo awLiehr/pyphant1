@@ -159,11 +159,11 @@ class DataContainer(object):
     def generateHash(self, m=None):
         if m == None:
             m = hashlib.md5()
-        m.update(self.longname)
-        m.update(self.shortname)
-        m.update(self.machine)
-        m.update(self.creator)
-        m.update(str(self.attributes))
+        m.update(self.longname.encode('utf-8'))
+        m.update(self.shortname.encode('utf-8'))
+        m.update(self.machine.encode('utf-8'))
+        m.update(self.creator.encode('utf-8'))
+        m.update(str(self.attributes).encode('utf-8'))
         return enc(m.hexdigest())
 
     def seal(self, id=None):
