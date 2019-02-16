@@ -72,13 +72,13 @@ def str2unit(unitStr, FMFversion='1.1'):
     # Convert input to quantity or float
     unitStr = unitStr.replace('^', '**')
     try: #FMFversion == '1.1'
-        unit = Quantity(unitStr.encode('utf-8'))
+        unit = Quantity(unitStr)
     except:
         unit = None
     if FMFversion == '1.0':
         try:
             unit1_0 = PhysicalQuantity(unitStr)
-            unit1_1 = Quantity(str(unit1_0.inBaseUnits()))
+            unit1_1 = Quantity(unit1_0.inBaseUnits())
         except:
             unit1_1 = None
         if isinstance(unit1_1, Quantity): # Unit exists in 1.0
