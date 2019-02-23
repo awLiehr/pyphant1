@@ -422,14 +422,14 @@ Concerning the ordering of data matrices and the dimension list consult http://w
         if not (self.typeString == other.typeString):
             _logger.debug('The typeString is not identical.')
             return False
-        if (self.mask == None) and (other.mask != None):
+        if (self.mask is None) and (other.mask is not None):
             _logger.debug(
                 'The mask of the first field container '
                 'has not been set, while the mask '
                 'of the second field container is set to %s.' % (other.mask, )
                 )
             return False
-        elif self.mask != None and (other.mask == None):
+        elif self.mask is not None and (other.mask is None):
             _logger.debug(
                 'The mask of the second field container '
                 'has not been set, while the mask '
@@ -441,14 +441,14 @@ Concerning the ordering of data matrices and the dimension list consult http://w
                 'The masks are not identical: %s\n%s' % (self.mask, other.mask)
                 )
             return False
-        if self.mask != None:
+        if self.mask is not None:
             data = self.data[numpy.logical_not(self.mask)]
             otherData = other.data[numpy.logical_not(other.mask)]
-            if self.error != None:
+            if self.error is not None:
                 error = self.error[numpy.logical_not(self.mask)]
             else:
                 error = self.error
-            if other.error != None:
+            if other.error is not None:
                 otherError = other.error[numpy.logical_not(other.mask)]
             else:
                 otherError = other.error
