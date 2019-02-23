@@ -61,6 +61,9 @@ table, so use this at your own risk.
 
 rc = { 'fetchCurrencyRates' : False }
 
+def cmp(a, b):
+    return (a > b) - (a < b)
+
 class NumberDict(dict):
 
     """
