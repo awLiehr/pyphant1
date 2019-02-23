@@ -787,7 +787,7 @@ Concerning the ordering of data matrices and the dimension list consult http://w
                     _logger.debug("Invalid dimension %s." % (d.longname, ))
                     return False
         # Valid mask?
-        if (self.mask != None) and (self.data.shape != self.mask.shape):
+        if (self.mask is not None) and (self.data.shape != self.mask.shape):
             _logger.debug(
                 "Shape of data %s and of mask %s do not match." % (
                     self.data.shape, self.mask.shape
