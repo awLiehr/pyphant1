@@ -3,15 +3,11 @@ import os
 import re
 import numpy as np
 
-file_name = 'Solar.fmf'
-# file_name = 'Faraday.fmf'
-file_name = 'Dynamik-Numerik-Drift.fmf'
-
 def readFMF(file_name, returnMeta = False):
     '''
     Function reads in a fmf file and returns pandas.dataframe
 
-    Note: only works if files in in same folder,
+    Note: currently only works if files in in same folder,
 
     Author:Michael Zhang - UoA
     Date: 10-02-2019
@@ -111,6 +107,9 @@ def readFMF(file_name, returnMeta = False):
     else:
         return list_data
 
+file_name = 'Solar.fmf'
+# file_name = 'Faraday.fmf'
+# file_name = 'Dynamik-Numerik-Drift.fmf'
 
 print(readFMF(file_name, 1))
 # print(lnum_data_headers)
