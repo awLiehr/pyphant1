@@ -1,3 +1,23 @@
+## Pyphant 2 to 3
+
+Used the 2to3 script that comes with the python distribution.
+which turn most of the code to 2 to 3.
+
+But some common errors/observations i have come across:
+
+* errors relating to string literals and byte literals
+	* probable solution, convert all byteliterals into strings.
+	* https://docs.python.org/3.3/howto/pyporting.html
+* uft8 encoding.
+	* 	https://docs.python.org/3.3/howto/pyporting.html
+* Module not found error
+	* When run in developer mode is no problem.
+	* When not run, need an aboslute path
+	* However, when changed, and run in developer, nothing bad happens
+* Comparisons between different types
+
+
+
 # Pyphant
 
 Pyphant is a framework for scientific data analysis. It features a
