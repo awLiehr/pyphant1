@@ -33,7 +33,7 @@
 this module provides the Gradient worker
 """
 
-from src.pyphant.pyphant.core import (Worker, Connectors)
+from pyphant.core import (Worker, Connectors)
 import numpy as np
 import copy
 import pkg_resources
@@ -68,7 +68,7 @@ class Gradient(Worker.Worker):
         magnitude = np.sqrt(magnitude)
 
         longname = "Gradient"
-        from src.pyphant.pyphant.core.DataContainer import FieldContainer
+        from pyphant.core.DataContainer import FieldContainer
         result = FieldContainer(
             magnitude,
             image.unit / d0.unit,

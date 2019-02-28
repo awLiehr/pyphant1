@@ -35,7 +35,7 @@ The Worker module provides the Worker base class and some support.
 
 import types
 import logging
-from src.pyphant.pyphant.core import Connectors, Param, WorkerRegistry
+from pyphant.core import Connectors, Param, WorkerRegistry
 import pkg_resources
 
 

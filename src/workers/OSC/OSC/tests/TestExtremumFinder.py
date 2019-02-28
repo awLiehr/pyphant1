@@ -39,8 +39,8 @@ import sys
 import unittest
 import numpy, scipy, scipy.optimize
 import OSC.ExtremumFinder as EF
-from src.pyphant.pyphant.core import DataContainer as DC
-from src.pyphant.pyphant.tests.Helpers import fixedPoints
+from pyphant.core import DataContainer as DC
+from pyphant.tests.Helpers import fixedPoints
 
 
 class TestExtremumFinder(unittest.TestCase):

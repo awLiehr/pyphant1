@@ -33,13 +33,13 @@
 
 """This module provides the GUI entry point for pyphant"""
 
-from src.pyphant.pyphant.mplbackend import ensure_mpl_backend
+from pyphant.mplbackend import ensure_mpl_backend
 ensure_mpl_backend('wxagg')
 
 import os
 import os.path
 import pkg_resources
-from src.pyphant.pyphant.core.Helpers import getPyphantPath
+from pyphant.core.Helpers import getPyphantPath
 LOGDIR = getPyphantPath()
 import logging
 from logging.handlers import MemoryHandler
@@ -60,11 +60,11 @@ import wx
 import wx.aui
 import sogl
 import pyphant.wxgui2.paramvisualization.ParamVisReg as ParamVisReg
-from src.pyphant.pyphant.core.H5FileHandler import H5FileHandler
-from src.pyphant.pyphant.wxgui2 import WorkerRepository
-from src.pyphant.pyphant.wxgui2 import ConfigureFrame
+from pyphant.core.H5FileHandler import H5FileHandler
+from pyphant.wxgui2 import WorkerRepository
+from pyphant.wxgui2 import ConfigureFrame
 import platform
-from src.pyphant.pyphant.core.KnowledgeManager import KnowledgeManager
+from pyphant.core.KnowledgeManager import KnowledgeManager
 import webbrowser
 pltform = platform.system()
 
@@ -150,7 +150,7 @@ class wxPyphantFrame(wx.Frame):
     def _initWorkerRep(self):
         try:
             # adds Emd5Src worker to WorkerRepository
-            from src.pyphant.pyphant.core.Emd5Src import Emd5Src
+            from pyphant.core.Emd5Src import Emd5Src
             Emd5Src()
             self._workerRepository = WorkerRepository.WorkerRepository(
                 self, self.ID_WINDOW_RIGHT, wx.DefaultPosition,
@@ -238,7 +238,7 @@ class wxPyphantFrame(wx.Frame):
                     dlg.Destroy()
                     raise AbortRecipeCreation
             dlg.Destroy()
-        from src.pyphant.pyphant.wxgui2 import PyphantCanvas
+        from pyphant.wxgui2 import PyphantCanvas
         if self._wxPyphantApp.pathToRecipe[-3:] == '.h5':
             if os.path.exists(self._wxPyphantApp.pathToRecipe):
                 try:
@@ -263,7 +263,7 @@ class wxPyphantFrame(wx.Frame):
                     self._remainingSpace = PyphantCanvas.PyphantCanvas(self)
             else:
                 self._remainingSpace = PyphantCanvas.PyphantCanvas(self)
-            from src.pyphant.pyphant.core.WebInterface import shorten
+            from pyphant.core.WebInterface import shorten
             self.SetTitle(self.titleStr \
                           % shorten(self._wxPyphantApp.pathToRecipe, 30, 30))
         else:
@@ -298,7 +298,7 @@ class wxPyphantFrame(wx.Frame):
                     self._fileMenu.IsChecked(wx.ID_FILE4))
             self._wxPyphantApp.pathToRecipe = filename
             self.recipeState = 'clean'
-            from src.pyphant.pyphant.core.WebInterface import shorten
+            from pyphant.core.WebInterface import shorten
             self.SetTitle(self.titleStr % shorten(filename, 30, 30))
         else:
             dlg.Destroy()
@@ -434,7 +434,7 @@ class wxPyphantFrame(wx.Frame):
         self.Destroy()
 
     def editCompositeWorker(self, worker):
-        from src.pyphant.pyphant.wxgui2 import PyphantCanvas
+        from pyphant.wxgui2 import PyphantCanvas
         self.compositeWorkerStack.append(self._remainingSpace)
         self._remainingSpace = PyphantCanvas.PyphantCanvas(self, worker)
         self._remainingSpace.diagram.recipe.registerListener(
@@ -509,7 +509,7 @@ class wxPyphantFrame(wx.Frame):
         if self._wxPyphantApp._knowledgeNode is None:
             try:
                 logg = self._wxPyphantApp._logger
-                from src.pyphant.pyphant.core.KnowledgeNode import get_kn_autoport
+                from pyphant.core.KnowledgeNode import get_kn_autoport
                 ports = [8080] + list(range(48621, 48771))
                 self._wxPyphantApp._knowledgeNode = get_kn_autoport(
                     ports, logg, start=True, web_interface=True)
@@ -567,7 +567,7 @@ class mySplashScreen(wx.Frame):
 
         import io
         import base64
-        from src.pyphant.pyphant.wxgui2 import pyphantLogo
+        from pyphant.wxgui2 import pyphantLogo
 
         png = base64.decodestring(pyphantLogo.pic_b64)
         stream = io.StringIO(png)

@@ -33,7 +33,7 @@
 
 import wx
 import sogl
-from src.pyphant.pyphant.wxgui2 import PyphantDiagram
+from pyphant.wxgui2 import PyphantDiagram
 import pyphant.core.CompositeWorker as CompositeWorker
 
 

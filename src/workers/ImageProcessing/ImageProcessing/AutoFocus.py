@@ -33,11 +33,11 @@
 This module provides the refactored AutoFocus Worker and its little helpers
 """
 
-from src.pyphant.pyphant.core import (Worker, Connectors)
+from pyphant.core import (Worker, Connectors)
 import numpy
 from scipy import ndimage
-from src.pyphant.pyphant.quantities import Quantity
-from src.pyphant.pyphant.core.DataContainer import SampleContainer
+from pyphant.quantities import Quantity
+from pyphant.core.DataContainer import SampleContainer
 import pkg_resources
 
 
@@ -293,7 +293,7 @@ class AutoFocus(Worker.Worker):
                      'xSliceStart', 'xSliceStop']
         columnsns = ['z', 'y', 'x', 'd', 'f', 'l',
                      'zi', 'yt', 'yp', 'xt', 'xp']
-        from src.pyphant.pyphant.core.Helpers import makeSC
+        from pyphant.core.Helpers import makeSC
         resultSC = makeSC(infoList, columnlns, columnsns,
                           longname, 's', attributes)
         subscriber %= 100

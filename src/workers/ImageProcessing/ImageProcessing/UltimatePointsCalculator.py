@@ -34,7 +34,7 @@ The Ultimate Points Calculator Worker is a class of Pyphant's Image
 Processing Toolbox. It is used to calculate peaks in an image.
 """
 
-from src.pyphant.pyphant.core import (Worker, Connectors, DataContainer)
+from pyphant.core import (Worker, Connectors, DataContainer)
 import scipy
 import pkg_resources
 

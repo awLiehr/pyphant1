@@ -36,7 +36,7 @@ threshold. Therefore required percentages of black and white material
 in the image can be edited.
 """
 
-from src.pyphant.pyphant.core import (Worker, Connectors)
+from pyphant.core import (Worker, Connectors)
 import pkg_resources
 
 
@@ -70,7 +70,7 @@ class CoverageWorker(Worker.Worker):
 
     @Worker.plug(Connectors.TYPE_IMAGE)
     def threshold(self, image, subscriber=0):
-        from src.pyphant.pyphant.quantities.ParseQuantities import parseQuantity
+        from pyphant.quantities.ParseQuantities import parseQuantity
         w1 = parseQuantity(self.paramW1.value)[0]
         rho1 = parseQuantity(self.paramRho1.value)[0]
         rho2 = parseQuantity(self.paramRho2.value)[0]
@@ -79,7 +79,7 @@ class CoverageWorker(Worker.Worker):
         import scipy
         from ImageProcessing import (FEATURE_COLOR, BACKGROUND_COLOR)
         import copy
-        from src.pyphant.pyphant.core.DataContainer import FieldContainer
+        from pyphant.core.DataContainer import FieldContainer
         resultArray = scipy.where(image.data < th,
                                   FEATURE_COLOR,
                                   BACKGROUND_COLOR)

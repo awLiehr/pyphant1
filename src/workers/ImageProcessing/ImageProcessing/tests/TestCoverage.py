@@ -39,7 +39,7 @@ import numpy
 
 class CoverageTestCase(unittest.TestCase):
     def setUp(self):
-        from src.pyphant.pyphant.core.DataContainer import FieldContainer
+        from pyphant.core.DataContainer import FieldContainer
         data = numpy.arange(0, 256, 1).reshape((16, 16))
         self.image = FieldContainer(data, unit=1e10)
         self.image.seal()
@@ -48,7 +48,7 @@ class CoverageTestCase(unittest.TestCase):
         delta = .1
         from ImageProcessing.CoverageWorker import CoverageWorker
         from ImageProcessing import FEATURE_COLOR, BACKGROUND_COLOR
-        from src.pyphant.pyphant.quantities import Quantity
+        from pyphant.quantities import Quantity
         cworker = CoverageWorker()
         for rho1Fac in [0.1, 0.25, 0.5, 1.0, 1.5, 2.0, 5.0, 10.0]:
             rho1 = '%s mC / m ** 3' % (3000. * rho1Fac, )

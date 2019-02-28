@@ -146,11 +146,11 @@ def batch(recipe, input, plug, longname, dobatch=True, temporary=False):
                  dobatch is set to True
     """
     socket = recipe.getOpenSocketsForPlug(plug)[0]
-    from src.pyphant.pyphant.core.Emd5Src import Emd5Src
+    from pyphant.core.Emd5Src import Emd5Src
     DummyWorker = Emd5Src()
     socket.insert(DummyWorker.getPlugs()[0])
     DummyWorker.paramSelectby.value = "enter emd5"
-    from src.pyphant.pyphant.core.KnowledgeManager import KnowledgeManager
+    from pyphant.core.KnowledgeManager import KnowledgeManager
     km = KnowledgeManager.getInstance()
     if dobatch:
         import copy
@@ -181,20 +181,20 @@ def makeSC(column_data, longnames, shortnames, longname, shortname,
 
     def get_column_fc(col, ln, sn):
         try:
-            from src.pyphant.pyphant.quantities import Quantity
+            from pyphant.quantities import Quantity
             unit = Quantity(1.0, col[0].unit)
             data = [quant.value for quant in col]
         except (KeyError, AttributeError):
             unit = 1
             data = col
         from numpy import array
-        from src.pyphant.pyphant.core.DataContainer import FieldContainer
+        from pyphant.core.DataContainer import FieldContainer
         fc = FieldContainer(data=array(data), unit=unit,
                             longname=ln, shortname=sn)
         return fc
     columns = [get_column_fc(col, ln, sn) for col, ln, sn \
                in zip(unzipped, longnames, shortnames)]
-    from src.pyphant.pyphant.core.DataContainer import SampleContainer
+    from pyphant.core.DataContainer import SampleContainer
     sc = SampleContainer(longname=longname, shortname=shortname,
                          attributes=attributes, columns=columns)
     sc.seal()
@@ -238,5 +238,5 @@ def parseFCUnit(s):
     try:
         return float(s)
     except ValueError:
-        from src.pyphant.pyphant.quantities import Quantity
+        from pyphant.quantities import Quantity
         return Quantity(s)

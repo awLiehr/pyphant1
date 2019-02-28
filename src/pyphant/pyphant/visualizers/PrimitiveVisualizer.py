@@ -32,7 +32,7 @@
 """This module provides a visualizer that simply prints the input"""
 
 import pyphant.core.Connectors
-from src.pyphant.pyphant.wxgui2.DataVisReg import DataVisReg
+from pyphant.wxgui2.DataVisReg import DataVisReg
 
 
 class PrimitiveVisualizer(object):

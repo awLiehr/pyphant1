@@ -41,7 +41,7 @@ import ImageProcessing.SkeletonizeFeature as IM
 from . import TestDistanceMapper as TDM
 import numpy
 import pyphant.quantities as pq
-from src.pyphant.pyphant.core import DataContainer
+from pyphant.core import DataContainer
 
 #Define helper function providing the curved feature
 def ring(width=1,radius=9,center=[0,0],dim=11):

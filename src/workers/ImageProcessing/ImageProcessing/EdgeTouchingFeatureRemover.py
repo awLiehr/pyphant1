@@ -35,7 +35,7 @@ Toolbox. It removes all features of an image that are touching the
 edge until only the outline remains.
 """
 
-from src.pyphant.pyphant.core import (Worker, Connectors)
+from pyphant.core import (Worker, Connectors)
 from ImageProcessing import EdgeFillWorker
 import copy
 import pkg_resources

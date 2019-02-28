@@ -36,7 +36,7 @@ enc = lambda s: str(s, "utf-8")
 
 import socket
 import datetime
-from src.pyphant.pyphant.core import FMFGen
+from pyphant.core import FMFGen
 import numpy
 import pyphant.core.Helpers
 

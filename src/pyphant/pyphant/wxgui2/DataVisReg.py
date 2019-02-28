@@ -31,7 +31,7 @@
 
 """A registry for visualizers"""
 
-from src.pyphant.pyphant.core import singletonmixin
+from pyphant.core import singletonmixin
 import logging
 import pkg_resources
 
@@ -68,4 +68,4 @@ class DataVisReg(singletonmixin.Singleton):
 
 
 # loads visualizers
-import src.pyphant.pyphant.visualizers
+import pyphant.visualizers

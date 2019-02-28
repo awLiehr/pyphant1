@@ -36,7 +36,7 @@ returns a binary image where pixels that comprise features are set to
 0x00 whereas background pixels are set to 0xFF.
 """
 
-from src.pyphant.pyphant.core import (Worker, Connectors, DataContainer)
+from pyphant.core import (Worker, Connectors, DataContainer)
 import ImageProcessing
 import scipy
 import copy
@@ -61,7 +61,7 @@ class ThresholdingWorker(Worker.Worker):
     def threshold(self, image, subscriber=0):
         th = float(self.paramThreshold.value)
         if self.paramUnit.value.lower() != 'ignore':
-            from src.pyphant.pyphant.quantities import Quantity, isQuantity
+            from pyphant.quantities import Quantity, isQuantity
             try:
                 unit = float(self.paramUnit.value)
                 assert not isQuantity(image.unit)

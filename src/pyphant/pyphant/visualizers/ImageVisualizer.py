@@ -42,9 +42,9 @@ except:
 import pylab
 import scipy
 import numpy
-from src.pyphant.pyphant.core.Connectors import TYPE_IMAGE
-from src.pyphant.pyphant.wxgui2.DataVisReg import DataVisReg
-from src.pyphant.pyphant.quantities import isQuantity
+from pyphant.core.Connectors import TYPE_IMAGE
+from pyphant.wxgui2.DataVisReg import DataVisReg
+from pyphant.quantities import isQuantity
 #from NonUniformImage import NonUniformImage
 from matplotlib.image import NonUniformImage
 

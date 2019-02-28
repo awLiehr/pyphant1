@@ -36,7 +36,7 @@ standard median filter. In its configurations the size of the applied
 kernel and the number of smoothing runs can be edited.
 """
 
-from src.pyphant.pyphant.core import (Worker, Connectors)
+from pyphant.core import (Worker, Connectors)
 import scipy.ndimage.filters
 import copy
 import pkg_resources

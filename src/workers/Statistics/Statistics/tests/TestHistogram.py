@@ -39,7 +39,7 @@ import unittest
 import Statistics.Histogram as S
 import numpy
 import scipy.special
-from src.pyphant.pyphant.core import DataContainer
+from pyphant.core import DataContainer
 
 dim = 100000
 uniformSample = numpy.random.uniform(size=dim)

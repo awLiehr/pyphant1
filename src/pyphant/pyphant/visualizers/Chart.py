@@ -36,8 +36,8 @@
 import pylab
 import numpy
 import pyphant.core.Connectors
-from src.pyphant.pyphant.core import DataContainer
-from src.pyphant.pyphant.wxgui2.DataVisReg import DataVisReg
+from pyphant.core import DataContainer
+from pyphant.wxgui2.DataVisReg import DataVisReg
 
 
 class Chart(object):

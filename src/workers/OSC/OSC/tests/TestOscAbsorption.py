@@ -43,7 +43,7 @@ import os.path
 import numpy, scipy, scipy.optimize
 import pyphant.quantities as pq
 import OSC.OscAbsorption as OA
-from src.pyphant.pyphant.core import DataContainer as DC
+from pyphant.core import DataContainer as DC
 
 class TestOscAbsorptionCalculator(unittest.TestCase):
     "Tests the correct calculation of absorption from intensity measurements."

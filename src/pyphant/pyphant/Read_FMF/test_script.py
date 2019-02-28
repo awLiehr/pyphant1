@@ -17,7 +17,7 @@
 
 # 3.7
 import numpy
-import src.pyphant.pyphant.core.LoadFMF as ff
+import pyphant.core.LoadFMF as ff
 # import pyphant.core.LoadFMF as ff
 
 ddd = ff.readDataFile("/Volumes/Imogen's Brain/Pyphant/src/pyphant/pyphant/quantities/Solar.fmf")

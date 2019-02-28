@@ -37,8 +37,8 @@
 import unittest
 import scipy
 import copy
-from src.pyphant.pyphant.quantities import Quantity
-from src.pyphant.pyphant.core.DataContainer import (INDEX,
+from pyphant.quantities import Quantity
+from pyphant.core.DataContainer import (INDEX,
                                         generateIndex,
                                         FieldContainer,
                                         SampleContainer,
@@ -549,7 +549,7 @@ class SampleContainerTest(unittest.TestCase):
 class AlgebraSampleContainerTests(SampleContainerTest):
 
     def testNodeTransformer(self):
-        from src.pyphant.pyphant.core.AstTransformers import (ReplaceName, ReplaceOperator,
+        from pyphant.core.AstTransformers import (ReplaceName, ReplaceOperator,
                                                   ReplaceCompare)
         rpn = ReplaceName(self.sampleContainer)
         import ast
@@ -615,7 +615,7 @@ class AlgebraSampleContainerTests(SampleContainerTest):
                                             'TestZero', 'Division by Zero')
 
     def testAlgebraPlus(self):
-        from src.pyphant.pyphant.core.DataContainer import FieldContainer
+        from pyphant.core.DataContainer import FieldContainer
         expr = 'col("i") + col("i2") + "-10 m"'
         columnOut = self.sampleContainerNeu.calcColumn(
             expr, 'OutPlus', 'OutcomePlus')
@@ -630,7 +630,7 @@ class AlgebraSampleContainerTests(SampleContainerTest):
             raise ValueError
 
     def testAlgebraMinus(self):
-        from src.pyphant.pyphant.core.DataContainer import FieldContainer
+        from pyphant.core.DataContainer import FieldContainer
         expr = 'col("i") - col("i2") - "-10 km"'
         columnOut = self.sampleContainerNeu.calcColumn(
             expr, 'OutMinus', 'OutcomeMinus')
@@ -645,7 +645,7 @@ class AlgebraSampleContainerTests(SampleContainerTest):
             raise ValueError
 
     def testAlgebraMult(self):
-        from src.pyphant.pyphant.core.DataContainer import FieldContainer
+        from pyphant.core.DataContainer import FieldContainer
         expr = 'col("i") * col("i") * 0.5'
         columnOut = self.sampleContainerNeu.calcColumn(
             expr, 'OutMult', 'OutcomeMult')
@@ -662,7 +662,7 @@ class AlgebraSampleContainerTests(SampleContainerTest):
             raise ValueError
 
     def testAlgebraDiv(self):
-        from src.pyphant.pyphant.core.DataContainer import FieldContainer
+        from pyphant.core.DataContainer import FieldContainer
         expr = 'col("i") / 2.'
         expr2 = '(col("i") + "1 m") / (col("i") + "1 m")'
         columnOut = self.sampleContainerNeu.calcColumn(

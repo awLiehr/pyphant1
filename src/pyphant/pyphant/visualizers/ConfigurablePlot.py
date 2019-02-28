@@ -39,10 +39,10 @@ import wx
 import pylab
 import numpy
 import pyphant.core.Connectors
-from src.pyphant.pyphant.core import DataContainer
-from src.pyphant.pyphant.wxgui2.DataVisReg import DataVisReg
-from src.pyphant.pyphant.quantities import Quantity
-from src.pyphant.pyphant.quantities.ParseQuantities import str2unit
+from pyphant.core import DataContainer
+from pyphant.wxgui2.DataVisReg import DataVisReg
+from pyphant.quantities import Quantity
+from pyphant.quantities.ParseQuantities import str2unit
 
 
 class PlotPanel (wx.PyPanel):

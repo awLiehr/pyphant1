@@ -32,7 +32,7 @@
 """
 """
 
-from src.pyphant.pyphant.core import Worker, Connectors
+from pyphant.core import Worker, Connectors
 import pkg_resources
 
 

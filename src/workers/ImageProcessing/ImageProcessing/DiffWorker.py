@@ -35,7 +35,7 @@ computes the difference between two images, eg. the skeletonised image
 and the origial image.
 """
 
-from src.pyphant.pyphant.core import (Worker, Connectors)
+from pyphant.core import (Worker, Connectors)
 import pkg_resources
 
 

@@ -39,7 +39,7 @@ import unittest
 
 
 import numpy
-from src.pyphant.pyphant.core import DataContainer as DC
+from pyphant.core import DataContainer as DC
 
 
 class TestEmd5Source(unittest.TestCase):

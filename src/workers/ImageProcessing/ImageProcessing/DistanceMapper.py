@@ -37,7 +37,7 @@ binary images through calculating the distance of every pixel to the
 nearest background pixel.
 """
 
-from src.pyphant.pyphant.core import (Worker, Connectors, DataContainer)
+from pyphant.core import (Worker, Connectors, DataContainer)
 import scipy
 import copy
 from ImageProcessing import FEATURE_COLOR

@@ -70,7 +70,7 @@ import threading
 import numpy
 import io
 import urllib.parse
-from src.pyphant.pyphant.core.AstTransformers import (
+from pyphant.core.AstTransformers import (
     ReplaceName, ReplaceCompare, ReplaceOperator, UnitCalculator,
     checkDimensions)
 from . import Helpers

@@ -33,7 +33,7 @@
 TODO
 """
 
-from src.pyphant.pyphant.core import (Worker, Connectors, DataContainer)
+from pyphant.core import (Worker, Connectors, DataContainer)
 import copy
 import heapq
 import scipy

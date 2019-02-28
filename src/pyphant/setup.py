@@ -64,7 +64,7 @@ setup(
         'scipy',
         'tables',
         'wxPython',
-        'egenix-mx-base',
+#        'egenix-mx-base',
         'configobj',
         ],
     packages=find_packages(),

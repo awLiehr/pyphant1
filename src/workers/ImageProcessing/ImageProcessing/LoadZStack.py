@@ -35,9 +35,9 @@ Toolbox. It simply loads a set of images from the location given in the
 worker's configuration as a 3d image.
 """
 
-from src.pyphant.pyphant.core.Connectors import (SUBTYPE_FILE, TYPE_IMAGE)
-from src.pyphant.pyphant.core import Worker
-from src.pyphant.pyphant.core.Helpers import parseFCUnit
+from pyphant.core.Connectors import (SUBTYPE_FILE, TYPE_IMAGE)
+from pyphant.core import Worker
+from pyphant.core.Helpers import parseFCUnit
 import pkg_resources
 
 
@@ -72,7 +72,7 @@ class LoadZStack(Worker.Worker):
         import re
         from scipy.misc import imread
         import numpy
-        from src.pyphant.pyphant.core.DataContainer import FieldContainer
+        from pyphant.core.DataContainer import FieldContainer
         path = os.path.realpath(self.paramPath.value)
         if os.path.isfile(path):
             path = os.path.dirname(path)
@@ -115,8 +115,8 @@ class LoadZStack(Worker.Worker):
         return [int(x) if len(x) else None for x in split]
 
     def getDimension(self, axis, length):
-        from src.pyphant.pyphant.quantities import Quantity
-        from src.pyphant.pyphant.core.DataContainer import FieldContainer
+        from pyphant.quantities import Quantity
+        from pyphant.core.DataContainer import FieldContainer
         import numpy
         delta = parseFCUnit(self.getParam('d' + axis).value)
         start = parseFCUnit(self.getParam('start' + axis).value)
