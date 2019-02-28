@@ -32,7 +32,7 @@
 
 
 """script for running all unit tests from pyphant and the toolboxes"""
-from src.pyphant.pyphant.mplbackend import ensure_mpl_backend
+from pyphant.mplbackend import ensure_mpl_backend
 ensure_mpl_backend('agg')
 import os
 import os.path
