@@ -11,10 +11,10 @@ But some common errors/observations i have come across:
 * uft8 encoding.
 	* 	https://docs.python.org/3.3/howto/pyporting.html
 * Module not found error
-	* When run in developer mode is no problem.
+	* When run in developer mode(installed in dev mode) is no problem.
 	* When not run, need an aboslute path
-	* However, when changed, and run in developer, nothing bad happens
-* Comparisons between different types
+	* However, when changed, and run in developer, nothing bad happens - so i  reverted the change
+* Comparisons between different types not working, ie > < ...
 
 
 
