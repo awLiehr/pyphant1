@@ -179,16 +179,13 @@ def pintify(dataframe, data_definitions):
     Author:Michael Zhang - UoA
     Date: 10-03-2019
     :param dataframe: dataframe of the data
-    :param file_section_meta_data: dictionary of the data labels/headers/units
+    :param data_definitions: dictionary of the data labels/headers/units
     :return: PintArray
-    :param dataframe:
-    :param file_section_meta_data:
-    :return:
     """
     # empty string array
-    units = np.empty(len(file_section_meta_data), dtype=object)
+    units = np.empty(len(data_definitions), dtype=object)
 
-    for i, n in enumerate(list(file_section_meta_data.values())):
+    for i, n in enumerate(list(data_definitions.values())):
         # finds the units in
         m = re.match(r"(.*)\[(.*)\]", n)
         try:
@@ -198,7 +195,7 @@ def pintify(dataframe, data_definitions):
 
     # dictionary of data series
     dict_series = {}
-    for i, name in enumerate(file_section_meta_data.keys()):
+    for i, name in enumerate(data_definitions.keys()):
         try:
             dict_series.update({name: pd.Series(dataframe[name], dtype=("pint[" + units[i] + "]"))})
         except:
