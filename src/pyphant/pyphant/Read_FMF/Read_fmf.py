@@ -1,12 +1,13 @@
 from .pint_array import *  # since its not pint 0.10 yet
 # import pint
 
+
 import pandas as pd
 import re
 import numpy as np
 
 
-def readFMF(path_file, returnMetaData=False):
+def readFMF(path_file, returnMetaData=False, trim=True, isPinting=True):
     """
     Function reads in a fmf file and returns pandas.dataframe
 
@@ -14,13 +15,18 @@ def readFMF(path_file, returnMetaData=False):
     Date: 10-02-2019
     :param path_file: String, filename of the file to be read, - including the .fmf extention.
     :param returnMetaData: Boolean, to return dictionary of the metadata or not.
+    :param trim: Boolean, to trim the filemeta data or not. - only matters when returning meta data
+    :param isPinting: Boolean, to transform dataframe into a pintarray or not.
     :return: dataframe of the data located inside the fmffiles. (if multiple, a list of dataframes)
     :return: (optional) dictionary of the fmffiles metadata.
     """
 
     file_meta_data = obtainFileMetaData(path_file)
 
-    list_dataframe = fileToDataframe(file_meta_data, path_file)
+    list_dataframe = fileToDataframe(file_meta_data, path_file, isPinting)
+
+    if trim:
+        file_meta_data = trimFileMetaData(file_meta_data)
 
     if returnMetaData:
         return list_dataframe, file_meta_data
@@ -110,7 +116,7 @@ def obtainFileMetaData(path_file):
     return file_meta_data
 
 
-def fileToDataframe(file_meta_data, path_file):
+def fileToDataframe(file_meta_data, path_file, isPinting):
     """
     Function that converts the data from a file (csvread) into a pandas dataframe.
     then turns it into a pintArray (with units)
@@ -137,7 +143,12 @@ def fileToDataframe(file_meta_data, path_file):
                                     delimiter=file_meta_data['file_info']['delimiter'],
                                     comment=str(file_meta_data['file_info']['comment_character']),
                                     )
-            list_data.append(pintify(dataframe, file_meta_data['*data definitions: ' + table_symbol]))
+            if isPinting:
+                # units
+                list_data.append(pintify(dataframe, file_meta_data['*data definitions: ' + table_symbol]))
+            else:
+                # Just dataframe
+                list_data.append(dataframe)
 
     else:  # if single table
         # Save to df
@@ -149,14 +160,17 @@ def fileToDataframe(file_meta_data, path_file):
                                 delimiter=file_meta_data['file_info']['delimiter'],
                                 comment=str(file_meta_data['file_info']['comment_character']),
                                 )
-        # print(dataframe)
 
-        # Units
-        list_data = pintify(dataframe, file_meta_data['*data definitions'])
+        if isPinting:
+            # Units
+            list_data = pintify(dataframe, file_meta_data['*data definitions'])
+        else:
+            # just dataframe
+            list_data = dataframe
     return list_data
 
 
-def pintify(dataframe, file_section_meta_data):
+def pintify(dataframe, data_definitions):
     """
     Function loads in a df with associated label/units and transforms it into a pint datafframe (Pandas Extension Array)
 
@@ -224,3 +238,23 @@ def preParseData2(line):
                     and its value are not separated by a colon.' % e)
 
     return str(localVar['fmf-version']), char_comment, str(localVar['delimiter'])
+
+
+def trimFileMetaData(file_meta_data):
+    """
+    deletes unnecessary dictionary key/values.
+
+    :param file_meta_data: dictionary
+    """
+    del file_meta_data['file_info']['section_info']
+
+    if file_meta_data['file_info']['isMultiple']:
+        for table_symbol in file_meta_data['*table definitions'].values():
+            del file_meta_data['*data: ' + table_symbol]
+    else:
+        # if single table
+        del file_meta_data['*data']
+
+    del file_meta_data['file_info']
+
+    return file_meta_data
